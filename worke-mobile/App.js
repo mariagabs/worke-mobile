@@ -1,6 +1,6 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useFonts } from "expo-font";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
@@ -11,7 +11,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TouchableOpacity,
-  Pressable
+  Pressable,
 } from "react-native";
 import { COLORS } from "./assets/colors.js";
 import * as SplashScreen from "expo-splash-screen";
@@ -28,8 +28,9 @@ export default function App() {
   });
 
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
-  useTogglePasswordVisibility();
-  const [password, setPassword] = useState('');
+    useTogglePasswordVisibility();
+  const [password, setPassword] = useState("");
+  const [keyboardVisible, setKeyboardVisible] = useState(true);
 
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
@@ -46,33 +47,59 @@ export default function App() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+          setKeyboardVisible(true);
+        }}
+      >
         <View style={styles.view} onLayout={onLayoutRootView}>
-          <Image source={require("./assets/worke-logo.png")} style={styles.logo} />
-          <TextInput style={styles.input} placeholder="E-mail" />
+          <Image
+            source={require("./assets/worke-logo.png")}
+            style={styles.logo}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="E-mail"
+            onTouchStart={() => setKeyboardVisible(false)}
+          />
           <View style={styles.input}>
-            <TextInput 
-                placeholder="Senha" 
-                secureTextEntry={passwordVisibility}
-                value={password}
-                autoCorrect={false}
-                textContentType="newPassword"
-                onChangeText={text => setPassword(text)} />
-            <Pressable onPress={handlePasswordVisibility} >
-              <MaterialCommunityIcons name={rightIcon} size={22} color={COLORS.lightGray} />
+            <TextInput
+              placeholder="Senha"
+              style={styles.passwordInput}
+              secureTextEntry={passwordVisibility}
+              value={password}
+              autoCorrect={false}
+              onChangeText={(text) => setPassword(text)}
+              onTouchStart={() => setKeyboardVisible(false)}
+            />
+            <Pressable
+              onPress={handlePasswordVisibility}
+              style={styles.eyeIcon}
+            >
+              <MaterialCommunityIcons
+                name={rightIcon}
+                size={22}
+                color={COLORS.lightGray}
+              />
             </Pressable>
           </View>
           <Text style={styles.span}>Esqueceu a senha?</Text>
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>ENTRAR</Text>
           </TouchableOpacity>
-          <Image
-            source={require("./assets/divider-line.png")}
-            style={styles.divider}
-          />
-          <Text style={styles.createAccount}>
-            Não possui uma conta? <Text style={styles.span}>Crie aqui!</Text>
-          </Text>
+          {keyboardVisible ? (
+            <View style={styles.bottomInfo}>
+              <Image
+                source={require("./assets/divider-line.png")}
+                style={styles.divider}
+              />
+              <Text style={styles.createAccount}>
+                Não possui uma conta?{" "}
+                <Text style={styles.span}>Crie aqui!</Text>
+              </Text>
+            </View>
+          ) : null}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
@@ -85,9 +112,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 30,
   },
-  view:{
-    flex: 1,
+  view: {
     width: "100%",
+    height: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -106,7 +133,11 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontSize: 16,
     marginTop: 20,
-    fontFamily: "Nunito-SemiBold"
+    fontFamily: "Nunito-SemiBold",
+    justifyContent: "center",
+  },
+  touchInput: {
+    width: "100%",
   },
   span: {
     color: COLORS.black,
@@ -115,7 +146,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginTop: 10,
     marginBottom: 30,
-    fontFamily: "Nunito-Bold"
+    fontFamily: "Nunito-Bold",
   },
   buttonText: {
     color: COLORS.white,
@@ -134,19 +165,31 @@ const styles = StyleSheet.create({
   },
   divider: {
     width: "100%",
-    position: "absolute",
-    bottom: 80,
   },
   createAccount: {
     fontSize: 16,
     color: COLORS.black,
-    position: "absolute",
-    bottom: 50,
-    fontFamily: "Nunito"
+    marginTop: 14,
+    fontFamily: "Nunito",
   },
-  showPassword:{
+  bottomInfo: {
+    position: "absolute",
+    width: "100%",
+    alignItems: "center",
+    bottom: 40,
+  },
+  showPassword: {
     width: "100%",
     flexDirection: "row",
-    alignItems: "center"
-  }
+    justifyContent: "center",
+  },
+  passwordInput: {
+    fontFamily: "Nunito-SemiBold",
+    fontSize: 16,
+  },
+  eyeIcon: {
+    alignSelf: "flex-end",
+    position: "absolute",
+    paddingRight: 18,
+  },
 });
