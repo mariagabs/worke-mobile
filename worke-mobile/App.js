@@ -1,21 +1,18 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import { useFonts } from "expo-font";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
   View,
   Image,
-  TextInput,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
-  TouchableOpacity,
-  Pressable,
 } from "react-native";
 import { COLORS } from "./assets/colors.js";
 import * as SplashScreen from "expo-splash-screen";
-import { useTogglePasswordVisibility } from "./src/components/molecules/useTogglePasswordVisibility";
+import TextBox from "./src/components/molecules/TextBox.js";
+import Button from "./src/components/molecules/Button.js";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,9 +24,6 @@ export default function App() {
     "Nunito-Black": require("./assets/fonts/Nunito-Black.ttf"),
   });
 
-  const { passwordVisibility, rightIcon, handlePasswordVisibility } =
-    useTogglePasswordVisibility();
-  const [password, setPassword] = useState("");
   const [keyboardVisible, setKeyboardVisible] = useState(true);
 
   const onLayoutRootView = useCallback(async () => {
@@ -58,36 +52,15 @@ export default function App() {
             source={require("./assets/worke-logo.png")}
             style={styles.logo}
           />
-          <TextInput
+          <View
             style={styles.input}
-            placeholder="E-mail"
             onTouchStart={() => setKeyboardVisible(false)}
-          />
-          <View style={styles.input}>
-            <TextInput
-              placeholder="Senha"
-              style={styles.passwordInput}
-              secureTextEntry={passwordVisibility}
-              value={password}
-              autoCorrect={false}
-              onChangeText={(text) => setPassword(text)}
-              onTouchStart={() => setKeyboardVisible(false)}
-            />
-            <Pressable
-              onPress={handlePasswordVisibility}
-              style={styles.eyeIcon}
-            >
-              <MaterialCommunityIcons
-                name={rightIcon}
-                size={22}
-                color={COLORS.lightGray}
-              />
-            </Pressable>
+          >
+            <TextBox inputPlaceHolder="E-mail" passwordInput={false}></TextBox>
+            <TextBox inputPlaceHolder="Senha" passwordInput={true}></TextBox>
           </View>
           <Text style={styles.span}>Esqueceu a senha?</Text>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>ENTRAR</Text>
-          </TouchableOpacity>
+          <Button buttonText={"ENTRAR"}></Button>
           {keyboardVisible ? (
             <View style={styles.bottomInfo}>
               <Image
@@ -113,31 +86,15 @@ const styles = StyleSheet.create({
     padding: 30,
   },
   view: {
-    width: "100%",
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
-  logo: {
-    marginBottom: 60,
-  },
   input: {
     width: "100%",
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: COLORS.lightGray,
-    borderRadius: 7,
-    height: 48,
-    paddingVertical: 12,
-    paddingHorizontal: 18,
-    textAlign: "left",
-    fontSize: 16,
-    marginTop: 20,
-    fontFamily: "Nunito-SemiBold",
-    justifyContent: "center",
   },
-  touchInput: {
-    width: "100%",
+  logo: {
+    marginBottom: 60,
   },
   span: {
     color: COLORS.black,
@@ -148,21 +105,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     fontFamily: "Nunito-Bold",
   },
-  buttonText: {
-    color: COLORS.white,
-    textAlign: "center",
-    fontSize: 12,
-    fontWeight: "800",
-    letterSpacing: 2,
-    fontFamily: "Nunito-Black",
-  },
-  button: {
-    backgroundColor: COLORS.black,
-    width: "100%",
-    borderRadius: 7,
-    height: 48,
-    paddingVertical: 15,
-  },
+
   divider: {
     width: "100%",
   },
@@ -177,19 +120,5 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     bottom: 40,
-  },
-  showPassword: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  passwordInput: {
-    fontFamily: "Nunito-SemiBold",
-    fontSize: 16,
-  },
-  eyeIcon: {
-    alignSelf: "flex-end",
-    position: "absolute",
-    paddingRight: 18,
   },
 });
