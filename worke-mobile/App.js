@@ -11,8 +11,9 @@ import {
 } from "react-native";
 import { COLORS } from "./assets/colors.js";
 import * as SplashScreen from "expo-splash-screen";
-import TextBox from "./src/components/molecules/TextBox.js";
-import Button from "./src/components/molecules/Button.js";
+import TextBox from "./src/components/atoms/TextBox.js";
+import Button from "./src/components/atoms/Button.js";
+import PasswordTextBox from "./src/components/atoms/PasswordTextBox";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -53,14 +54,18 @@ export default function App() {
             style={styles.logo}
           />
           <View
-            style={styles.input}
+            style={styles.fullWidth}
             onTouchStart={() => setKeyboardVisible(false)}
           >
-            <TextBox inputPlaceHolder="E-mail" passwordInput={false}></TextBox>
-            <TextBox inputPlaceHolder="Senha" passwordInput={true}></TextBox>
+            <TextBox inputPlaceHolder="E-mail"></TextBox>
+            <PasswordTextBox></PasswordTextBox>
           </View>
-          <Text style={styles.span}>Esqueceu a senha?</Text>
-          <Button buttonText={"ENTRAR"}></Button>
+          <View style={styles.fullWidth}>
+            <Text style={styles.span}>Esqueceu a senha?</Text>
+          </View>
+          <View style={styles.fullWidth}>
+            <Button buttonText={"ENTRAR"}></Button>
+          </View>
           {keyboardVisible ? (
             <View style={styles.bottomInfo}>
               <Image
@@ -90,7 +95,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  input: {
+  fullWidth: {
     width: "100%",
   },
   logo: {
@@ -105,7 +110,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     fontFamily: "Nunito-Bold",
   },
-
   divider: {
     width: "100%",
   },
