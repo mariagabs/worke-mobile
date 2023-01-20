@@ -9,13 +9,36 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "6.2.0",
+    "@react-navigation/bottom-tabs": "^6.5.3",
+    "@react-navigation/material-top-tabs": "^6.5.2",
+    "@react-navigation/native": "^6.1.2",
+    "@react-navigation/native-stack": "^6.9.5",
+    "@react-navigation/stack": "^6.3.11",
+    "axios": "^1.2.1",
     "expo": "~46.0.16",
+    "expo-app-loading": "^2.1.0",
+    "expo-font": "^10.2.1",
+    "expo-splash-screen": "^0.16.2",
     "expo-status-bar": "~1.4.0",
+    "font": "^0.0.4",
     "react": "18.0.0",
-    "react-native": "0.69.6"
+    "react-native": "0.69.6",
+    "react-native-date-picker": "^4.2.6",
+    "react-native-hide-with-keyboard": "^1.2.1",
+    "react-native-masked-text": "^1.13.0",
+    "react-native-splash-screen": "^3.3.0",
+    "react-native-tab-view": "^3.3.4",
+    "react-native-pager-view": "5.4.24"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "@tsconfig/react-native": "^2.0.3",
+    "@types/jest": "^29.2.4",
+    "@types/react": "^18.0.26",
+    "@types/react-native": "^0.70.8",
+    "@types/react-test-renderer": "^18.0.0",
+    "typescript": "^4.9.3"
   },
   "private": true
 }
