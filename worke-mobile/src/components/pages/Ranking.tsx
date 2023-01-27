@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Dimensions } from "react-native";
+import { View, Dimensions } from "react-native";
 import { COLORS } from "../../../assets/colors";
 import styles from "../../styles";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -13,7 +13,6 @@ const Ranking: React.FC = () => {
     return (
       <View style={styles.rankingContainer}>
         <Tab.Navigator
-          style={styles.topTab}
           screenOptions={{
             tabBarItemStyle: {
               width: (Dimensions.get("window").width - 126) / 2,

@@ -5,6 +5,7 @@ import styles from "../../styles";
 import Home from "./Home";
 import Ranking from "./Ranking";
 import NavigationBar from "../atoms/NavigationBar";
+import Profile from "./Profile";
 
 interface Props {
   selectedTab: string;
@@ -22,6 +23,8 @@ const Menu: React.FC<Props> = ({ selectedTab }) => {
         <Home />
       ) : activeTab === "ranking" ? (
         <Ranking />
+      ) : activeTab === "profile" ? (
+        <Profile />
       ) : (
         ""
       )}
