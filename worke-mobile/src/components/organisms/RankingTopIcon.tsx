@@ -21,7 +21,7 @@ interface Props {
 const RankingTopIcon: React.FC<Props> = ({ userInfo, color, horizontal }) => {
   let image = "data:image/png;base64," + userInfo.image;
   return (
-    <View>
+    <View style={styles.rankingPhotos(horizontal)}>
       <View>
         <Image style={styles.topRankPhoto} source={{ uri: image }}></Image>
         <View style={styles.starTopRank}>
