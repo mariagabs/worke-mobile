@@ -77,6 +77,21 @@ export default StyleSheet.create({
   inputPassword: {
     justifyContent: "center",
   },
+  inputCode: {
+    width: 48,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: COLORS.lightGray,
+    borderRadius: 7,
+    height: 62,
+    paddingVertical: 5,
+    paddingHorizontal: 12,
+    textAlign: "center",
+    fontSize: 32,
+    fontWeight: "bold",
+    fontFamily: "Nunito-SemiBold",
+    justifyContent: "center",
+  },
   eyeIcon: {
     alignSelf: "flex-end",
     position: "absolute",
@@ -348,6 +363,12 @@ export default StyleSheet.create({
   lines: {
     position: "absolute",
     bottom: -10,
+  },
+  linesOnTop: {
+    position: "absolute",
+    top: 0,
+    width: Dimensions.get('window').width,
+    height: "18%"
   },
   userPhotoIcon: {
     width: 60,
@@ -731,6 +752,66 @@ export default StyleSheet.create({
     position: "absolute",
     right: 15,
   }),
+  groupTitleGroup: {
+    display: "flex",
+    flexDirection: "row",
+  },  
+  groupTitle: {
+    color: COLORS.black,
+    fontSize: 28,
+    fontFamily: "Nunito",
+    marginRight: 8
+  },
+  groupTitleBold: {
+    color: COLORS.black,
+    fontSize: 28,
+    fontFamily: "Nunito-Black",
+    marginBottom: 25,
+  },
+  inputCodeGroup: {
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: 25,
+  },
+  margin10: {
+    marginRight: 10,
+  },
+  codeGroup: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "70%",
+    backgroundColor: "transparent",
+  },
+  width100: {
+    width: 100,
+  },
+  purple: {
+    color: COLORS.purple
+  },
+  pink: {
+    color: COLORS.pink
+  },
+  green: {
+    color: COLORS.green,
+  },
+  blue: {
+    color: COLORS.blue
+  },
+  groupLabel: {
+    color: COLORS.black,
+    fontSize: 14,
+    fontFamily: "Nunito-Black",
+    fontWeight: 900,
+    letterSpacing: 2,
+    marginRight: 12
+  },
+  groupLabelContainer: {
+    display: "flex",
+    flexDirection: "row",
+    position: "absolute",
+    bottom: 50
+  },
   achievementCard: {
     borderColor: COLORS.lighterGray,
     borderWidth: 1,
