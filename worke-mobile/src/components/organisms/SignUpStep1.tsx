@@ -15,7 +15,7 @@ const SignUpStep1: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.view}>
-      <BackButton onPress={login}></BackButton>
+      <BackButton onPress={login} signUpPage={true}></BackButton>
       <Text style={styles.title(200, 2.5)}>
         <Text style={styles.titleBold}>VAMOS</Text> COMEÇAR?
       </Text>

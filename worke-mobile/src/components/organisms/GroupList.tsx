@@ -41,7 +41,7 @@ const GroupList: React.FC<Props> = ({ users }) => {
     );
   }
 
-  return <ScrollView style={styles.groupList}>{list}</ScrollView>;
+  return <View style={styles.groupList}>{list}</View>;
 };
 
 export default GroupList;

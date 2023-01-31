@@ -32,7 +32,7 @@ const TextBox: React.FC<Props> = ({
   return (
     <View>
       <TextInput
-        style={errorInput ? styles.errorInput : styles.input(top)}
+        style={errorInput ? styles.errorInput : styles.input}
         placeholder={inputPlaceHolder}
         secureTextEntry={secureTextEntry}
         autoCorrect={autoCorrect}

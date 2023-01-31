@@ -10,11 +10,11 @@ interface Props {
   passwordVisibility?: boolean;
   rightIcon?: keyof typeof Ionicons.glyphMap;
   handlePasswordVisibility?: () => void;
-  onChangeText: (text: any) => void;
-  errorInput: boolean;
+  onChangeText?: (text: any) => void;
+  errorInput?: boolean;
   errorText?: string;
   top?: number;
-  submitEdit: () => void;
+  submitEdit?: () => void;
 }
 
 const PasswordTextBox: React.FC<Props> = ({

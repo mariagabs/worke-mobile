@@ -71,7 +71,7 @@ const SignUpStep4: React.FC<Props> = ({ navigation }) => {
           <View style={styles.stepsPosition}>
             <Steps qtd={7} step={3}></Steps>
           </View>
-          <BackButton onPress={back}></BackButton>
+          <BackButton onPress={back} signUpPage={true}></BackButton>
           <StepsCount currentStep={3} steps={7}></StepsCount>
           <View style={styles.centerView}>
             <Text style={styles.title(200)}>

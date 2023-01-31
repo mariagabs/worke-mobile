@@ -40,9 +40,15 @@ const Group: React.FC = () => {
   ];
   return (
     <View style={styles.container}>
-      <View style={styles.view}>
-        <GroupCode code="7d6r"></GroupCode>
-        <GroupList users={usersGroup}></GroupList>
+      <View style={styles.defaultPadding}>
+        <View style={styles.listHeight}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.groupCode}>
+              <GroupCode code="7d6r"></GroupCode>
+            </View>
+            <GroupList users={usersGroup}></GroupList>
+          </ScrollView>
+        </View>
       </View>
     </View>
   );

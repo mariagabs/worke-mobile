@@ -108,7 +108,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
             ></TextBox>
           </View>
           <View
-            style={styles.fullWidth}
+            style={styles.loginPassword}
             onTouchStart={() => setKeyboardVisible(true)}
           >
             <PasswordTextBox

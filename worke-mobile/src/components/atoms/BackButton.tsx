@@ -4,11 +4,12 @@ import styles from "../../styles";
 
 interface Props {
   onPress: () => void;
+  signUpPage: boolean;
 }
 
-const BackButton: React.FC<Props> = ({ onPress }) => {
+const BackButton: React.FC<Props> = ({ onPress, signUpPage }) => {
   return (
-    <TouchableOpacity style={styles.arrowBack} onPress={onPress}>
+    <TouchableOpacity style={styles.arrowBack(signUpPage)} onPress={onPress}>
       <Image source={require("../../../assets/arrow-back.png")} />
     </TouchableOpacity>
   );

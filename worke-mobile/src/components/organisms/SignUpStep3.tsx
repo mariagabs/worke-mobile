@@ -33,7 +33,7 @@ const SignUpStep3: React.FC<Props> = ({ navigation }) => {
       <View style={styles.stepsPosition}>
         <Steps qtd={7} step={2}></Steps>
       </View>
-      <BackButton onPress={back}></BackButton>
+      <BackButton onPress={back} signUpPage={true}></BackButton>
       <StepsCount currentStep={2} steps={7}></StepsCount>
       <Text style={styles.title(250)}>
         Conte para nós mais sobre <Text style={styles.titleBold}>você!</Text>

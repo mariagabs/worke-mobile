@@ -15,4 +15,5 @@ export const COLORS = {
   lightPurple: "#DAD0F0",
   lightBlue: "#D6F0F8",
   lightPink: "#FFDAEC",
+  darkWhite: "#F6F6F6",
 };
