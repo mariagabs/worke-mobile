@@ -6,7 +6,7 @@ const CreateGroupLabel: React.FC = () => {
 
   return (
     <View style={styles.groupLabelContainer}>
-        <Text style={styles.groupLabel}>CRIE SEU PRÓRPIO GRUPO</Text>
+        <Text style={styles.groupLabel}>CRIE SEU PRÓPRIO GRUPO</Text>
         <Image
             source={require("../../../assets/angle-right-black.png")}
           ></Image>
