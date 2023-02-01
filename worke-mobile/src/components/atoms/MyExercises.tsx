@@ -1,15 +1,22 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import { COLORS } from "../../../assets/colors";
 import styles from "../../styles";
 
 interface Props {
   userLevel: string;
+  navigation: any;
 }
 
-const MyExercises: React.FC<Props> = ({ userLevel }) => {
+const MyExercises: React.FC<Props> = ({ userLevel, navigation }) => {
+  const myExercises = () => navigation.navigate("MyExercises");
+
   return (
-    <View style={styles.myExercises}>
+    <TouchableOpacity
+      onPress={myExercises}
+      activeOpacity={1}
+      style={styles.myExercises}
+    >
       <View style={styles.headerMyExercises}>
         <Text style={styles.subtitleHome}>MEUS EXERCÍCIOS</Text>
         <Image
@@ -34,7 +41,7 @@ const MyExercises: React.FC<Props> = ({ userLevel }) => {
           source={require("../../../assets/rope-jumping-green-background.png")}
         ></Image>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

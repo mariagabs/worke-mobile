@@ -27,7 +27,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
   const [invalidInput, setInvalidInput] = useState(false);
 
   const signUp = () => navigation.navigate("SignUp");
-  const home = () => navigation.navigate("Menu");
+  const home = () => navigation.navigate("Group");
 
   const onChangePassword = (password) => {
     setPassword(password);

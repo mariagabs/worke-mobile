@@ -8,10 +8,21 @@ import MaxCapacityGroup from "../atoms/MaxCapacityGroup";
 import CapacityAd from "../atoms/CapacityAd";
 import Button from "../atoms/Button";
 
-const CreateGroup: React.FC = () => {
+interface Props {
+  navigation: any;
+}
+
+const CreateGroup: React.FC<Props> = ({ navigation }) => {
+  const group = () => navigation.navigate("Group");
+  const menu = () => navigation.navigate("Menu");
+
   return (
     <View style={styles.container}>
-      <HeaderTitleButton title="criar grupo"></HeaderTitleButton>
+      <HeaderTitleButton
+        onPress={group}
+        title="criar grupo"
+        search={false}
+      ></HeaderTitleButton>
       <View style={styles.viewList}>
         <ScrollView>
           <View style={styles.viewSection}>
@@ -28,7 +39,7 @@ const CreateGroup: React.FC = () => {
           </View>
         </ScrollView>
         <View style={styles.buttonBottomPage}>
-          <Button buttonText="criar grupo"></Button>
+          <Button buttonText="criar grupo" onClick={menu}></Button>
         </View>
       </View>
     </View>

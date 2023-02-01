@@ -16,6 +16,7 @@ import SignUpStep8 from "./src/components/organisms/SignUpStep8";
 import SignUpStep9 from "./src/components/organisms/SignUpStep9";
 import CreateGroup from "./src/components/pages/CreateGroup";
 import Group from "./src/components/pages/Group";
+import MyExercises from "./src/components/pages/MyExercises";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -43,6 +44,7 @@ const AppNavigator = () => (
       <Screen name="SignUpStep8" component={SignUpStep8}></Screen>
       <Screen name="SignUpStep9" component={SignUpStep9}></Screen>
       <Screen name="CreateGroup" component={CreateGroup}></Screen>
+      <Screen name="MyExercises" component={MyExercises}></Screen>
     </Navigator>
   </NavigationContainer>
 );

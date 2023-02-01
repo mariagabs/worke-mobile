@@ -9,9 +9,10 @@ import Profile from "./Profile";
 
 interface Props {
   selectedTab: string;
+  navigation: any;
 }
 
-const Menu: React.FC<Props> = ({ selectedTab }) => {
+const Menu: React.FC<Props> = ({ selectedTab, navigation }) => {
   const [activeTab, setActiveTab] = useState("home");
 
   const getSelectedTab = (tab) => {
@@ -20,7 +21,7 @@ const Menu: React.FC<Props> = ({ selectedTab }) => {
   return (
     <View style={styles.container}>
       {activeTab === "home" ? (
-        <Home />
+        <Home navigation={navigation} />
       ) : activeTab === "ranking" ? (
         <Ranking />
       ) : activeTab === "profile" ? (

@@ -19,6 +19,7 @@ const Favorites: React.FC<Props> = ({ list }) => {
         color={colors[i]}
         description={list[i].description}
         exercise={list[i].exercise}
+        list={false}
       ></ExerciseCard>,
     );
   }

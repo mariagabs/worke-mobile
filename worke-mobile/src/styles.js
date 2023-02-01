@@ -367,8 +367,8 @@ export default StyleSheet.create({
   linesOnTop: {
     position: "absolute",
     top: 0,
-    width: Dimensions.get('window').width,
-    height: "18%"
+    width: Dimensions.get("window").width,
+    height: "18%",
   },
   userPhotoIcon: {
     width: 60,
@@ -593,12 +593,12 @@ export default StyleSheet.create({
     padding: 30,
     marginTop: 40,
   },
-  exerciseCard: (cardColor) => ({
+  exerciseCard: (cardColor, list) => ({
     borderColor: cardColor,
     borderWidth: 1,
     borderRadius: 7,
     width: (Dimensions.get("window").width - 80) / 2,
-    height: 110,
+    height: list ? 80 : 110,
     padding: 15,
     marginTop: 20,
   }),
@@ -755,12 +755,12 @@ export default StyleSheet.create({
   groupTitleGroup: {
     display: "flex",
     flexDirection: "row",
-  },  
+  },
   groupTitle: {
     color: COLORS.black,
     fontSize: 28,
     fontFamily: "Nunito",
-    marginRight: 8
+    marginRight: 8,
   },
   groupTitleBold: {
     color: COLORS.black,
@@ -787,16 +787,16 @@ export default StyleSheet.create({
     width: 100,
   },
   purple: {
-    color: COLORS.purple
+    color: COLORS.purple,
   },
   pink: {
-    color: COLORS.pink
+    color: COLORS.pink,
   },
   green: {
     color: COLORS.green,
   },
   blue: {
-    color: COLORS.blue
+    color: COLORS.blue,
   },
   groupLabel: {
     color: COLORS.black,
@@ -804,13 +804,13 @@ export default StyleSheet.create({
     fontFamily: "Nunito-Black",
     fontWeight: 900,
     letterSpacing: 2,
-    marginRight: 12
+    marginRight: 12,
   },
   groupLabelContainer: {
     display: "flex",
     flexDirection: "row",
     position: "absolute",
-    bottom: 50
+    bottom: 50,
   },
   achievementCard: {
     borderColor: COLORS.lighterGray,
@@ -1173,5 +1173,49 @@ export default StyleSheet.create({
     position: "absolute",
     width: "100%",
     bottom: 150,
+  },
+  exercisesList: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+  },
+  myExercisesList: {
+    marginTop: 90,
+  },
+  searchHeaderTitle: {
+    position: "absolute",
+    top: 75,
+    right: 30,
+  },
+  headerTitle: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  listButton: (buttonColor) => ({
+    width: "100%",
+    backgroundColor: buttonColor,
+    paddingVertical: 20,
+    borderRadius: 7,
+    alignSelf: "center",
+  }),
+  listButtonText: {
+    fontFamily: "Nunito-Bold",
+    fontSize: 14,
+    letterSpacing: 1,
+    textTransform: "uppercase",
+    color: COLORS.gray,
+    textAlign: "center",
+  },
+  buttonEditList: {
+    padding: 30,
+    backgroundColor: COLORS.white,
+    width: "100%",
+    position: "absolute",
+    bottom: 0,
+    height: 140,
   },
 });
