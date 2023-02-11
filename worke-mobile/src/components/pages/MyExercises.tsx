@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, ScrollView } from "react-native";
 import HeaderTitleButton from "../organisms/HeaderTitleButton";
 import styles from "../../styles";
@@ -11,19 +11,32 @@ interface Props {
 
 const MyExercises: React.FC<Props> = ({ navigation }) => {
   const home = () => navigation.navigate("Menu");
+  const list = () => getListType(false);
+  const [listEdit, setListEdit] = useState(false);
+
+  const getListType = (type) => {
+    setListEdit(type);
+    console.log(listEdit);
+  };
 
   return (
     <View>
       <HeaderTitleButton
-        onPress={home}
+        onPress={listEdit ? list : home}
         title="meus exercícios"
         search={true}
       ></HeaderTitleButton>
-      <View style={styles.myExercisesList}>
-        <ExercisesList></ExercisesList>
-      </View>
-      <View style={styles.buttonEditList}>
-        <ListButton edit={true} text="editar lista"></ListButton>
+      <View style={styles.view}>
+        <View style={styles.myExercisesList}>
+          <ExercisesList edit={listEdit}></ExercisesList>
+        </View>
+        <View style={styles.buttonEditList}>
+          <ListButton
+            edit={listEdit}
+            text={listEdit ? "salvar" : "editar lista"}
+            onPress={(type) => getListType(type)}
+          ></ListButton>
+        </View>
       </View>
     </View>
   );

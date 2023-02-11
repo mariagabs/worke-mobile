@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, ScrollView } from "react-native";
 import HeaderTitleButton from "../organisms/HeaderTitleButton";
 import GroupCode from "../atoms/GroupCode";
@@ -7,6 +7,7 @@ import GroupPassword from "../organisms/GroupPassword";
 import MaxCapacityGroup from "../atoms/MaxCapacityGroup";
 import CapacityAd from "../atoms/CapacityAd";
 import Button from "../atoms/Button";
+import DefaultModal from "../molecules/DefaultModal";
 
 interface Props {
   navigation: any;
@@ -15,9 +16,23 @@ interface Props {
 const CreateGroup: React.FC<Props> = ({ navigation }) => {
   const group = () => navigation.navigate("Group");
   const menu = () => navigation.navigate("Menu");
+  const [visible, setVisible] = useState(false);
+  const modalVisible = () => setVisible(true);
 
   return (
     <View style={styles.container}>
+      {visible ? (
+        <DefaultModal
+          buttonText="ENTRE NO GRUPO"
+          text="SEU GRUPO FOI CRIADO, 
+SEU CÓGIDO É 7D6R!
+COMPARTILHE COM SEUS AMIGOS!"
+          title="EBA!"
+          type="shareGroup"
+        ></DefaultModal>
+      ) : (
+        ""
+      )}
       <HeaderTitleButton
         onPress={group}
         title="criar grupo"
@@ -39,7 +54,7 @@ const CreateGroup: React.FC<Props> = ({ navigation }) => {
           </View>
         </ScrollView>
         <View style={styles.buttonBottomPage}>
-          <Button buttonText="criar grupo" onClick={menu}></Button>
+          <Button buttonText="criar grupo" onClick={modalVisible}></Button>
         </View>
       </View>
     </View>
