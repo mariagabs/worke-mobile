@@ -4,6 +4,7 @@ import Button from "../atoms/Button";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { COLORS } from "../../../assets/colors";
 import styles from "../../styles";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface Props {
   title: string;
@@ -11,7 +12,6 @@ interface Props {
   buttonText: string;
   type: string;
   onPressClose: (visible: boolean) => void;
-  visible: boolean;
 }
 
 const DefaultModal: React.FC<Props> = ({
@@ -20,7 +20,6 @@ const DefaultModal: React.FC<Props> = ({
   buttonText,
   type,
   onPressClose,
-  visible,
 }) => {
   const images = [
     { type: "yoga", image: require("../../../assets/letsyoga.png") },
@@ -36,12 +35,12 @@ const DefaultModal: React.FC<Props> = ({
       <View style={styles.modal}>
         <View style={styles.headerModal}>
           <FontAwesome5 name="share-alt" size={24} color={COLORS.green} />
-          <FontAwesome
-            name="close"
-            size={30}
-            color={COLORS.lightGray}
-            onPress={(visible) => onPressClose()}
-          />
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={() => onPressClose(false)}
+          >
+            <FontAwesome name="close" size={30} color={COLORS.lightGray} />
+          </TouchableOpacity>
         </View>
         <View style={styles.modalTitle}>
           <Text style={styles.modalTitleText}>{title}</Text>

@@ -113,6 +113,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
           >
             <PasswordTextBox
               onChangeText={onChangePassword}
+              placeholder={"Senha"}
               errorInput={invalidInput}
               errorText="Ops, senha inválida"
               top={25}

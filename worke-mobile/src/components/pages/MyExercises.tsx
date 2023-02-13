@@ -11,13 +11,8 @@ interface Props {
 
 const MyExercises: React.FC<Props> = ({ navigation }) => {
   const home = () => navigation.navigate("Menu");
-  const list = () => getListType(false);
+  const list = () => setListEdit(false);
   const [listEdit, setListEdit] = useState(false);
-
-  const getListType = (type) => {
-    setListEdit(type);
-    console.log(listEdit);
-  };
 
   return (
     <View>
@@ -34,7 +29,7 @@ const MyExercises: React.FC<Props> = ({ navigation }) => {
           <ListButton
             edit={listEdit}
             text={listEdit ? "salvar" : "editar lista"}
-            onPress={(type) => getListType(type)}
+            onPress={(type) => setListEdit(type)}
           ></ListButton>
         </View>
       </View>

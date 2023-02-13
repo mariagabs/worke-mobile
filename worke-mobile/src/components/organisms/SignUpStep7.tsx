@@ -13,36 +13,33 @@ import BackButton from "../atoms/BackButton";
 import StepsCount from "../atoms/StepsCount";
 import { COLORS } from "../../../assets/colors";
 import BlankTextBox from "../atoms/BlankTextBox";
-import LabelButton from "../atoms/LabelButton";
 import ErrorLabel from "../atoms/ErrorLabel";
+import LabelButton from "../atoms/LabelButton";
 import SkipButton from "../atoms/SkipButton";
-import SelectionLabel from "../atoms/SelectionLabel";
 
 interface Props {
   navigation: any;
 }
 
-const SignUpStep7: React.FC<Props> = ({ navigation }) => {
-  const back = () => navigation.navigate("SignUpStep6");
-  const next = () => navigation.navigate("SignUpStep8");
+const SignUpStep5: React.FC<Props> = ({ navigation }) => {
+  const back = () => navigation.navigate("SignUpStep4");
+  const next = () => navigation.navigate("SignUpStep6");
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [invalidInput, setInvalidInput] = useState(false);
-  const [selected, setSelected] = useState(0);
+  const [height, setHeight] = useState("");
 
-  const select = (value) => {
-    if (selected !== value) {
-      setSelected(value);
-      setInvalidInput(false);
-    } else {
-      setSelected(0);
-    }
+  const onChangeHeightHandler = (height) => {
+    setHeight(height);
+
+    if (height !== "" && height !== "0") setInvalidInput(false);
   };
 
-  const validateSelection = () => {
-    if (selected === 0) setInvalidInput(true);
-    else {
+  const validateHeight = () => {
+    if (height !== "" && height !== "0") {
       setInvalidInput(false);
       next();
+    } else {
+      setInvalidInput(true);
     }
   };
 
@@ -58,38 +55,26 @@ const SignUpStep7: React.FC<Props> = ({ navigation }) => {
       >
         <View style={styles.view}>
           <View style={styles.stepsPosition}>
-            <Steps qtd={7} step={6}></Steps>
+            <Steps qtd={9} step={4}></Steps>
           </View>
           <BackButton onPress={back} signUpPage={true}></BackButton>
-          <StepsCount currentStep={6} steps={7}></StepsCount>
+          <StepsCount currentStep={4} steps={9}></StepsCount>
           <View style={styles.centerView}>
             <Text style={styles.title(250)}>
-              Quantas vezes na semana você faz
-              <Text style={styles.titleBold}> exercícios físicos</Text>?
+              Qual a sua <Text style={styles.titleBold}>altura?</Text>
             </Text>
-            <SelectionLabel
-              text="Nenhuma"
-              color={COLORS.green}
-              onPress={() => select(1)}
-              selected={selected === 1}
-            ></SelectionLabel>
-            <SelectionLabel
-              text="1 ou 2 vezes"
-              color={COLORS.pink}
-              onPress={() => select(2)}
-              selected={selected === 2}
-            ></SelectionLabel>
-            <SelectionLabel
-              text="mais de 3 vezes"
+            <BlankTextBox
               color={COLORS.blue}
-              onPress={() => select(3)}
-              selected={selected === 3}
-            ></SelectionLabel>
+              onTouchStart={() => setKeyboardVisible(true)}
+              type="height"
+              complementaryText="cm"
+              onChangeText={onChangeHeightHandler}
+            ></BlankTextBox>
           </View>
           {invalidInput ? (
             <ErrorLabel
-              errorText="Ops, selecione uma opção!"
-              bottom={-90}
+              errorText="Ops, informe uma altura válida!"
+              bottom={-150}
             ></ErrorLabel>
           ) : (
             ""
@@ -99,9 +84,9 @@ const SignUpStep7: React.FC<Props> = ({ navigation }) => {
               <SkipButton onPress={next}></SkipButton>
               <LabelButton
                 text="CONTINUAR"
-                color={COLORS.green}
-                imageColor="green"
-                onPress={validateSelection}
+                color={COLORS.blue}
+                imageColor="blue"
+                onPress={validateHeight}
               ></LabelButton>
             </View>
           ) : (
@@ -113,4 +98,4 @@ const SignUpStep7: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default SignUpStep7;
+export default SignUpStep5;

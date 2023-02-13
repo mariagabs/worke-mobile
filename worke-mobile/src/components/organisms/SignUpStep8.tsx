@@ -12,37 +12,34 @@ import Steps from "../atoms/Steps";
 import BackButton from "../atoms/BackButton";
 import StepsCount from "../atoms/StepsCount";
 import { COLORS } from "../../../assets/colors";
+import BlankTextBox from "../atoms/BlankTextBox";
 import LabelButton from "../atoms/LabelButton";
 import ErrorLabel from "../atoms/ErrorLabel";
 import SkipButton from "../atoms/SkipButton";
-import SelectionLabel from "../atoms/SelectionLabel";
 
 interface Props {
   navigation: any;
 }
 
-const SignUpStep8: React.FC<Props> = ({ navigation }) => {
-  const back = () => navigation.navigate("SignUpStep7");
-  const next = () => navigation.navigate("SignUpStep9");
+const SignUpStep6: React.FC<Props> = ({ navigation }) => {
+  const back = () => navigation.navigate("SignUpStep5");
+  const next = () => navigation.navigate("SignUpStep7");
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [invalidInput, setInvalidInput] = useState(false);
-  const [selected, setSelected] = useState("");
+  const [weight, setWeight] = useState("");
 
-  const select = (value) => {
-    setInvalidInput(false);
-    if (selected === "" || selected.indexOf(value) === -1) {
-      setSelected(selected + value);
-      setInvalidInput(false);
-    } else if (selected.indexOf(value) !== -1) {
-      setSelected(selected.replace(value, ""));
-    }
+  const onChangeWeightHandler = (weight) => {
+    setWeight(weight);
+
+    if (weight !== "" && weight !== "0") setInvalidInput(false);
   };
 
-  const validateSelection = () => {
-    if (selected === "") setInvalidInput(true);
-    else {
+  const validateHeight = () => {
+    if (weight !== "" && weight !== "0") {
       setInvalidInput(false);
       next();
+    } else {
+      setInvalidInput(true);
     }
   };
 
@@ -58,50 +55,26 @@ const SignUpStep8: React.FC<Props> = ({ navigation }) => {
       >
         <View style={styles.view}>
           <View style={styles.stepsPosition}>
-            <Steps qtd={7} step={7}></Steps>
+            <Steps qtd={9} step={5}></Steps>
           </View>
           <BackButton onPress={back} signUpPage={true}></BackButton>
-          <StepsCount currentStep={7} steps={7}></StepsCount>
+          <StepsCount currentStep={5} steps={9}></StepsCount>
           <View style={styles.centerView}>
             <Text style={styles.title(250)}>
-              Quais são suas
-              <Text style={styles.titleBold}> expectativas</Text>?
+              Qual o seu <Text style={styles.titleBold}>peso?</Text>
             </Text>
-            <View style={styles.expectations}>
-              <View style={styles.expect}>
-                <SelectionLabel
-                  text="ser mais saudável"
-                  color={COLORS.green}
-                  onPress={() => select("1")}
-                  selected={selected.indexOf("1") !== -1}
-                ></SelectionLabel>
-                <SelectionLabel
-                  text="iniciar uma atividade física"
-                  color={COLORS.blue}
-                  onPress={() => select("2")}
-                  selected={selected.indexOf("2") !== -1}
-                ></SelectionLabel>
-              </View>
-              <View style={styles.expect}>
-                <SelectionLabel
-                  text="               criar hábitos"
-                  color={COLORS.pink}
-                  onPress={() => select("3")}
-                  selected={selected.indexOf("3") !== -1}
-                ></SelectionLabel>
-                <SelectionLabel
-                  text="               motivação"
-                  color={COLORS.purple}
-                  onPress={() => select("4")}
-                  selected={selected.indexOf("4") !== -1}
-                ></SelectionLabel>
-              </View>
-            </View>
+            <BlankTextBox
+              color={COLORS.purple}
+              onTouchStart={() => setKeyboardVisible(true)}
+              type="weight"
+              complementaryText="kg"
+              onChangeText={onChangeWeightHandler}
+            ></BlankTextBox>
           </View>
           {invalidInput ? (
             <ErrorLabel
-              errorText="Ops, selecione uma opção!"
-              bottom={-90}
+              errorText="Ops, informe um peso válido!"
+              bottom={-150}
             ></ErrorLabel>
           ) : (
             ""
@@ -110,10 +83,10 @@ const SignUpStep8: React.FC<Props> = ({ navigation }) => {
             <View style={styles.labelSkipButton}>
               <SkipButton onPress={next}></SkipButton>
               <LabelButton
-                text="FINALIZAR"
-                color={COLORS.pink}
-                imageColor="pink"
-                onPress={validateSelection}
+                text="CONTINUAR"
+                color={COLORS.purple}
+                imageColor="purple"
+                onPress={validateHeight}
               ></LabelButton>
             </View>
           ) : (
@@ -125,4 +98,4 @@ const SignUpStep8: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default SignUpStep8;
+export default SignUpStep6;

@@ -7,14 +7,14 @@ import {
   Keyboard,
   Platform,
 } from "react-native";
+import TextBox from "../atoms/TextBox";
 import styles from "../../styles";
-import Steps from "../atoms/Steps";
-import BackButton from "../atoms/BackButton";
-import StepsCount from "../atoms/StepsCount";
 import { COLORS } from "../../../assets/colors";
-import BlankTextBox from "../atoms/BlankTextBox";
+import BackButton from "../atoms/BackButton";
+import Steps from "../atoms/Steps";
+import StepsCount from "../atoms/StepsCount";
 import LabelButton from "../atoms/LabelButton";
-import ErrorLabel from "../atoms/ErrorLabel";
+import PasswordTextBox from "../molecules/PasswordTextBox/PasswordTextBox";
 
 interface Props {
   navigation: any;
@@ -23,38 +23,25 @@ interface Props {
 const SignUpStep4: React.FC<Props> = ({ navigation }) => {
   const back = () => navigation.navigate("SignUpStep3");
   const next = () => navigation.navigate("SignUpStep5");
+
   const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [date, setDate] = useState("");
+  const [password, setPassword] = useState("");
   const [invalidInput, setInvalidInput] = useState(false);
 
-  const onChangeDateHandler = (date) => {
-    setDate(date);
-
-    if (date !== "") setInvalidInput(false);
+  const onChangePassword = (password) => {
+    setPassword(password);
   };
 
-  const validateDate = () => {
-    let regex = /(((0|1)[0-9]|2[0-9]|3[0-1])\/(0[1-9]|1[0-2])\/((19|20)\d\d))$/;
-    if (regex.test(date)) {
-      var parts = date.split("/");
-      var dtDOB = new Date(parts[1] + "/" + parts[0] + "/" + parts[2]);
-      var dtCurrent = new Date();
+  const nextStep = () => {
+    let validRegex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-      if (dtCurrent.getFullYear() < dtDOB.getFullYear()) {
-        setInvalidInput(true);
-        return;
-      }
-
-      if (dtCurrent.getFullYear() - dtDOB.getFullYear() < 13) {
-        setInvalidInput(true);
-        return;
-      }
-
-      setInvalidInput(false);
-      next();
-    } else {
-      setInvalidInput(true);
-    }
+    // if (!email.trim().match(validRegex)) {
+    //   setInvalidInput(true);
+    //   return;
+    // }
+    // setInvalidInput(false);
+    // next();
   };
 
   return (
@@ -69,36 +56,45 @@ const SignUpStep4: React.FC<Props> = ({ navigation }) => {
       >
         <View style={styles.view}>
           <View style={styles.stepsPosition}>
-            <Steps qtd={7} step={3}></Steps>
+            <Steps qtd={9} step={3}></Steps>
           </View>
           <BackButton onPress={back} signUpPage={true}></BackButton>
-          <StepsCount currentStep={3} steps={7}></StepsCount>
+          <StepsCount steps={9} currentStep={3}></StepsCount>
           <View style={styles.centerView}>
-            <Text style={styles.title(200)}>
-              Quando você <Text style={styles.titleBold}>nasceu?</Text>
+            <Text style={styles.title(300)}>
+              Crie sua <Text style={styles.titleBold}>nova senha</Text>
             </Text>
-            <BlankTextBox
-              color={COLORS.pink}
+            <View
+              style={styles.fullWidth}
               onTouchStart={() => setKeyboardVisible(true)}
-              type="date"
-              onChangeText={onChangeDateHandler}
-            ></BlankTextBox>
+            >
+              <PasswordTextBox
+                onChangeText={onChangePassword}
+                errorInput={invalidInput}
+                errorText="Ops, senha inválida"
+                top={25}
+                submitEdit={() => setKeyboardVisible(false)}
+                placeholder={"Nova senha"}
+              ></PasswordTextBox>
+              <View style={styles.secondTextBox}>
+                <PasswordTextBox
+                  onChangeText={onChangePassword}
+                  errorInput={invalidInput}
+                  errorText="Ops, senha inválida"
+                  top={25}
+                  submitEdit={() => setKeyboardVisible(false)}
+                  placeholder={"Confirmar senha"}
+                ></PasswordTextBox>
+              </View>
+            </View>
           </View>
-          {invalidInput ? (
-            <ErrorLabel
-              errorText="Ops, informe uma data válida!"
-              bottom={-150}
-            ></ErrorLabel>
-          ) : (
-            ""
-          )}
           {!keyboardVisible ? (
             <View style={styles.labelSkipButton}>
               <LabelButton
                 text="CONTINUAR"
-                color={COLORS.pink}
-                imageColor="pink"
-                onPress={validateDate}
+                color={COLORS.green}
+                imageColor="green"
+                onPress={nextStep}
               ></LabelButton>
             </View>
           ) : (

@@ -6,38 +6,40 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
-  Image,
 } from "react-native";
 import styles from "../../styles";
 import Steps from "../atoms/Steps";
 import BackButton from "../atoms/BackButton";
 import StepsCount from "../atoms/StepsCount";
 import { COLORS } from "../../../assets/colors";
+import BlankTextBox from "../atoms/BlankTextBox";
 import LabelButton from "../atoms/LabelButton";
+import ErrorLabel from "../atoms/ErrorLabel";
+import SkipButton from "../atoms/SkipButton";
+import SelectionLabel from "../atoms/SelectionLabel";
 
 interface Props {
   navigation: any;
 }
 
-const SignUpStep9: React.FC<Props> = ({ navigation }) => {
+const SignUpStep7: React.FC<Props> = ({ navigation }) => {
   const back = () => navigation.navigate("SignUpStep6");
-  const next = () => navigation.navigate("SignUpStep6");
+  const next = () => navigation.navigate("SignUpStep8");
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [invalidInput, setInvalidInput] = useState(false);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(0);
 
   const select = (value) => {
-    setInvalidInput(false);
-    if (selected === "" || selected.indexOf(value) === -1) {
-      setSelected(selected + value);
+    if (selected !== value) {
+      setSelected(value);
       setInvalidInput(false);
-    } else if (selected.indexOf(value) !== -1) {
-      setSelected(selected.replace(value, ""));
+    } else {
+      setSelected(0);
     }
   };
 
   const validateSelection = () => {
-    if (selected === "") setInvalidInput(true);
+    if (selected === 0) setInvalidInput(true);
     else {
       setInvalidInput(false);
       next();
@@ -56,47 +58,59 @@ const SignUpStep9: React.FC<Props> = ({ navigation }) => {
       >
         <View style={styles.view}>
           <View style={styles.stepsPosition}>
-            <Steps qtd={7} step={8}></Steps>
+            <Steps qtd={9} step={6}></Steps>
           </View>
+          <BackButton onPress={back} signUpPage={true}></BackButton>
+          <StepsCount currentStep={6} steps={9}></StepsCount>
           <View style={styles.centerView}>
-            <Image source={require("../../../assets/happy-green.png")}></Image>
-            <Text
-              style={styles.defaultText(
-                32,
-                "center",
-                "Nunito-Black",
-                "100%",
-                2,
-                20,
-              )}
-            >
-              EBA!
+            <Text style={styles.title(250)}>
+              Quantas vezes na semana você faz
+              <Text style={styles.titleBold}> exercícios físicos</Text>?
             </Text>
-            <Text
-              style={styles.defaultText(20, "center", "Nunito", "70%", 0, 0)}
-            >
-              Seu cadastro está pronto! {"\n"}Inicie para sua vida ficar ainda
-              mais saudável!
-            </Text>
+            <SelectionLabel
+              text="Nenhuma"
+              color={COLORS.green}
+              onPress={() => select(1)}
+              selected={selected === 1}
+            ></SelectionLabel>
+            <SelectionLabel
+              text="1 ou 2 vezes"
+              color={COLORS.pink}
+              onPress={() => select(2)}
+              selected={selected === 2}
+            ></SelectionLabel>
+            <SelectionLabel
+              text="mais de 3 vezes"
+              color={COLORS.blue}
+              onPress={() => select(3)}
+              selected={selected === 3}
+            ></SelectionLabel>
           </View>
-
-          <View style={styles.labelSkipButton}>
-            <LabelButton
-              text="INICIAR"
-              color={COLORS.purple}
-              imageColor="purple"
-              onPress={validateSelection}
-              hideImage={true}
-            ></LabelButton>
-          </View>
-          <Image
-            style={styles.lines}
-            source={require("../../../assets/2-lines.png")}
-          ></Image>
+          {invalidInput ? (
+            <ErrorLabel
+              errorText="Ops, selecione uma opção!"
+              bottom={-90}
+            ></ErrorLabel>
+          ) : (
+            ""
+          )}
+          {!keyboardVisible ? (
+            <View style={styles.labelSkipButton}>
+              <SkipButton onPress={next}></SkipButton>
+              <LabelButton
+                text="CONTINUAR"
+                color={COLORS.green}
+                imageColor="green"
+                onPress={validateSelection}
+              ></LabelButton>
+            </View>
+          ) : (
+            ""
+          )}
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };
 
-export default SignUpStep9;
+export default SignUpStep7;

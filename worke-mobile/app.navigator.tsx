@@ -14,6 +14,8 @@ import SignUpStep6 from "./src/components/organisms/SignUpStep6";
 import SignUpStep7 from "./src/components/organisms/SignUpStep7";
 import SignUpStep8 from "./src/components/organisms/SignUpStep8";
 import SignUpStep9 from "./src/components/organisms/SignUpStep9";
+import SignUpStep10 from "./src/components/organisms/SignUpStep10";
+import SignUpStep11 from "./src/components/organisms/SignUpStep11";
 import CreateGroup from "./src/components/pages/CreateGroup";
 import Group from "./src/components/pages/Group";
 import MyExercises from "./src/components/pages/MyExercises";

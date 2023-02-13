@@ -15,6 +15,7 @@ interface Props {
   errorText?: string;
   top?: number;
   submitEdit?: () => void;
+  placeholder: string;
 }
 
 const PasswordTextBox: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const PasswordTextBox: React.FC<Props> = ({
   errorText,
   top,
   submitEdit,
+  placeholder,
 }) => {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
@@ -31,7 +33,7 @@ const PasswordTextBox: React.FC<Props> = ({
   return (
     <View style={styles.inputPassword}>
       <TextBox
-        inputPlaceHolder="Senha"
+        inputPlaceHolder={placeholder}
         secureTextEntry={passwordVisibility}
         autoCorrect={false}
         onChangeText={onChangeText}

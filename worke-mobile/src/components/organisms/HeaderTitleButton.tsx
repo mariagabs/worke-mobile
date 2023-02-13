@@ -11,14 +11,18 @@ interface Props {
   search: boolean;
 }
 
-const HeaderTitleButton: React.FC<Props> = ({ title, onPress }) => {
+const HeaderTitleButton: React.FC<Props> = ({ title, onPress, search }) => {
   return (
     <View style={styles.headerTitle}>
       <BackButton signUpPage={false} onPress={onPress}></BackButton>
       <Text style={styles.pageTitle}>{title}</Text>
-      <View style={styles.searchHeaderTitle}>
-        <FontAwesome5 name="search" size={24} color={COLORS.lighterGray} />
-      </View>
+      {search ? (
+        <View style={styles.searchHeaderTitle}>
+          <FontAwesome5 name="search" size={24} color={COLORS.lighterGray} />
+        </View>
+      ) : (
+        ""
+      )}
     </View>
   );
 };

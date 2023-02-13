@@ -19,6 +19,10 @@ const CreateGroup: React.FC<Props> = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
   const modalVisible = () => setVisible(true);
 
+  const closeModal = (visible) => {
+    setVisible(visible);
+  };
+
   return (
     <View style={styles.container}>
       {visible ? (
@@ -29,6 +33,7 @@ SEU CÓGIDO É 7D6R!
 COMPARTILHE COM SEUS AMIGOS!"
           title="EBA!"
           type="shareGroup"
+          onPressClose={(visible) => closeModal(visible)}
         ></DefaultModal>
       ) : (
         ""
@@ -54,7 +59,7 @@ COMPARTILHE COM SEUS AMIGOS!"
           </View>
         </ScrollView>
         <View style={styles.buttonBottomPage}>
-          <Button buttonText="criar grupo" onClick={modalVisible}></Button>
+          <Button buttonText="criar grupo" onClick={menu}></Button>
         </View>
       </View>
     </View>

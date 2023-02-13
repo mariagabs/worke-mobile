@@ -1,13 +1,19 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+} from "react-native";
+import TextBox from "../atoms/TextBox";
 import styles from "../../styles";
+import { COLORS } from "../../../assets/colors";
 import BackButton from "../atoms/BackButton";
 import Steps from "../atoms/Steps";
 import StepsCount from "../atoms/StepsCount";
-import { COLORS } from "../../../assets/colors";
-import Gender from "../atoms/Gender";
 import LabelButton from "../atoms/LabelButton";
-import ErrorLabel from "../atoms/ErrorLabel";
 
 interface Props {
   navigation: any;
@@ -16,11 +22,20 @@ interface Props {
 const SignUpStep3: React.FC<Props> = ({ navigation }) => {
   const back = () => navigation.navigate("SignUpStep2");
   const next = () => navigation.navigate("SignUpStep4");
-  const [genderSelect, setGenderSelect] = useState("none");
+
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [email, setEmail] = useState("");
   const [invalidInput, setInvalidInput] = useState(false);
 
+  const onChangeEmailHandler = (name) => {
+    setEmail(name);
+  };
+
   const nextStep = () => {
-    if (genderSelect === "none") {
+    let validRegex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+    if (!email.trim().match(validRegex)) {
       setInvalidInput(true);
       return;
     }
@@ -29,74 +44,57 @@ const SignUpStep3: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.view}>
-      <View style={styles.stepsPosition}>
-        <Steps qtd={7} step={2}></Steps>
-      </View>
-      <BackButton onPress={back} signUpPage={true}></BackButton>
-      <StepsCount currentStep={2} steps={7}></StepsCount>
-      <Text style={styles.title(250)}>
-        Conte para nós mais sobre <Text style={styles.titleBold}>você!</Text>
-      </Text>
-      <View style={styles.displayRow}>
-        <Gender
-          gender="MASCULINO"
-          onPress={() => {
-            setGenderSelect("MASCULINO");
-            setInvalidInput(false);
-          }}
-          selected={genderSelect}
-        ></Gender>
-        <Gender
-          gender="FEMININO"
-          onPress={() => {
-            setGenderSelect("FEMININO");
-            setInvalidInput(false);
-          }}
-          selected={genderSelect}
-        ></Gender>
-      </View>
-      <TouchableOpacity
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback
         onPress={() => {
-          setGenderSelect("");
-          setInvalidInput(false);
+          Keyboard.dismiss();
+          setKeyboardVisible(false);
         }}
-        activeOpacity={1}
       >
-        <Text
-          style={
-            genderSelect.trim()
-              ? styles.defaultText(
-                  14,
-                  "center",
-                  "Nunito-ExtraBold",
-                  "auto",
-                  2.5,
-                  50,
-                )
-              : styles.defaultAnswerGender
-          }
-        >
-          PREFIRO NÃO RESPONDER
-        </Text>
-      </TouchableOpacity>
-      {invalidInput ? (
-        <ErrorLabel
-          errorText="Ops, algo deu errado! Selecione uma opção."
-          bottom={-90}
-        ></ErrorLabel>
-      ) : (
-        ""
-      )}
-      <View style={styles.labelSkipButton}>
-        <LabelButton
-          color={COLORS.green}
-          text="CONTINUAR"
-          imageColor="green"
-          onPress={nextStep}
-        ></LabelButton>
-      </View>
-    </View>
+        <View style={styles.view}>
+          <View style={styles.stepsPosition}>
+            <Steps qtd={9} step={2}></Steps>
+          </View>
+          <BackButton onPress={back} signUpPage={true}></BackButton>
+          <StepsCount steps={9} currentStep={2}></StepsCount>
+          <View style={styles.centerView}>
+            <Text style={styles.title(300)}>
+              Qual o seu <Text style={styles.titleBold}>e-mail?</Text>
+            </Text>
+            <View
+              style={styles.fullWidth}
+              onTouchStart={() => setKeyboardVisible(true)}
+            >
+              <TextBox
+                inputPlaceHolder="E-mail"
+                autoCorrect={false}
+                secureTextEntry={false}
+                top={25}
+                keyboardType={"email-address"}
+                errorText="Ops, e-mail inválido"
+                errorInput={invalidInput}
+                onChangeText={onChangeEmailHandler}
+                submitEdit={() => setKeyboardVisible(false)}
+              ></TextBox>
+            </View>
+          </View>
+          {!keyboardVisible ? (
+            <View style={styles.labelSkipButton}>
+              <LabelButton
+                text="CONTINUAR"
+                color={COLORS.purple}
+                imageColor="purple"
+                onPress={nextStep}
+              ></LabelButton>
+            </View>
+          ) : (
+            ""
+          )}
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
