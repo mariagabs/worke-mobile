@@ -1,10 +1,10 @@
 import React from "react";
-import SignUpStep1 from "../organisms/SignUpStep1";
+import SignUpTemplate from "../templates/SignUp";
 
 interface Props {
   navigation: any;
 }
 const SignUp: React.FC<Props> = ({ navigation }) => {
-  return <SignUpStep1 navigation={navigation}></SignUpStep1>;
+  return <SignUpTemplate />;
 };
 export default SignUp;

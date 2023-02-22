@@ -6,7 +6,7 @@ import { LabelButtonImages } from "../../LabelButtonImages";
 interface Props {
   text: string;
   color: string;
-  onPress: () => void;
+  onPress?: () => void;
   imageColor: string;
   hideImage?: boolean;
 }
@@ -18,8 +18,7 @@ const LabelButton: React.FC<Props> = ({
   imageColor,
   hideImage,
 }) => {
-  const image = LabelButtonImages.GetImage(imageColor);
-
+  const image = LabelButtonImages.GetImageColor(imageColor);
   return (
     <TouchableOpacity
       onPress={onPress}

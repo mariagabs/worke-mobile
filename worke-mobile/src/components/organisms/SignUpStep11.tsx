@@ -11,12 +11,12 @@ import {
 import styles from "../../styles";
 import Steps from "../atoms/Steps";
 import BackButton from "../atoms/BackButton";
-import StepsCount from "../atoms/StepsCount";
+import StepsCount from "../molecules/StepsCount";
 import { COLORS } from "../../../assets/colors";
 import LabelButton from "../atoms/LabelButton";
 
 interface Props {
-  navigation: any;
+  navigation?: any;
 }
 
 const SignUpStep9: React.FC<Props> = ({ navigation }) => {
@@ -45,57 +45,27 @@ const SignUpStep9: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <TouchableWithoutFeedback
-        onPress={() => {
-          Keyboard.dismiss();
-          setKeyboardVisible(false);
-        }}
-      >
-        <View style={styles.view}>
-          <View style={styles.stepsPosition}>
-            <Steps qtd={9} step={8}></Steps>
-          </View>
-          <View style={styles.centerView}>
-            <Image source={require("../../../assets/happy-green.png")}></Image>
-            <Text
-              style={styles.defaultText(
-                32,
-                "center",
-                "Nunito-Black",
-                "100%",
-                2,
-                20,
-              )}
-            >
-              EBA!
-            </Text>
-            <Text
-              style={styles.defaultText(20, "center", "Nunito", "70%", 0, 0)}
-            >
-              Seu cadastro está pronto! {"\n"}Inicie para sua vida ficar ainda
-              mais saudável!
-            </Text>
-          </View>
-
-          <View style={styles.labelSkipButton}>
-            <LabelButton
-              text="INICIAR"
-              color={COLORS.purple}
-              imageColor="purple"
-              onPress={validateSelection}
-              hideImage={true}
-            ></LabelButton>
-          </View>
-          <Image
-            style={styles.lines}
-            source={require("../../../assets/2-lines.png")}
-          ></Image>
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    <View>
+      <View style={styles.centerView}>
+        <Image source={require("../../../assets/happy-green.png")}></Image>
+        <Text
+          style={styles.defaultText(
+            32,
+            "center",
+            "Nunito-Black",
+            "100%",
+            2,
+            20,
+          )}
+        >
+          EBA!
+        </Text>
+        <Text style={styles.defaultText(20, "center", "Nunito", "70%", 0, 0)}>
+          Seu cadastro está pronto! {"\n"}Inicie para sua vida ficar ainda mais
+          saudável!
+        </Text>
+      </View>
+    </View>
   );
 };
 

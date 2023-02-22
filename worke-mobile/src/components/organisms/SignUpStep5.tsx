@@ -3,14 +3,14 @@ import { View, Text, TouchableOpacity } from "react-native";
 import styles from "../../styles";
 import BackButton from "../atoms/BackButton";
 import Steps from "../atoms/Steps";
-import StepsCount from "../atoms/StepsCount";
+import StepsCount from "../molecules/StepsCount";
 import { COLORS } from "../../../assets/colors";
 import Gender from "../atoms/Gender";
 import LabelButton from "../atoms/LabelButton";
 import ErrorLabel from "../atoms/ErrorLabel";
 
 interface Props {
-  navigation: any;
+  navigation?: any;
 }
 
 const SignUpStep3: React.FC<Props> = ({ navigation }) => {
@@ -29,12 +29,7 @@ const SignUpStep3: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.view}>
-      <View style={styles.stepsPosition}>
-        <Steps qtd={9} step={2}></Steps>
-      </View>
-      <BackButton onPress={back} signUpPage={true}></BackButton>
-      <StepsCount currentStep={2} steps={9}></StepsCount>
+    <View style={styles.centerView}>
       <Text style={styles.title(250)}>
         Conte para nós mais sobre <Text style={styles.titleBold}>você!</Text>
       </Text>
@@ -88,14 +83,6 @@ const SignUpStep3: React.FC<Props> = ({ navigation }) => {
       ) : (
         ""
       )}
-      <View style={styles.labelSkipButton}>
-        <LabelButton
-          color={COLORS.green}
-          text="CONTINUAR"
-          imageColor="green"
-          onPress={nextStep}
-        ></LabelButton>
-      </View>
     </View>
   );
 };

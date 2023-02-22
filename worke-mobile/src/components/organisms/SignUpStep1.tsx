@@ -4,18 +4,19 @@ import { COLORS } from "../../../assets/colors";
 import styles from "../../styles";
 import BackButton from "../atoms/BackButton";
 import LabelButton from "../atoms/LabelButton";
+import SignUpStep2 from "./SignUpStep2";
 
 interface Props {
-  navigation: any;
+  navigation?: any;
 }
 
 const SignUpStep1: React.FC<Props> = ({ navigation }) => {
   const login = () => navigation.navigate("Login");
-  const next = () => navigation.navigate("SignUpStep2");
+  const next = () => navigation.navigate("SignUpStep" + "2");
 
   return (
     <View style={styles.view}>
-      <BackButton onPress={login} signUpPage={false}></BackButton>
+      {/* <BackButton onPress={login} signUpPage={false}></BackButton> */}
       <Text style={styles.title(200, 2.5)}>
         <Text style={styles.titleBold}>VAMOS</Text> COMEÇAR?
       </Text>
@@ -26,7 +27,7 @@ const SignUpStep1: React.FC<Props> = ({ navigation }) => {
       <Text style={styles.info}>
         Para iniciar precisamos de algumas informações sobre você!
       </Text>
-      <View style={styles.labelSkipButton}>
+      {/* <View style={styles.labelSkipButton}>
         <LabelButton
           color={COLORS.purple}
           text="INICIAR"
@@ -34,7 +35,7 @@ const SignUpStep1: React.FC<Props> = ({ navigation }) => {
           imageColor="purple"
           hideImage={false}
         ></LabelButton>
-      </View>
+      </View> */}
     </View>
   );
 };

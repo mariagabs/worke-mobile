@@ -3,13 +3,12 @@ import { TouchableOpacity, Image } from "react-native";
 import styles from "../../styles";
 
 interface Props {
-  onPress: () => void;
-  signUpPage: boolean;
+  onPress?: () => void;
 }
 
-const BackButton: React.FC<Props> = ({ onPress, signUpPage }) => {
+const BackButton: React.FC<Props> = ({ onPress }) => {
   return (
-    <TouchableOpacity style={styles.arrowBack(signUpPage)} onPress={onPress}>
+    <TouchableOpacity style={styles.arrowBack} onPress={onPress}>
       <Image source={require("../../../assets/arrow-back.png")} />
     </TouchableOpacity>
   );
