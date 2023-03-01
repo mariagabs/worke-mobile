@@ -6,10 +6,9 @@ import { COLORS } from "../../../assets/colors";
 interface Props {
   qtd: number;
   step: number;
-  color: string;
 }
 
-const Steps: React.FC<Props> = ({ qtd, step, color }) => {
+const Steps: React.FC<Props> = ({ qtd, step }) => {
   let steps = [];
   let colors = [COLORS.purple, COLORS.green, COLORS.pink, COLORS.blue];
   let chosenColor = COLORS.lighterGray;
@@ -17,22 +16,21 @@ const Steps: React.FC<Props> = ({ qtd, step, color }) => {
   step--;
 
   for (let i = 0; i < qtd; i++) {
-    // console.log(i, qtd, step);
-    // if (step >= 0 && i <= step) {
-    //   if (i >= colors.length) {
-    //     chosenColor = colors[aux];
-    //     aux++;
-    //     if (aux > colors.length) {
-    //       aux = 0;
-    //     }
-    //   } else {
-    //     chosenColor = colors[i];
-    //   }
-    // } else {
-    //   chosenColor = COLORS.lighterGray;
-    // }
+    if (step >= 0 && i <= step) {
+      if (i >= colors.length) {
+        chosenColor = colors[aux];
+        aux++;
+        if (aux >= colors.length) {
+          aux = 0;
+        }
+      } else {
+        chosenColor = colors[i];
+      }
+    } else {
+      chosenColor = COLORS.lighterGray;
+    }
 
-    steps.push(<View key={i} style={styles.step(color, qtd)}></View>);
+    steps.push(<View style={styles.step(chosenColor, qtd)} key={i}></View>);
   }
 
   return <View style={styles.steps}>{steps}</View>;

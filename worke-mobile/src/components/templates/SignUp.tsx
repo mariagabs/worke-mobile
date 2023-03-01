@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Text,
   Platform,
   Image,
 } from "react-native";
@@ -99,7 +100,7 @@ const SignUp: React.FC = () => {
       if (i >= colors.length) {
         chosenColor = colors[aux];
         aux++;
-        if (aux > colors.length) {
+        if (aux >= colors.length) {
           aux = 0;
         }
       } else {
@@ -112,7 +113,15 @@ const SignUp: React.FC = () => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   return (
     <View>
-      <Steps currentStep={currentStep} qtySteps={10} />
+      <View style={styles.stepsSignUp}>
+        <Steps
+          currentStep={currentStep}
+          qtySteps={10}
+          onPress={(currentStep) => {
+            setCurrentStep(currentStep);
+          }}
+        />
+      </View>
       <View style={styles.viewSignUp}>
         <View>{steps[currentStep].page}</View>
         {isKeyboardVisible ? (
