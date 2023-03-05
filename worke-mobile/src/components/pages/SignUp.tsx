@@ -5,6 +5,6 @@ interface Props {
   navigation: any;
 }
 const SignUp: React.FC<Props> = ({ navigation }) => {
-  return <SignUpTemplate />;
+  return <SignUpTemplate navigation={navigation} />;
 };
 export default SignUp;

@@ -1,44 +1,36 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-} from "react-native";
+import { View, Text } from "react-native";
 import TextBox from "../atoms/TextBox";
 import styles from "../../styles";
-import { COLORS } from "../../../assets/colors";
-import BackButton from "../atoms/BackButton";
-import Steps from "../atoms/Steps";
-import StepsCount from "../molecules/StepsCount";
-import LabelButton from "../atoms/LabelButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
   navigation?: any;
   onPressText: (keyboardVisible) => void;
+  invalidInput?: boolean;
 }
 
-const SignUpStep2: React.FC<Props> = ({ navigation, onPressText }) => {
+const SignUpStep2: React.FC<Props> = ({ onPressText, invalidInput }) => {
   const [name, setName] = useState("");
-  const [invalidInput, setInvalidInput] = useState(false);
 
-  const back = () => navigation.navigate("SignUp");
-  const next = () => navigation.navigate("SignUpStep3");
+  const getName = async () => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
+    setName(userCreate.name);
+  };
 
-  const onChangeNameHandler = (name) => {
+  const onChangeNameHandler = async (name) => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
     setName(name);
+
+    userCreate.name = name;
+    await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
+      (error) => console.log(error),
+    );
   };
 
-  const nextStep = () => {
-    if (!name.trim()) {
-      setInvalidInput(true);
-      return;
-    }
-    setInvalidInput(false);
-    next();
-  };
+  getName();
 
   return (
     <View>
@@ -58,6 +50,7 @@ const SignUpStep2: React.FC<Props> = ({ navigation, onPressText }) => {
             onTouchStart={() => {
               onPressText(true);
             }}
+            text={name}
           ></TextBox>
         </View>
       </View>

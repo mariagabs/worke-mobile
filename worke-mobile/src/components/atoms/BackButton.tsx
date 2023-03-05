@@ -12,7 +12,6 @@ const BackButton: React.FC<Props> = ({ onPress, currentStep }) => {
     <TouchableOpacity
       style={styles.arrowBack}
       onPress={(step) => {
-        console.log(step);
         onPress(currentStep > 0 ? currentStep - 1 : 0);
       }}
     >

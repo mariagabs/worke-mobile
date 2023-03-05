@@ -11,10 +11,11 @@ import {
   Text,
   Keyboard,
   Platform,
-  AsyncStorage,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface Props {
   navigation: any;
@@ -136,13 +137,17 @@ const Login: React.FC<Props> = ({ navigation }) => {
                 source={require("../../../assets/divider-line.png")}
                 style={styles.divider}
               />
-              <Text style={styles.createAccount}>
-                Não possui uma conta?
-                <Text style={styles.span} onPress={signUp}>
-                  {" "}
-                  Crie aqui!
-                </Text>
-              </Text>
+              <View style={styles.bottomInfoText}>
+                <Text style={styles.createAccount}>Não possui uma conta?</Text>
+
+                <TouchableOpacity
+                  onPress={signUp}
+                  activeOpacity={1}
+                  style={styles.clickableSpan}
+                >
+                  <Text style={styles.span}> Crie aqui!</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           ) : null}
         </View>

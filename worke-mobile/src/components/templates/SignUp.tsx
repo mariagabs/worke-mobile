@@ -23,63 +23,77 @@ import SignUpStep11 from "../organisms/SignUpStep11";
 import Steps from "../molecules/Steps";
 import LabelButton from "../atoms/LabelButton";
 import { COLORS } from "../../../assets/colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const SignUp: React.FC = () => {
+interface Props {
+  navigation: any;
+}
+
+const SignUp: React.FC<Props> = ({ navigation }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const next = () => {
-    let step = currentStep + 1;
-    setCurrentStep(step);
-  };
+  const [invalid, setInvalid] = useState(false);
 
   let steps = [
     {
       step: 0,
+      name: "start",
       page: <SignUpStep1 />,
     },
     {
       step: 1,
+      name: "name",
       page: (
         <SignUpStep2
           onPressText={(isKeyboardVisible) =>
             setKeyboardVisible(isKeyboardVisible)
           }
+          invalidInput={invalid}
         />
       ),
     },
     {
       step: 2,
+      name: "email",
       page: <SignUpStep3 />,
     },
     {
       step: 3,
+      name: "password",
       page: <SignUpStep4 />,
     },
     {
       step: 4,
+      name: "sex",
       page: <SignUpStep5 />,
     },
     {
       step: 5,
+      name: "birthDate",
       page: <SignUpStep6 />,
     },
     {
       step: 6,
+      name: "height",
       page: <SignUpStep7 />,
     },
     {
       step: 7,
+      name: "weigth",
       page: <SignUpStep8 />,
     },
     {
       step: 8,
+      name: "frequency",
       page: <SignUpStep9 />,
     },
     {
       step: 9,
+      name: "expectations",
       page: <SignUpStep10 />,
     },
     {
       step: 10,
+      name: "end",
       page: <SignUpStep11 />,
     },
   ];
@@ -94,6 +108,44 @@ const SignUp: React.FC = () => {
   let chosenColor = COLORS.purple;
   let aux = 0;
   let step = currentStep == 0 ? currentStep : currentStep - 1;
+  let userCreate = {
+    name: "",
+    email: "",
+    password: "",
+    sex: "",
+    birthDate: "",
+    height: 0,
+    weigth: 0,
+    frequency: 0,
+    expec: 0,
+  };
+
+  const next = async () => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
+
+    switch (steps[currentStep].name) {
+      case "start":
+        nextStep();
+        break;
+      case "name":
+        if (userCreate.name === "") {
+          setInvalid(true);
+        } else {
+          setInvalid(false);
+          nextStep();
+        }
+    }
+  };
+
+  const nextStep = () => {
+    let step = currentStep + 1;
+
+    if (step === 11) createGroup();
+    else {
+      setCurrentStep(step);
+    }
+  };
 
   for (let i = 0; i <= step; i++) {
     if (currentStep >= 0 && i <= currentStep) {
@@ -110,43 +162,62 @@ const SignUp: React.FC = () => {
       chosenColor = COLORS.lighterGray;
     }
   }
+
+  if (currentStep === 10) chosenColor = COLORS.purple;
+
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+  const backHome = () => navigation.navigate("Login");
+  const createGroup = () => navigation.navigate("Group");
+
   return (
-    <View>
-      <View style={styles.stepsSignUp}>
-        <Steps
-          currentStep={currentStep}
-          qtySteps={10}
-          onPress={(currentStep) => {
-            setCurrentStep(currentStep);
-          }}
-        />
-      </View>
-      <View style={styles.viewSignUp}>
-        <View>{steps[currentStep].page}</View>
-        {isKeyboardVisible ? (
-          ""
-        ) : (
-          <View style={styles.labelSkipButton}>
-            <LabelButton
-              color={chosenColor}
-              imageColor={chosenColor}
-              text={buttonText}
-              hideImage={currentStep == 10}
-              onPress={next}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+          setKeyboardVisible(false);
+        }}
+      >
+        <View>
+          <View style={styles.stepsSignUp}>
+            <Steps
+              currentStep={currentStep}
+              qtySteps={10}
+              onPress={(currentStep) => {
+                setCurrentStep(currentStep);
+                currentStep == 0 ? backHome() : "";
+              }}
             />
           </View>
-        )}
-      </View>
-      {currentStep == 10 ? (
-        <Image
-          style={styles.lines}
-          source={require("../../../assets/2-lines.png")}
-        ></Image>
-      ) : (
-        ""
-      )}
-    </View>
+          <View style={styles.viewSignUp}>
+            <View>{steps[currentStep].page}</View>
+            {isKeyboardVisible ? (
+              ""
+            ) : (
+              <View style={styles.labelSkipButton}>
+                <LabelButton
+                  color={chosenColor}
+                  imageColor={chosenColor}
+                  text={buttonText}
+                  hideImage={currentStep == 10}
+                  onPress={next}
+                />
+              </View>
+            )}
+          </View>
+          {currentStep == 10 ? (
+            <Image
+              style={styles.lines}
+              source={require("../../../assets/2-lines.png")}
+            ></Image>
+          ) : (
+            ""
+          )}
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
