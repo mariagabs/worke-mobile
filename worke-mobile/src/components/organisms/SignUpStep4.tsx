@@ -1,48 +1,53 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-} from "react-native";
-import TextBox from "../atoms/TextBox";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState, useEffect } from "react";
+import { View, Text } from "react-native";
 import styles from "../../styles";
-import { COLORS } from "../../../assets/colors";
-import BackButton from "../atoms/BackButton";
-import Steps from "../atoms/Steps";
-import StepsCount from "../molecules/StepsCount";
-import LabelButton from "../atoms/LabelButton";
 import PasswordTextBox from "../molecules/PasswordTextBox/PasswordTextBox";
 
 interface Props {
-  navigation?: any;
+  onPressText: (keyboardVisible) => void;
+  invalidInput?: boolean;
 }
 
-const SignUpStep4: React.FC<Props> = ({ navigation }) => {
-  const back = () => navigation.navigate("SignUpStep3");
-  const next = () => navigation.navigate("SignUpStep5");
-
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+const SignUpStep4: React.FC<Props> = ({ onPressText, invalidInput }) => {
   const [password, setPassword] = useState("");
-  const [invalidInput, setInvalidInput] = useState(false);
+  const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  const onChangePassword = (password) => {
-    setPassword(password);
+  const onChangePassword = (pass) => {
+    setPassword(pass);
   };
 
-  const nextStep = () => {
-    let validRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
-    // if (!email.trim().match(validRegex)) {
-    //   setInvalidInput(true);
-    //   return;
-    // }
-    // setInvalidInput(false);
-    // next();
+  const onChangePasswordConfirm = (passwordConfirm) => {
+    setPasswordConfirm(passwordConfirm);
   };
+
+  const savePassword = async () => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
+
+    if (password === passwordConfirm) {
+      userCreate.password = password;
+    } else {
+      userCreate.password = "";
+      invalidInput = true;
+    }
+
+    await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
+      (error) => console.log(error),
+    );
+  };
+
+  useEffect(() => {
+    const getPassword = async () => {
+      let user = await AsyncStorage.getItem("userCreate");
+      let userCreate = JSON.parse(user);
+
+      setPassword(userCreate.password);
+      setPasswordConfirm(userCreate.password);
+    };
+
+    getPassword().catch(console.error);
+  }, []);
 
   return (
     <View>
@@ -50,26 +55,29 @@ const SignUpStep4: React.FC<Props> = ({ navigation }) => {
         <Text style={styles.title(300)}>
           Crie sua <Text style={styles.titleBold}>nova senha</Text>
         </Text>
-        <View
-          style={styles.fullWidth}
-          onTouchStart={() => setKeyboardVisible(true)}
-        >
+        <View style={styles.fullWidth}>
           <PasswordTextBox
             onChangeText={onChangePassword}
-            errorInput={invalidInput}
-            errorText="Ops, senha inválida"
             top={25}
-            submitEdit={() => setKeyboardVisible(false)}
             placeholder={"Nova senha"}
+            onBlur={savePassword}
+            text={password}
+            onTouchStart={() => {
+              onPressText(true);
+            }}
           ></PasswordTextBox>
           <View style={styles.secondTextBox}>
             <PasswordTextBox
-              onChangeText={onChangePassword}
+              onChangeText={onChangePasswordConfirm}
               errorInput={invalidInput}
-              errorText="Ops, senha inválida"
+              errorText="Ops, as senhas não coincidem"
               top={25}
-              submitEdit={() => setKeyboardVisible(false)}
               placeholder={"Confirmar senha"}
+              onBlur={savePassword}
+              onTouchStart={() => {
+                onPressText(true);
+              }}
+              text={passwordConfirm}
             ></PasswordTextBox>
           </View>
         </View>

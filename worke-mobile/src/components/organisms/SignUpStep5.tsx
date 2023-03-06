@@ -1,32 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import styles from "../../styles";
-import BackButton from "../atoms/BackButton";
-import Steps from "../atoms/Steps";
-import StepsCount from "../molecules/StepsCount";
-import { COLORS } from "../../../assets/colors";
 import Gender from "../atoms/Gender";
-import LabelButton from "../atoms/LabelButton";
 import ErrorLabel from "../atoms/ErrorLabel";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
-  navigation?: any;
+  invalidInput: boolean;
 }
 
-const SignUpStep3: React.FC<Props> = ({ navigation }) => {
-  const back = () => navigation.navigate("SignUpStep2");
-  const next = () => navigation.navigate("SignUpStep4");
-  const [genderSelect, setGenderSelect] = useState("none");
-  const [invalidInput, setInvalidInput] = useState(false);
+const SignUpStep3: React.FC<Props> = ({ invalidInput }) => {
+  const [genderSelect, setGenderSelect] = useState("NONE");
 
-  const nextStep = () => {
-    if (genderSelect === "none") {
-      setInvalidInput(true);
-      return;
-    }
-    setInvalidInput(false);
-    next();
+  const saveGender = async (gender) => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
+    setGenderSelect(gender);
+    userCreate.gender = gender;
+
+    await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
+      (error) => console.log(error),
+    );
   };
+
+  useEffect(() => {
+    const getGender = async () => {
+      let user = await AsyncStorage.getItem("userCreate");
+      let userCreate = JSON.parse(user);
+
+      setGenderSelect(userCreate.gender);
+    };
+
+    getGender().catch(console.error);
+  }, []);
 
   return (
     <View style={styles.centerView}>
@@ -37,30 +43,27 @@ const SignUpStep3: React.FC<Props> = ({ navigation }) => {
         <Gender
           gender="MASCULINO"
           onPress={() => {
-            setGenderSelect("MASCULINO");
-            setInvalidInput(false);
+            saveGender("MASCULINO");
           }}
           selected={genderSelect}
         ></Gender>
         <Gender
           gender="FEMININO"
           onPress={() => {
-            setGenderSelect("FEMININO");
-            setInvalidInput(false);
+            saveGender("FEMININO");
           }}
           selected={genderSelect}
         ></Gender>
       </View>
       <TouchableOpacity
         onPress={() => {
-          setGenderSelect("");
-          setInvalidInput(false);
+          saveGender("NOTINFORMED");
         }}
         activeOpacity={1}
       >
         <Text
           style={
-            genderSelect.trim()
+            genderSelect.trim() === "NONE"
               ? styles.defaultText(
                   14,
                   "center",

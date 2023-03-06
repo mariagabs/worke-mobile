@@ -1,47 +1,41 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text } from "react-native";
 import TextBox from "../atoms/TextBox";
 import styles from "../../styles";
-import { COLORS } from "../../../assets/colors";
-import BackButton from "../atoms/BackButton";
-import Steps from "../atoms/Steps";
-import StepsCount from "../molecules/StepsCount";
-import LabelButton from "../atoms/LabelButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
-  navigation?: any;
+  onPressText: (keyboardVisible) => void;
+  invalidInput?: boolean;
 }
 
-const SignUpStep3: React.FC<Props> = ({ navigation }) => {
-  const back = () => navigation.navigate("SignUpStep2");
-  const next = () => navigation.navigate("SignUpStep4");
-
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+const SignUpStep3: React.FC<Props> = ({ onPressText, invalidInput }) => {
   const [email, setEmail] = useState("");
-  const [invalidInput, setInvalidInput] = useState(false);
 
   const onChangeEmailHandler = (name) => {
     setEmail(name);
   };
 
-  const nextStep = () => {
-    let validRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  const saveEmail = async () => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
+    userCreate.email = email;
 
-    if (!email.trim().match(validRegex)) {
-      setInvalidInput(true);
-      return;
-    }
-    setInvalidInput(false);
-    next();
+    await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
+      (error) => console.log(error),
+    );
   };
+
+  useEffect(() => {
+    const getEmail = async () => {
+      let user = await AsyncStorage.getItem("userCreate");
+      let userCreate = JSON.parse(user);
+
+      setEmail(userCreate.email);
+    };
+
+    getEmail().catch(console.error);
+  }, []);
 
   return (
     <View>
@@ -49,10 +43,7 @@ const SignUpStep3: React.FC<Props> = ({ navigation }) => {
         <Text style={styles.title(300)}>
           Qual o seu <Text style={styles.titleBold}>e-mail?</Text>
         </Text>
-        <View
-          style={styles.fullWidth}
-          onTouchStart={() => setKeyboardVisible(true)}
-        >
+        <View style={styles.fullWidth}>
           <TextBox
             inputPlaceHolder="E-mail"
             autoCorrect={false}
@@ -62,7 +53,11 @@ const SignUpStep3: React.FC<Props> = ({ navigation }) => {
             errorText="Ops, e-mail inválido"
             errorInput={invalidInput}
             onChangeText={onChangeEmailHandler}
-            submitEdit={() => setKeyboardVisible(false)}
+            onBlur={saveEmail}
+            text={email}
+            onTouchStart={() => {
+              onPressText(true);
+            }}
           ></TextBox>
         </View>
       </View>

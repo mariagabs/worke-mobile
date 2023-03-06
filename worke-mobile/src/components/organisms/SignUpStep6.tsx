@@ -1,61 +1,43 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text } from "react-native";
 import styles from "../../styles";
-import Steps from "../atoms/Steps";
-import BackButton from "../atoms/BackButton";
-import StepsCount from "../molecules/StepsCount";
 import { COLORS } from "../../../assets/colors";
 import BlankTextBox from "../atoms/BlankTextBox";
-import LabelButton from "../atoms/LabelButton";
 import ErrorLabel from "../atoms/ErrorLabel";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
-  navigation?: any;
+  onPressText: (keyboardVisible) => void;
+  invalidInput: boolean;
 }
 
-const SignUpStep4: React.FC<Props> = ({ navigation }) => {
-  const back = () => navigation.navigate("SignUpStep3");
-  const next = () => navigation.navigate("SignUpStep5");
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
+const SignUpStep4: React.FC<Props> = ({ invalidInput, onPressText }) => {
   const [date, setDate] = useState("");
-  const [invalidInput, setInvalidInput] = useState(false);
 
   const onChangeDateHandler = (date) => {
     setDate(date);
-
-    if (date !== "") setInvalidInput(false);
   };
 
-  const validateDate = () => {
-    let regex = /(((0|1)[0-9]|2[0-9]|3[0-1])\/(0[1-9]|1[0-2])\/((19|20)\d\d))$/;
-    if (regex.test(date)) {
-      var parts = date.split("/");
-      var dtDOB = new Date(parts[1] + "/" + parts[0] + "/" + parts[2]);
-      var dtCurrent = new Date();
+  const saveDate = async () => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
+    userCreate.birthDate = date;
 
-      if (dtCurrent.getFullYear() < dtDOB.getFullYear()) {
-        setInvalidInput(true);
-        return;
-      }
-
-      if (dtCurrent.getFullYear() - dtDOB.getFullYear() < 13) {
-        setInvalidInput(true);
-        return;
-      }
-
-      setInvalidInput(false);
-      next();
-    } else {
-      setInvalidInput(true);
-    }
+    await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
+      (error) => console.log(error),
+    );
   };
+
+  useEffect(() => {
+    const getDate = async () => {
+      let user = await AsyncStorage.getItem("userCreate");
+      let userCreate = JSON.parse(user);
+
+      setDate(userCreate.birthDate);
+    };
+
+    getDate().catch(console.error);
+  }, []);
 
   return (
     <View>
@@ -65,9 +47,10 @@ const SignUpStep4: React.FC<Props> = ({ navigation }) => {
         </Text>
         <BlankTextBox
           color={COLORS.pink}
-          onTouchStart={() => setKeyboardVisible(true)}
+          onTouchStart={() => onPressText(true)}
           type="date"
           onChangeText={onChangeDateHandler}
+          onBlur={saveDate}
         ></BlankTextBox>
       </View>
       {invalidInput ? (

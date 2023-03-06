@@ -16,6 +16,9 @@ interface Props {
   top?: number;
   submitEdit?: () => void;
   placeholder: string;
+  onBlur?: () => void;
+  onTouchStart?: () => void;
+  text?: string;
 }
 
 const PasswordTextBox: React.FC<Props> = ({
@@ -25,6 +28,9 @@ const PasswordTextBox: React.FC<Props> = ({
   top,
   submitEdit,
   placeholder,
+  onBlur,
+  onTouchStart,
+  text,
 }) => {
   const { passwordVisibility, rightIcon, handlePasswordVisibility } =
     useTogglePasswordVisibility();
@@ -41,6 +47,9 @@ const PasswordTextBox: React.FC<Props> = ({
         errorText={errorText}
         top={top}
         submitEdit={submitEdit}
+        onTouchStart={onTouchStart}
+        onBlur={onBlur}
+        text={text}
       />
       <Pressable onPress={handlePasswordVisibility} style={styles.eyeIcon}>
         <Ionicons name={rightIcon} size={22} color={COLORS.lightGray} />

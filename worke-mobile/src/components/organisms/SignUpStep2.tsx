@@ -1,36 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import TextBox from "../atoms/TextBox";
 import styles from "../../styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
-  navigation?: any;
   onPressText: (keyboardVisible) => void;
   invalidInput?: boolean;
 }
 
 const SignUpStep2: React.FC<Props> = ({ onPressText, invalidInput }) => {
   const [name, setName] = useState("");
-
-  const getName = async () => {
-    let user = await AsyncStorage.getItem("userCreate");
-    let userCreate = JSON.parse(user);
-    setName(userCreate.name);
-  };
-
-  const onChangeNameHandler = async (name) => {
-    let user = await AsyncStorage.getItem("userCreate");
-    let userCreate = JSON.parse(user);
+  const onChangeNameHandler = (name) => {
     setName(name);
-
+  };
+  const saveName = async () => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
     userCreate.name = name;
+
     await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
       (error) => console.log(error),
     );
   };
 
-  getName();
+  useEffect(() => {
+    const getName = async () => {
+      let user = await AsyncStorage.getItem("userCreate");
+      let userCreate = JSON.parse(user);
+
+      setName(userCreate.name);
+    };
+
+    getName().catch(console.error);
+  }, []);
 
   return (
     <View>
@@ -47,6 +50,7 @@ const SignUpStep2: React.FC<Props> = ({ onPressText, invalidInput }) => {
             errorText="Ops, nome inválido"
             errorInput={invalidInput}
             onChangeText={onChangeNameHandler}
+            onBlur={saveName}
             onTouchStart={() => {
               onPressText(true);
             }}

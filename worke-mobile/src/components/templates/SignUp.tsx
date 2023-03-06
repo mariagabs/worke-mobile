@@ -54,22 +54,43 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
     {
       step: 2,
       name: "email",
-      page: <SignUpStep3 />,
+      page: (
+        <SignUpStep3
+          onPressText={(isKeyboardVisible) =>
+            setKeyboardVisible(isKeyboardVisible)
+          }
+          invalidInput={invalid}
+        />
+      ),
     },
     {
       step: 3,
       name: "password",
-      page: <SignUpStep4 />,
+      page: (
+        <SignUpStep4
+          onPressText={(isKeyboardVisible) =>
+            setKeyboardVisible(isKeyboardVisible)
+          }
+          invalidInput={invalid}
+        />
+      ),
     },
     {
       step: 4,
-      name: "sex",
-      page: <SignUpStep5 />,
+      name: "gender",
+      page: <SignUpStep5 invalidInput={invalid} />,
     },
     {
       step: 5,
       name: "birthDate",
-      page: <SignUpStep6 />,
+      page: (
+        <SignUpStep6
+          onPressText={(isKeyboardVisible) =>
+            setKeyboardVisible(isKeyboardVisible)
+          }
+          invalidInput={invalid}
+        />
+      ),
     },
     {
       step: 6,
@@ -108,16 +129,30 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
   let chosenColor = COLORS.purple;
   let aux = 0;
   let step = currentStep == 0 ? currentStep : currentStep - 1;
-  let userCreate = {
-    name: "",
-    email: "",
-    password: "",
-    sex: "",
-    birthDate: "",
-    height: 0,
-    weigth: 0,
-    frequency: 0,
-    expec: 0,
+  const createGroup = () => navigation.navigate("Group");
+
+  const nextStep = async () => {
+    let step = currentStep + 1;
+
+    if (step === 1) {
+      let userCreate = {
+        name: "",
+        email: "",
+        password: "",
+        gender: "NONE",
+        birthDate: "",
+        height: 0,
+        weigth: 0,
+        frequency: 0,
+        expec: 0,
+      };
+      await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate));
+    }
+
+    if (step === 11) createGroup();
+    else {
+      setCurrentStep(step);
+    }
   };
 
   const next = async () => {
@@ -135,15 +170,55 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
           setInvalid(false);
           nextStep();
         }
-    }
-  };
+        break;
+      case "email":
+        let validRegex =
+          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
-  const nextStep = () => {
-    let step = currentStep + 1;
+        if (!userCreate.email.trim().match(validRegex)) {
+          setInvalid(true);
+        } else {
+          setInvalid(false);
+          nextStep();
+        }
+        break;
+      case "password":
+        if (userCreate.password.trim() === "") {
+          setInvalid(true);
+        } else {
+          setInvalid(false);
+          nextStep();
+        }
+        break;
+      case "gender":
+        if (userCreate.gender.trim() === "NONE") {
+          setInvalid(true);
+        } else {
+          setInvalid(false);
+          nextStep();
+        }
+        break;
+      case "birthDate":
+        let regex =
+          /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+        let date = userCreate.birthDate;
+        if (regex.test(userCreate.birthDate)) {
+          var parts = date.split("/");
+          var dtDOB = new Date(parts[1] + "/" + parts[0] + "/" + parts[2]);
+          var dtCurrent = new Date();
 
-    if (step === 11) createGroup();
-    else {
-      setCurrentStep(step);
+          if (dtCurrent.getFullYear() < dtDOB.getFullYear()) {
+            setInvalid(true);
+          } else if (dtCurrent.getFullYear() - dtDOB.getFullYear() < 13) {
+            setInvalid(true);
+          } else {
+            setInvalid(false);
+            nextStep();
+          }
+        } else {
+          setInvalid(true);
+        }
+        break;
     }
   };
 
@@ -168,7 +243,6 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   const backHome = () => navigation.navigate("Login");
-  const createGroup = () => navigation.navigate("Group");
 
   return (
     <KeyboardAvoidingView

@@ -14,6 +14,7 @@ interface Props {
   submitEdit?: () => void;
   text?: string;
   onTouchStart?: () => void;
+  onBlur?: () => void;
 }
 
 const TextBox: React.FC<Props> = ({
@@ -28,6 +29,7 @@ const TextBox: React.FC<Props> = ({
   submitEdit,
   text,
   onTouchStart,
+  onBlur,
 }) => {
   return (
     <View>
@@ -40,6 +42,7 @@ const TextBox: React.FC<Props> = ({
         keyboardType={keyboardType}
         onSubmitEditing={submitEdit}
         onTouchStart={onTouchStart}
+        onBlur={onBlur}
       >
         {text}
       </TextInput>

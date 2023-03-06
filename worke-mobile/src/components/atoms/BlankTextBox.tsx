@@ -9,6 +9,7 @@ interface Props {
   onTouchStart: () => void;
   type: string;
   onChangeText: (text: any) => void;
+  onBlur?: () => void;
 }
 
 const BlankTextBox: React.FC<Props> = ({
@@ -17,6 +18,7 @@ const BlankTextBox: React.FC<Props> = ({
   onTouchStart,
   type,
   onChangeText,
+  onBlur,
 }) => {
   const [date, setDate] = useState("");
 
@@ -35,6 +37,7 @@ const BlankTextBox: React.FC<Props> = ({
             }}
             onTouchStart={onTouchStart}
             placeholder="dd/mm/aaaa"
+            onBlur={onBlur}
           ></TextInputMask>
         </View>
       ) : (
@@ -47,6 +50,7 @@ const BlankTextBox: React.FC<Props> = ({
               onChangeText(text);
             }}
             onTouchStart={onTouchStart}
+            onBlur={onBlur}
           ></TextInput>
           <Text style={styles.complementaryText}> {complementaryText}</Text>
         </View>
