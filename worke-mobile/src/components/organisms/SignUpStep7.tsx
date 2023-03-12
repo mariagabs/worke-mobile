@@ -1,47 +1,43 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text } from "react-native";
 import styles from "../../styles";
-import Steps from "../atoms/Steps";
-import BackButton from "../atoms/BackButton";
-import StepsCount from "../molecules/StepsCount";
 import { COLORS } from "../../../assets/colors";
 import BlankTextBox from "../atoms/BlankTextBox";
 import ErrorLabel from "../atoms/ErrorLabel";
-import LabelButton from "../atoms/LabelButton";
-import SkipButton from "../atoms/SkipButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
-  navigation?: any;
+  onPressText: (keyboardVisible) => void;
+  invalidInput?: boolean;
 }
 
-const SignUpStep5: React.FC<Props> = ({ navigation }) => {
-  const back = () => navigation.navigate("SignUpStep4");
-  const next = () => navigation.navigate("SignUpStep6");
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [invalidInput, setInvalidInput] = useState(false);
+const SignUpStep5: React.FC<Props> = ({ onPressText, invalidInput }) => {
   const [height, setHeight] = useState("");
 
   const onChangeHeightHandler = (height) => {
     setHeight(height);
-
-    if (height !== "" && height !== "0") setInvalidInput(false);
   };
 
-  const validateHeight = () => {
-    if (height !== "" && height !== "0") {
-      setInvalidInput(false);
-      next();
-    } else {
-      setInvalidInput(true);
-    }
+  const saveHeight = async () => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
+    userCreate.height = height;
+
+    await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
+      (error) => console.log(error),
+    );
   };
+
+  useEffect(() => {
+    const getHeight = async () => {
+      let user = await AsyncStorage.getItem("userCreate");
+      let userCreate = JSON.parse(user);
+
+      setHeight(userCreate.height);
+    };
+
+    getHeight().catch(console.error);
+  }, []);
 
   return (
     <View>
@@ -51,10 +47,12 @@ const SignUpStep5: React.FC<Props> = ({ navigation }) => {
         </Text>
         <BlankTextBox
           color={COLORS.blue}
-          onTouchStart={() => setKeyboardVisible(true)}
+          onTouchStart={() => onPressText(true)}
+          onBlur={saveHeight}
           type="height"
           complementaryText="cm"
           onChangeText={onChangeHeightHandler}
+          text={height}
         ></BlankTextBox>
       </View>
       {invalidInput ? (

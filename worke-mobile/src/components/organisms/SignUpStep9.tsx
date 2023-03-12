@@ -1,50 +1,45 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text } from "react-native";
 import styles from "../../styles";
-import Steps from "../atoms/Steps";
-import BackButton from "../atoms/BackButton";
-import StepsCount from "../molecules/StepsCount";
 import { COLORS } from "../../../assets/colors";
-import BlankTextBox from "../atoms/BlankTextBox";
-import LabelButton from "../atoms/LabelButton";
 import ErrorLabel from "../atoms/ErrorLabel";
-import SkipButton from "../atoms/SkipButton";
 import SelectionLabel from "../atoms/SelectionLabel";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
-  navigation?: any;
+  invalidInput?: boolean;
 }
 
-const SignUpStep7: React.FC<Props> = ({ navigation }) => {
-  const back = () => navigation.navigate("SignUpStep6");
-  const next = () => navigation.navigate("SignUpStep8");
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [invalidInput, setInvalidInput] = useState(false);
+const SignUpStep7: React.FC<Props> = ({ invalidInput }) => {
   const [selected, setSelected] = useState(0);
 
-  const select = (value) => {
+  const select = async (value) => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
+
     if (selected !== value) {
       setSelected(value);
-      setInvalidInput(false);
+      userCreate.frequency = value;
     } else {
       setSelected(0);
+      userCreate.frequency = 0;
     }
+
+    await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
+      (error) => console.log(error),
+    );
   };
 
-  const validateSelection = () => {
-    if (selected === 0) setInvalidInput(true);
-    else {
-      setInvalidInput(false);
-      next();
-    }
-  };
+  useEffect(() => {
+    const getFrequency = async () => {
+      let user = await AsyncStorage.getItem("userCreate");
+      let userCreate = JSON.parse(user);
+
+      setSelected(userCreate.frequency);
+    };
+
+    getFrequency().catch(console.error);
+  }, []);
 
   return (
     <View>

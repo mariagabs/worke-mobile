@@ -1,47 +1,43 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text } from "react-native";
 import styles from "../../styles";
-import Steps from "../atoms/Steps";
-import BackButton from "../atoms/BackButton";
-import StepsCount from "../molecules/StepsCount";
 import { COLORS } from "../../../assets/colors";
 import BlankTextBox from "../atoms/BlankTextBox";
-import LabelButton from "../atoms/LabelButton";
 import ErrorLabel from "../atoms/ErrorLabel";
-import SkipButton from "../atoms/SkipButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
-  navigation?: any;
+  onPressText: (keyboardVisible) => void;
+  invalidInput?: boolean;
 }
 
-const SignUpStep6: React.FC<Props> = ({ navigation }) => {
-  const back = () => navigation.navigate("SignUpStep5");
-  const next = () => navigation.navigate("SignUpStep7");
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [invalidInput, setInvalidInput] = useState(false);
+const SignUpStep6: React.FC<Props> = ({ onPressText, invalidInput }) => {
   const [weight, setWeight] = useState("");
 
   const onChangeWeightHandler = (weight) => {
     setWeight(weight);
-
-    if (weight !== "" && weight !== "0") setInvalidInput(false);
   };
 
-  const validateHeight = () => {
-    if (weight !== "" && weight !== "0") {
-      setInvalidInput(false);
-      next();
-    } else {
-      setInvalidInput(true);
-    }
+  const saveWeight = async () => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
+    userCreate.weight = weight;
+
+    await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
+      (error) => console.log(error),
+    );
   };
+
+  useEffect(() => {
+    const getWeight = async () => {
+      let user = await AsyncStorage.getItem("userCreate");
+      let userCreate = JSON.parse(user);
+
+      setWeight(userCreate.weight);
+    };
+
+    getWeight().catch(console.error);
+  }, []);
 
   return (
     <View>
@@ -51,10 +47,12 @@ const SignUpStep6: React.FC<Props> = ({ navigation }) => {
         </Text>
         <BlankTextBox
           color={COLORS.purple}
-          onTouchStart={() => setKeyboardVisible(true)}
+          onTouchStart={() => onPressText(true)}
+          onBlur={saveWeight}
           type="weight"
           complementaryText="kg"
           onChangeText={onChangeWeightHandler}
+          text={weight}
         ></BlankTextBox>
       </View>
       {invalidInput ? (

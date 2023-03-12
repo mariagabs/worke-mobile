@@ -63,8 +63,9 @@ const SignUpStep3: React.FC<Props> = ({ invalidInput }) => {
       >
         <Text
           style={
-            genderSelect.trim() === "NONE"
-              ? styles.defaultText(
+            genderSelect.trim() === "NOTINFORMED"
+              ? styles.defaultAnswerGender
+              : styles.defaultText(
                   14,
                   "center",
                   "Nunito-ExtraBold",
@@ -72,7 +73,6 @@ const SignUpStep3: React.FC<Props> = ({ invalidInput }) => {
                   2.5,
                   50,
                 )
-              : styles.defaultAnswerGender
           }
         >
           PREFIRO NÃO RESPONDER

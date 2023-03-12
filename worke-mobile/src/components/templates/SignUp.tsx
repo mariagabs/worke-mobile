@@ -95,22 +95,36 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
     {
       step: 6,
       name: "height",
-      page: <SignUpStep7 />,
+      page: (
+        <SignUpStep7
+          onPressText={(isKeyboardVisible) =>
+            setKeyboardVisible(isKeyboardVisible)
+          }
+          invalidInput={invalid}
+        />
+      ),
     },
     {
       step: 7,
-      name: "weigth",
-      page: <SignUpStep8 />,
+      name: "weight",
+      page: (
+        <SignUpStep8
+          onPressText={(isKeyboardVisible) =>
+            setKeyboardVisible(isKeyboardVisible)
+          }
+          invalidInput={invalid}
+        />
+      ),
     },
     {
       step: 8,
       name: "frequency",
-      page: <SignUpStep9 />,
+      page: <SignUpStep9 invalidInput={invalid} />,
     },
     {
       step: 9,
       name: "expectations",
-      page: <SignUpStep10 />,
+      page: <SignUpStep10 invalidInput={invalid} />,
     },
     {
       step: 10,
@@ -142,10 +156,11 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
         gender: "NONE",
         birthDate: "",
         height: 0,
-        weigth: 0,
+        weight: 0,
         frequency: 0,
-        expec: 0,
+        expectations: JSON.stringify([]),
       };
+      console.log(userCreate);
       await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate));
     }
 
@@ -218,6 +233,43 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
         } else {
           setInvalid(true);
         }
+        break;
+      case "height":
+        let height = userCreate.height.toString();
+
+        if (height !== "" && height !== "0") {
+          setInvalid(false);
+          nextStep();
+        } else setInvalid(true);
+        break;
+      case "weight":
+        let weight = userCreate.weight.toString();
+
+        if (weight !== "" && weight !== "0") {
+          setInvalid(false);
+          nextStep();
+        } else setInvalid(true);
+        break;
+      case "frequency":
+        let frequency = userCreate.frequency;
+        if (frequency === 0) {
+          setInvalid(true);
+        } else {
+          setInvalid(false);
+          nextStep();
+        }
+        break;
+      case "expectations":
+        let expectations = userCreate.expectations.toString();
+        if (expectations.length === 0) {
+          setInvalid(true);
+        } else {
+          setInvalid(false);
+          nextStep();
+        }
+        break;
+      case "end":
+        nextStep();
         break;
     }
   };

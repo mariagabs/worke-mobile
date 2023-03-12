@@ -1,50 +1,63 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text } from "react-native";
 import styles from "../../styles";
-import Steps from "../atoms/Steps";
-import BackButton from "../atoms/BackButton";
-import StepsCount from "../molecules/StepsCount";
 import { COLORS } from "../../../assets/colors";
-import LabelButton from "../atoms/LabelButton";
 import ErrorLabel from "../atoms/ErrorLabel";
-import SkipButton from "../atoms/SkipButton";
 import SelectionLabel from "../atoms/SelectionLabel";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
-  navigation?: any;
+  invalidInput?: boolean;
 }
 
-const SignUpStep8: React.FC<Props> = ({ navigation }) => {
-  const back = () => navigation.navigate("SignUpStep7");
-  const next = () => navigation.navigate("SignUpStep9");
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
-  const [invalidInput, setInvalidInput] = useState(false);
-  const [selected, setSelected] = useState("");
+const SignUpStep8: React.FC<Props> = ({ invalidInput }) => {
+  const [selected, setSelected] = useState([""]);
 
-  const select = (value) => {
-    setInvalidInput(false);
-    if (selected === "" || selected.indexOf(value) === -1) {
-      setSelected(selected + value);
-      setInvalidInput(false);
-    } else if (selected.indexOf(value) !== -1) {
-      setSelected(selected.replace(value, ""));
+  // const setSelect = (value) => {
+  //   let list = selected;
+
+  //   if (selected.includes(value)) {
+  //     list = list.filter((item) => item !== value);
+  //     setSelected(list);
+  //   } else {
+  //     list.push(value);
+  //   }
+  //   console.log("list", list);
+  //   setSelected(list);
+  //   console.log("selected", selected);
+  // };
+
+  const select = async (value) => {
+    let user = await AsyncStorage.getItem("userCreate");
+    let userCreate = JSON.parse(user);
+    let list = selected;
+
+    if (selected.length === 0 || !selected.includes(value.toString())) {
+      list.push(value);
+      setSelected((old) => [...old, value]);
+      console.log("selected", selected);
+      userCreate.expectations = JSON.stringify(list);
+    } else if (selected.includes(value.toString())) {
+      list = list.filter((item) => item !== value.toString());
+      setSelected((old) => [...old, value]);
+      console.log("deselect", selected);
+      userCreate.expectations = JSON.stringify(list);
     }
+
+    await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
+      (error) => console.log(error),
+    );
   };
 
-  const validateSelection = () => {
-    if (selected === "") setInvalidInput(true);
-    else {
-      setInvalidInput(false);
-      next();
-    }
-  };
+  useEffect(() => {
+    const getExpectations = async () => {
+      let user = await AsyncStorage.getItem("userCreate");
+      let userCreate = JSON.parse(user);
+      setSelected(JSON.parse(userCreate.expectations));
+    };
+
+    getExpectations().catch(console.error);
+  }, []);
 
   return (
     <View>
@@ -58,28 +71,44 @@ const SignUpStep8: React.FC<Props> = ({ navigation }) => {
             <SelectionLabel
               text="ser mais saudável"
               color={COLORS.green}
-              onPress={() => select("1")}
-              selected={selected.indexOf("1") !== -1}
+              onPress={() => {
+                // setSelect("1");
+
+                select("1");
+              }}
+              selected={selected.includes("1")}
             ></SelectionLabel>
             <SelectionLabel
               text="iniciar uma atividade física"
               color={COLORS.blue}
-              onPress={() => select("2")}
-              selected={selected.indexOf("2") !== -1}
+              onPress={() => {
+                // setSelect("2");
+
+                select("2");
+              }}
+              selected={selected.includes("2")}
             ></SelectionLabel>
           </View>
           <View style={styles.expect}>
             <SelectionLabel
               text="               criar hábitos"
               color={COLORS.pink}
-              onPress={() => select("3")}
-              selected={selected.indexOf("3") !== -1}
+              onPress={() => {
+                // setSelect("3");
+
+                select("3");
+              }}
+              selected={selected.includes("3")}
             ></SelectionLabel>
             <SelectionLabel
               text="               motivação"
               color={COLORS.purple}
-              onPress={() => select("4")}
-              selected={selected.indexOf("4") !== -1}
+              onPress={() => {
+                // setSelect("4");
+
+                select("4");
+              }}
+              selected={selected.includes("4")}
             ></SelectionLabel>
           </View>
         </View>

@@ -32,7 +32,6 @@ const SignUpStep4: React.FC<Props> = ({ invalidInput, onPressText }) => {
     const getDate = async () => {
       let user = await AsyncStorage.getItem("userCreate");
       let userCreate = JSON.parse(user);
-
       setDate(userCreate.birthDate);
     };
 
@@ -51,6 +50,7 @@ const SignUpStep4: React.FC<Props> = ({ invalidInput, onPressText }) => {
           type="date"
           onChangeText={onChangeDateHandler}
           onBlur={saveDate}
+          text={date}
         ></BlankTextBox>
       </View>
       {invalidInput ? (
