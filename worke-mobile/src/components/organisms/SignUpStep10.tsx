@@ -13,19 +13,16 @@ interface Props {
 const SignUpStep8: React.FC<Props> = ({ invalidInput }) => {
   const [selected, setSelected] = useState([""]);
 
-  // const setSelect = (value) => {
-  //   let list = selected;
+  const setSelect = (value) => {
+    let list = selected;
 
-  //   if (selected.includes(value)) {
-  //     list = list.filter((item) => item !== value);
-  //     setSelected(list);
-  //   } else {
-  //     list.push(value);
-  //   }
-  //   console.log("list", list);
-  //   setSelected(list);
-  //   console.log("selected", selected);
-  // };
+    if (selected.includes(value)) {
+      list = list.filter((item) => item !== value);
+      setSelected(list);
+    } else {
+      setSelected((old) => [...old, value]);
+    }
+  };
 
   const select = async (value) => {
     let user = await AsyncStorage.getItem("userCreate");
@@ -34,13 +31,13 @@ const SignUpStep8: React.FC<Props> = ({ invalidInput }) => {
 
     if (selected.length === 0 || !selected.includes(value.toString())) {
       list.push(value);
-      setSelected((old) => [...old, value]);
-      console.log("selected", selected);
+      // setSelected((old) => [...old, value]);
+      console.log("selected", list);
       userCreate.expectations = JSON.stringify(list);
     } else if (selected.includes(value.toString())) {
       list = list.filter((item) => item !== value.toString());
-      setSelected((old) => [...old, value]);
-      console.log("deselect", selected);
+      // setSelected((old) => [...old, value]);
+      console.log("deselect", list);
       userCreate.expectations = JSON.stringify(list);
     }
 
@@ -57,6 +54,8 @@ const SignUpStep8: React.FC<Props> = ({ invalidInput }) => {
     };
 
     getExpectations().catch(console.error);
+
+    console.log("load", selected);
   }, []);
 
   return (
@@ -72,8 +71,7 @@ const SignUpStep8: React.FC<Props> = ({ invalidInput }) => {
               text="ser mais saudável"
               color={COLORS.green}
               onPress={() => {
-                // setSelect("1");
-
+                setSelect("1");
                 select("1");
               }}
               selected={selected.includes("1")}
@@ -82,8 +80,7 @@ const SignUpStep8: React.FC<Props> = ({ invalidInput }) => {
               text="iniciar uma atividade física"
               color={COLORS.blue}
               onPress={() => {
-                // setSelect("2");
-
+                setSelect("2");
                 select("2");
               }}
               selected={selected.includes("2")}
@@ -94,8 +91,7 @@ const SignUpStep8: React.FC<Props> = ({ invalidInput }) => {
               text="               criar hábitos"
               color={COLORS.pink}
               onPress={() => {
-                // setSelect("3");
-
+                setSelect("3");
                 select("3");
               }}
               selected={selected.includes("3")}
@@ -104,8 +100,7 @@ const SignUpStep8: React.FC<Props> = ({ invalidInput }) => {
               text="               motivação"
               color={COLORS.purple}
               onPress={() => {
-                // setSelect("4");
-
+                setSelect("4");
                 select("4");
               }}
               selected={selected.includes("4")}

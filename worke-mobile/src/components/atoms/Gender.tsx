@@ -11,21 +11,25 @@ interface Props {
 interface Image {
   name: string;
   image: any;
+  desc: string;
 }
 
 const Gender: React.FC<Props> = ({ gender, selected, onPress }) => {
   const images: Array<Image> = [
     {
-      name: "FEMININO",
+      name: "F",
+      desc: "FEMININO",
       image: require("../../../assets/sexo-feminino.png"),
     },
     {
-      name: "MASCULINO",
+      name: "M",
+      desc: "MASCULINO",
       image: require("../../../assets/sexo-masculino.png"),
     },
   ];
 
   const genderImage = images.find((img) => img.name === gender).image;
+  const genderDesc = images.find((img) => img.name === gender).desc;
 
   return (
     <View>
@@ -40,7 +44,7 @@ const Gender: React.FC<Props> = ({ gender, selected, onPress }) => {
             selected === gender ? styles.genderTextSelected : styles.genderText
           }
         >
-          {gender}
+          {genderDesc}
         </Text>
       </TouchableOpacity>
     </View>

@@ -41,29 +41,29 @@ const SignUpStep3: React.FC<Props> = ({ invalidInput }) => {
       </Text>
       <View style={styles.displayRow}>
         <Gender
-          gender="MASCULINO"
+          gender="M"
           onPress={() => {
-            saveGender("MASCULINO");
+            saveGender("M");
           }}
           selected={genderSelect}
         ></Gender>
         <Gender
-          gender="FEMININO"
+          gender="F"
           onPress={() => {
-            saveGender("FEMININO");
+            saveGender("F");
           }}
           selected={genderSelect}
         ></Gender>
       </View>
       <TouchableOpacity
         onPress={() => {
-          saveGender("NOTINFORMED");
+          saveGender("O");
         }}
         activeOpacity={1}
       >
         <Text
           style={
-            genderSelect.trim() === "NOTINFORMED"
+            genderSelect.trim() === "O"
               ? styles.defaultAnswerGender
               : styles.defaultText(
                   14,

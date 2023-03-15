@@ -21,7 +21,7 @@ const SignUpStep4: React.FC<Props> = ({ invalidInput, onPressText }) => {
   const saveDate = async () => {
     let user = await AsyncStorage.getItem("userCreate");
     let userCreate = JSON.parse(user);
-    userCreate.birthDate = date;
+    userCreate.birth_date = date.replaceAll("/", "-");
 
     await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
       (error) => console.log(error),
@@ -32,7 +32,7 @@ const SignUpStep4: React.FC<Props> = ({ invalidInput, onPressText }) => {
     const getDate = async () => {
       let user = await AsyncStorage.getItem("userCreate");
       let userCreate = JSON.parse(user);
-      setDate(userCreate.birthDate);
+      setDate(userCreate.birth_date);
     };
 
     getDate().catch(console.error);
