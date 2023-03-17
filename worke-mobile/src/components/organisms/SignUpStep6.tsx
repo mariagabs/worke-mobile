@@ -18,10 +18,22 @@ const SignUpStep4: React.FC<Props> = ({ invalidInput, onPressText }) => {
     setDate(date);
   };
 
+  const convertDate = (date) => {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  };
+
   const saveDate = async () => {
     let user = await AsyncStorage.getItem("userCreate");
     let userCreate = JSON.parse(user);
-    userCreate.birth_date = date.replaceAll("/", "-");
+    userCreate.birth_date = convertDate(date);
 
     await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
       (error) => console.log(error),

@@ -28,6 +28,7 @@ const AppNavigator = () => (
       screenOptions={{
         headerShown: false,
         cardStyle: { backgroundColor: "white" },
+        gestureEnabled: false,
       }}
       initialRouteName="Login"
     >

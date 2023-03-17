@@ -144,7 +144,11 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
   let chosenColor = COLORS.purple;
   let aux = 0;
   let step = currentStep == 0 ? currentStep : currentStep - 1;
-  const createGroup = () => navigation.navigate("Group");
+  const createGroup = async () => {
+    let user = await AsyncStorage.getItem("userCreate");
+    await AsyncStorage.setItem("user", user);
+    navigation.navigate("Group");
+  };
 
   const nextStep = async () => {
     let step = currentStep + 1;
@@ -174,39 +178,34 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
 
   const register = async () => {
     let user = await AsyncStorage.getItem("userCreate");
+    console.log(user);
     let userCreate = JSON.parse(user);
-    delete userCreate.birth_date;
-    delete userCreate.expectations;
-    delete userCreate.height;
-    delete userCreate.weight;
-    delete userCreate.frequency;
-    delete userCreate.password;
-    delete userCreate.gender;
+    // delete userCreate.birth_date;
+    // delete userCreate.expectations;
+    // delete userCreate.height;
+    // delete userCreate.weight;
+    // delete userCreate.frequency;
+    // delete userCreate.gender;
+    // delete userCreate.password;
+    userCreate.first_name = userCreate.name;
     const configurationObject = {
-      url: "http://172.20.10.4:8000/register",
+      url: "http://192.168.15.12:8000/register",
       method: "POST",
       data: userCreate,
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
     console.log(userCreate);
-    // let response = () => {
-    //   return new Promise(function (resolve, reject) {
-    //     fetch("http://172.20.10.4:8000/register", userCreate).then(
-    //       (response) => {
-    //         console.log(response);
-    //         resolve(response);
-    //       },
-    //     );
-    //   });
-    // };
-    // let responseData = await response();
-    // console.log(responseData);
 
     axios(configurationObject)
       .then((response) => {
         console.log(response.status);
         if (response.status === 200) {
           nextStep();
+
           console.log(response.status);
+          return response;
         } else {
           throw new Error("An error has occurred");
         }
@@ -265,7 +264,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
         break;
       case "birth_date":
         let regex =
-          /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
+          /^(\d{4}[\/\-](0?[1-9]|1[012])[\/\-]0?[1-9]|[12][0-9]|3[01])$/;
         let date = userCreate.birth_date;
         if (regex.test(userCreate.birth_date)) {
           var parts = date.split("/");
