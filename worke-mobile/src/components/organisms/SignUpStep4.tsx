@@ -7,9 +7,14 @@ import PasswordTextBox from "../molecules/PasswordTextBox/PasswordTextBox";
 interface Props {
   onPressText: (keyboardVisible) => void;
   invalidInput?: boolean;
+  onSubmitEdit: () => void;
 }
 
-const SignUpStep4: React.FC<Props> = ({ onPressText, invalidInput }) => {
+const SignUpStep4: React.FC<Props> = ({
+  onPressText,
+  invalidInput,
+  onSubmitEdit,
+}) => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
@@ -65,6 +70,7 @@ const SignUpStep4: React.FC<Props> = ({ onPressText, invalidInput }) => {
             onTouchStart={() => {
               onPressText(true);
             }}
+            submitEdit={onSubmitEdit}
           ></PasswordTextBox>
           <View style={styles.secondTextBox}>
             <PasswordTextBox
@@ -78,6 +84,7 @@ const SignUpStep4: React.FC<Props> = ({ onPressText, invalidInput }) => {
                 onPressText(true);
               }}
               text={passwordConfirm}
+              submitEdit={onSubmitEdit}
             ></PasswordTextBox>
           </View>
         </View>

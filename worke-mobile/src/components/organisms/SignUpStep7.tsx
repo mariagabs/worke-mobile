@@ -9,9 +9,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 interface Props {
   onPressText: (keyboardVisible) => void;
   invalidInput?: boolean;
+  onSubmitEdit: () => void;
 }
 
-const SignUpStep5: React.FC<Props> = ({ onPressText, invalidInput }) => {
+const SignUpStep5: React.FC<Props> = ({
+  onPressText,
+  invalidInput,
+  onSubmitEdit,
+}) => {
   const [height, setHeight] = useState("");
 
   const onChangeHeightHandler = (height) => {
@@ -53,6 +58,7 @@ const SignUpStep5: React.FC<Props> = ({ onPressText, invalidInput }) => {
           complementaryText="cm"
           onChangeText={onChangeHeightHandler}
           text={height}
+          submitEdit={onSubmitEdit}
         ></BlankTextBox>
       </View>
       {invalidInput ? (

@@ -33,6 +33,7 @@ interface Props {
 const SignUp: React.FC<Props> = ({ navigation }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [invalid, setInvalid] = useState(false);
+  const [user, setUser] = useState("");
 
   let steps = [
     {
@@ -49,6 +50,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
             setKeyboardVisible(isKeyboardVisible)
           }
           invalidInput={invalid}
+          onSubmitEdit={() => setKeyboardVisible(false)}
         />
       ),
     },
@@ -61,6 +63,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
             setKeyboardVisible(isKeyboardVisible)
           }
           invalidInput={invalid}
+          onSubmitEdit={() => setKeyboardVisible(false)}
         />
       ),
     },
@@ -73,6 +76,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
             setKeyboardVisible(isKeyboardVisible)
           }
           invalidInput={invalid}
+          onSubmitEdit={() => setKeyboardVisible(false)}
         />
       ),
     },
@@ -90,6 +94,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
             setKeyboardVisible(isKeyboardVisible)
           }
           invalidInput={invalid}
+          onSubmitEdit={() => setKeyboardVisible(false)}
         />
       ),
     },
@@ -102,6 +107,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
             setKeyboardVisible(isKeyboardVisible)
           }
           invalidInput={invalid}
+          onSubmitEdit={() => setKeyboardVisible(false)}
         />
       ),
     },
@@ -114,6 +120,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
             setKeyboardVisible(isKeyboardVisible)
           }
           invalidInput={invalid}
+          onSubmitEdit={() => setKeyboardVisible(false)}
         />
       ),
     },
@@ -145,7 +152,6 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
   let aux = 0;
   let step = currentStep == 0 ? currentStep : currentStep - 1;
   const createGroup = async () => {
-    let user = await AsyncStorage.getItem("userCreate");
     await AsyncStorage.setItem("user", user);
     navigation.navigate("Group");
   };
@@ -166,45 +172,35 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
         frequency: 0,
         expectations: JSON.stringify([]),
       };
-      console.log(userCreate);
+
       await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate));
     }
 
-    if (step === 11) createGroup();
-    else {
+    if (step === 11) {
+      createGroup();
+    } else {
       setCurrentStep(step);
     }
   };
 
   const register = async () => {
     let user = await AsyncStorage.getItem("userCreate");
-    console.log(user);
     let userCreate = JSON.parse(user);
-    // delete userCreate.birth_date;
-    // delete userCreate.expectations;
-    // delete userCreate.height;
-    // delete userCreate.weight;
-    // delete userCreate.frequency;
-    // delete userCreate.gender;
-    // delete userCreate.password;
-    userCreate.first_name = userCreate.name;
+
     const configurationObject = {
-      url: "http://192.168.15.12:8000/register",
+      url: "http://172.20.10.4:8000/register",
       method: "POST",
       data: userCreate,
       headers: {
         "Content-Type": "application/json",
       },
     };
-    console.log(userCreate);
 
     axios(configurationObject)
       .then((response) => {
-        console.log(response.status);
         if (response.status === 200) {
           nextStep();
-
-          console.log(response.status);
+          setUser(response.data);
           return response;
         } else {
           throw new Error("An error has occurred");
@@ -227,10 +223,6 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
         if (userCreate.name === "") {
           setInvalid(true);
         } else {
-          userCreate.first_name =
-            userCreate.name.indexOf(" ") !== -1
-              ? userCreate.name.split(" ")[0]
-              : userCreate.name;
           setInvalid(false);
           nextStep();
         }
@@ -263,8 +255,8 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
         }
         break;
       case "birth_date":
-        let regex =
-          /^(\d{4}[\/\-](0?[1-9]|1[012])[\/\-]0?[1-9]|[12][0-9]|3[01])$/;
+        let regex = /^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/;
+
         let date = userCreate.birth_date;
         if (regex.test(userCreate.birth_date)) {
           var parts = date.split("/");
@@ -301,7 +293,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
         break;
       case "frequency":
         let frequency = userCreate.frequency;
-        if (frequency === 0) {
+        if (frequency === "0") {
           setInvalid(true);
         } else {
           setInvalid(false);
@@ -365,6 +357,8 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
               onPress={(currentStep) => {
                 setCurrentStep(currentStep);
                 currentStep == 0 ? backHome() : "";
+                setInvalid(false);
+                setKeyboardVisible(false);
               }}
             />
           </View>

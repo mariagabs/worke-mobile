@@ -31,13 +31,9 @@ const SignUpStep8: React.FC<Props> = ({ invalidInput }) => {
 
     if (selected.length === 0 || !selected.includes(value.toString())) {
       list.push(value);
-      // setSelected((old) => [...old, value]);
-      console.log("selected", list);
       userCreate.expectations = JSON.stringify(list);
     } else if (selected.includes(value.toString())) {
       list = list.filter((item) => item !== value.toString());
-      // setSelected((old) => [...old, value]);
-      console.log("deselect", list);
       userCreate.expectations = JSON.stringify(list);
     }
 
@@ -54,8 +50,6 @@ const SignUpStep8: React.FC<Props> = ({ invalidInput }) => {
     };
 
     getExpectations().catch(console.error);
-
-    console.log("load", selected);
   }, []);
 
   return (

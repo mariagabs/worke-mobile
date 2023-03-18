@@ -7,9 +7,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 interface Props {
   onPressText: (keyboardVisible) => void;
   invalidInput?: boolean;
+  onSubmitEdit: () => void;
 }
 
-const SignUpStep3: React.FC<Props> = ({ onPressText, invalidInput }) => {
+const SignUpStep3: React.FC<Props> = ({
+  onPressText,
+  invalidInput,
+  onSubmitEdit,
+}) => {
   const [email, setEmail] = useState("");
 
   const onChangeEmailHandler = (name) => {
@@ -58,6 +63,7 @@ const SignUpStep3: React.FC<Props> = ({ onPressText, invalidInput }) => {
             onTouchStart={() => {
               onPressText(true);
             }}
+            submitEdit={onSubmitEdit}
           ></TextBox>
         </View>
       </View>

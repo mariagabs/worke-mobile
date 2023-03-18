@@ -13,15 +13,16 @@ interface Props {
 const SignUpStep7: React.FC<Props> = ({ invalidInput }) => {
   const [selected, setSelected] = useState("0");
 
+  const setSelect = (value) => {
+    if (selected !== value) setSelected(value);
+    else setSelected("0");
+  };
   const select = async (value) => {
     let user = await AsyncStorage.getItem("userCreate");
     let userCreate = JSON.parse(user);
-
     if (selected !== value) {
-      setSelected(value);
       userCreate.frequency = value.toString();
     } else {
-      setSelected("0");
       userCreate.frequency = "0";
     }
 
@@ -51,19 +52,28 @@ const SignUpStep7: React.FC<Props> = ({ invalidInput }) => {
         <SelectionLabel
           text="Nenhuma"
           color={COLORS.green}
-          onPress={() => select("1")}
+          onPress={() => {
+            select("1");
+            setSelect("1");
+          }}
           selected={selected === "1"}
         ></SelectionLabel>
         <SelectionLabel
           text="1 ou 2 vezes"
           color={COLORS.pink}
-          onPress={() => select("2")}
+          onPress={() => {
+            select("2");
+            setSelect("2");
+          }}
           selected={selected === "2"}
         ></SelectionLabel>
         <SelectionLabel
           text="mais de 3 vezes"
           color={COLORS.blue}
-          onPress={() => select("3")}
+          onPress={() => {
+            select("3");
+            setSelect("3");
+          }}
           selected={selected === "3"}
         ></SelectionLabel>
       </View>

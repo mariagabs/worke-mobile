@@ -9,31 +9,43 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 interface Props {
   onPressText: (keyboardVisible) => void;
   invalidInput: boolean;
+  onSubmitEdit: () => void;
 }
 
-const SignUpStep4: React.FC<Props> = ({ invalidInput, onPressText }) => {
+const SignUpStep4: React.FC<Props> = ({
+  invalidInput,
+  onPressText,
+  onSubmitEdit,
+}) => {
   const [date, setDate] = useState("");
 
   const onChangeDateHandler = (date) => {
     setDate(date);
   };
 
-  const convertDate = (date) => {
-    var d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
+  const convertDate = (date, backendDate) => {
+    let month = "";
+    let day = "";
+    let year = "";
 
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
-
-    return [year, month, day].join("-");
+    if (backendDate) {
+      day = date.split("/")[2];
+      year = date.split("/")[0];
+      month = date.split("/")[1];
+    } else {
+      day = date.split("-")[0];
+      year = date.split("-")[2];
+      month = date.split("-")[1];
+    }
+    return backendDate
+      ? day + "-" + month + "-" + year
+      : year + "/" + month + "/" + day;
   };
 
   const saveDate = async () => {
     let user = await AsyncStorage.getItem("userCreate");
     let userCreate = JSON.parse(user);
-    userCreate.birth_date = convertDate(date);
+    userCreate.birth_date = convertDate(date, true);
 
     await AsyncStorage.setItem("userCreate", JSON.stringify(userCreate)).catch(
       (error) => console.log(error),
@@ -44,7 +56,7 @@ const SignUpStep4: React.FC<Props> = ({ invalidInput, onPressText }) => {
     const getDate = async () => {
       let user = await AsyncStorage.getItem("userCreate");
       let userCreate = JSON.parse(user);
-      setDate(userCreate.birth_date);
+      setDate(convertDate(userCreate.birth_date, false));
     };
 
     getDate().catch(console.error);
@@ -63,6 +75,7 @@ const SignUpStep4: React.FC<Props> = ({ invalidInput, onPressText }) => {
           onChangeText={onChangeDateHandler}
           onBlur={saveDate}
           text={date}
+          submitEdit={onSubmitEdit}
         ></BlankTextBox>
       </View>
       {invalidInput ? (

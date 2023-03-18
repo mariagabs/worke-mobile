@@ -9,9 +9,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 interface Props {
   onPressText: (keyboardVisible) => void;
   invalidInput?: boolean;
+  onSubmitEdit: () => void;
 }
 
-const SignUpStep6: React.FC<Props> = ({ onPressText, invalidInput }) => {
+const SignUpStep6: React.FC<Props> = ({
+  onPressText,
+  invalidInput,
+  onSubmitEdit,
+}) => {
   const [weight, setWeight] = useState("");
 
   const onChangeWeightHandler = (weight) => {
@@ -53,6 +58,7 @@ const SignUpStep6: React.FC<Props> = ({ onPressText, invalidInput }) => {
           complementaryText="kg"
           onChangeText={onChangeWeightHandler}
           text={weight}
+          submitEdit={onSubmitEdit}
         ></BlankTextBox>
       </View>
       {invalidInput ? (

@@ -11,6 +11,7 @@ interface Props {
   onChangeText: (text: any) => void;
   onBlur?: () => void;
   text?: string;
+  submitEdit: () => void;
 }
 
 const BlankTextBox: React.FC<Props> = ({
@@ -21,6 +22,7 @@ const BlankTextBox: React.FC<Props> = ({
   onChangeText,
   onBlur,
   text,
+  submitEdit,
 }) => {
   const [date, setDate] = useState("");
 
@@ -39,6 +41,7 @@ const BlankTextBox: React.FC<Props> = ({
             onTouchStart={onTouchStart}
             placeholder="dd/mm/aaaa"
             onBlur={onBlur}
+            onSubmitEditing={submitEdit}
           >
             {text}
           </TextInputMask>
@@ -54,6 +57,7 @@ const BlankTextBox: React.FC<Props> = ({
             }}
             onTouchStart={onTouchStart}
             onBlur={onBlur}
+            onSubmitEditing={submitEdit}
           >
             {text}
           </TextInput>
