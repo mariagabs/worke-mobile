@@ -1106,19 +1106,23 @@ export default StyleSheet.create({
     width: "100%",
     display: "flex",
     flexDirection: "column",
-    paddingVertical: 25,
+    paddingVertical: 20,
     paddingHorizontal: 20,
+    paddingTop: 25,
   },
   loginPassword: {
     width: "100%",
     marginTop: 20,
+  },
+  passwordGroup: {
+    marginTop: 30,
   },
   hasPassword: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 35,
+    // marginBottom: 35,
   },
   headerGroupPassword: {
     display: "flex",

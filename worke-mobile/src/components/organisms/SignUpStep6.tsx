@@ -24,22 +24,25 @@ const SignUpStep4: React.FC<Props> = ({
   };
 
   const convertDate = (date, backendDate) => {
-    let month = "";
-    let day = "";
-    let year = "";
+    if (date !== "") {
+      let month = "";
+      let day = "";
+      let year = "";
 
-    if (backendDate) {
-      day = date.split("/")[2];
-      year = date.split("/")[0];
-      month = date.split("/")[1];
-    } else {
-      day = date.split("-")[0];
-      year = date.split("-")[2];
-      month = date.split("-")[1];
+      if (backendDate) {
+        day = date.split("/")[2];
+        year = date.split("/")[0];
+        month = date.split("/")[1];
+      } else {
+        day = date.split("-")[0];
+        year = date.split("-")[2];
+        month = date.split("-")[1];
+      }
+      return backendDate
+        ? day + "-" + month + "-" + year
+        : year + "/" + month + "/" + day;
     }
-    return backendDate
-      ? day + "-" + month + "-" + year
-      : year + "/" + month + "/" + day;
+    return null;
   };
 
   const saveDate = async () => {

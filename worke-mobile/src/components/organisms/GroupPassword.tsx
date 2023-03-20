@@ -1,14 +1,45 @@
 import React, { useState } from "react";
-import { View, Text, Switch } from "react-native";
+import {
+  View,
+  Text,
+  Switch,
+  UIManager,
+  Platform,
+  LayoutAnimation,
+} from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import PasswordTextBox from "../molecules/PasswordTextBox/PasswordTextBox";
 import { COLORS } from "../../../assets/colors";
 import styles from "../../styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const GroupPassword: React.FC = () => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const [password, setPassword] = useState("");
+  const toggleSwitch = () => {
+    LayoutAnimation.easeInEaseOut();
 
+    setIsEnabled((previousState) => !previousState);
+  };
+
+  const onChangePasswordHandler = (value) => {
+    setPassword(value);
+  };
+
+  const setPasswordStorage = async () => {
+    let group = await AsyncStorage.getItem("userGroup");
+    let userGroup = JSON.parse(group);
+
+    userGroup.password = password;
+
+    await AsyncStorage.setItem("userGroup", JSON.stringify(userGroup));
+  };
+
+  if (Platform.OS === "android") {
+    if (UIManager.setLayoutAnimationEnabledExperimental) {
+      UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+  }
   return (
     <View style={styles.groupPassword}>
       <View style={styles.hasPassword}>
@@ -22,7 +53,17 @@ const GroupPassword: React.FC = () => {
           value={isEnabled}
         ></Switch>
       </View>
-      <PasswordTextBox></PasswordTextBox>
+      {isEnabled ? (
+        <View style={styles.passwordGroup}>
+          <PasswordTextBox
+            placeholder="Senha"
+            onChangeText={onChangePasswordHandler}
+            onBlur={setPasswordStorage}
+          ></PasswordTextBox>
+        </View>
+      ) : (
+        ""
+      )}
     </View>
   );
 };
