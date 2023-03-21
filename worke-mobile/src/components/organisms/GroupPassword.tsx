@@ -30,7 +30,7 @@ const GroupPassword: React.FC = () => {
     let group = await AsyncStorage.getItem("userGroup");
     let userGroup = JSON.parse(group);
 
-    userGroup.password = password;
+    userGroup.senha = password;
 
     await AsyncStorage.setItem("userGroup", JSON.stringify(userGroup));
   };

@@ -28,7 +28,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
   const [invalidInput, setInvalidInput] = useState(false);
 
   const signUp = () => navigation.navigate("SignUp");
-  const home = () => navigation.navigate("Group");
+  const home = () => navigation.navigate("Menu");
 
   const onChangePassword = (password) => {
     setPassword(password);
@@ -62,12 +62,17 @@ const Login: React.FC<Props> = ({ navigation }) => {
       data: { password, email },
     };
 
+    console.log(configurationObject);
+
     axios(configurationObject)
       .then((response) => {
         console.log(response.status);
         if (response.status === 200) {
+          console.log(response.data);
+          saveData(response.data.jwt);
           setPassword("");
           setEmail("");
+          home();
         } else {
           throw new Error("An error has occurred");
         }
@@ -127,8 +132,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
           <View style={styles.fullWidth}>
             <Button
               buttonText={"ENTRAR"}
-              // onClick={onSubmitFormHandler}
-              onClick={home}
+              onClick={onSubmitFormHandler}
             ></Button>
           </View>
           {!keyboardVisible ? (

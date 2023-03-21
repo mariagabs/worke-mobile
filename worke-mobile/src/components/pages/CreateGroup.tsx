@@ -45,7 +45,7 @@ const CreateGroup: React.FC<Props> = ({ navigation }) => {
     let userJSON = JSON.parse(user);
     console.log(userJSON);
     const configurationObject = {
-      url: "http://192.168.15.5:8000/criarGrupo/" + userJSON.id,
+      url: "http://172.20.10.4:8000/criarGrupo/" + userJSON.id,
       method: "POST",
       data: userGroup,
       headers: {
@@ -70,7 +70,7 @@ const CreateGroup: React.FC<Props> = ({ navigation }) => {
     let code = generateCode();
 
     const configurationObject = {
-      url: "http://192.168.15.5:8000/grupoCodigo/" + code,
+      url: "http://172.20.10.4:8000/grupoCodigo/" + code,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

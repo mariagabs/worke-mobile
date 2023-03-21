@@ -189,7 +189,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
     let userCreate = JSON.parse(user);
 
     const configurationObject = {
-      url: "http://192.168.15.5:8000/register",
+      url: "http://172.20.10.4:8000/register",
       method: "POST",
       data: userCreate,
       headers: {
