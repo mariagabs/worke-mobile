@@ -45,7 +45,7 @@ const SignUpStep2: React.FC<Props> = ({
   return (
     <View>
       <View style={styles.centerView}>
-        <Text style={styles.title(200)}>
+        <Text style={styles.title(250)}>
           Qual o seu <Text style={styles.titleBold}>nome completo?</Text>
         </Text>
         <View style={styles.fullWidth}>

@@ -57,7 +57,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
     setInvalidInput(false);
 
     const configurationObject = {
-      url: "http://172.20.10.4:8000/login",
+      url: "http://192.168.15.8:8000/login",
       method: "POST",
       data: { password, email },
     };
