@@ -2,19 +2,25 @@ import React from "react";
 import { View, Image } from "react-native";
 import styles from "../../styles";
 import Star from "./Star";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { COLORS } from "../../../assets/colors";
 
 interface Props {
-  userID?: number;
+  image: string;
   color: string;
 }
 
-const UserPhotoIcon: React.FC<Props> = ({ userID, color }) => {
+const UserPhotoIcon: React.FC<Props> = ({ image, color }) => {
+  let imageUser = "data:image/png;base64," + image;
   return (
     <View>
-      <Image
-        style={styles.userPhotoIcon}
-        source={require("../../../assets/karina.png")}
-      ></Image>
+      {image !== null && image !== "" ? (
+        <Image style={styles.userPhotoIcon} source={{ uri: imageUser }}></Image>
+      ) : (
+        <View style={styles.backgroundNoPhoto}>
+          <FontAwesome5 name="user-alt" size={24} color={COLORS.lightGray} />
+        </View>
+      )}
       <View style={styles.photoStar}>
         <Star color={color} level="10"></Star>
       </View>

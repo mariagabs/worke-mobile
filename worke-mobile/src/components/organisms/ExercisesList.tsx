@@ -1,91 +1,86 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, ScrollView, Dimensions } from "react-native";
 import ExerciseCard from "../atoms/ExerciseCard";
 import { COLORS } from "../../../assets/colors";
 import styles from "../../styles";
 import ExerciseCardEdit from "../atoms/ExerciseCardEdit";
+import axios from "axios";
+import DefaultModal from "../molecules/DefaultModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
-  edit: boolean;
+  onPress: (visible) => void;
 }
 
-const ExercisesList: React.FC<Props> = ({ edit }) => {
+const ExercisesList: React.FC<Props> = ({ onPress }) => {
   let colors = [COLORS.purple, COLORS.green, COLORS.pink, COLORS.blue];
-  let userExercises = [
-    { exercise: "ALONGAMENTO", description: "OMBROS" },
-    { exercise: "ALONGAMENTO", description: "PESCOÇO" },
-    { exercise: "ALONGAMENTO", description: "QUADRÍCEPS" },
-    { exercise: "ALONGAMENTO", description: "TRONCO" },
-    { exercise: "ALONGAMENTO", description: "COSTAS" },
-    { exercise: "ALONGAMENTO", description: "MEMBROS INFERIORES" },
-    { exercise: "YOGA", description: "ÁRVORE" },
-    { exercise: "YOGA", description: "MONTANHA" },
-    { exercise: "YOGA", description: "GUERREIRO" },
-    { exercise: "YOGA", description: "TRIÂNGULO" },
-  ];
-  let exercises = [
-    { exercise: "ALONGAMENTO", description: "OMBROS", selected: true },
-    { exercise: "ALONGAMENTO", description: "PESCOÇO", selected: true },
-    { exercise: "ALONGAMENTO", description: "QUADRÍCEPS", selected: true },
-    { exercise: "ALONGAMENTO", description: "TRONCO", selected: true },
-    { exercise: "ALONGAMENTO", description: "COSTAS", selected: true },
-    {
-      exercise: "ALONGAMENTO",
-      description: "MEMBROS INFERIORES",
-      selected: true,
-    },
-    {
-      exercise: "ALONGAMENTO",
-      description: "MEMBROS SUPERIORES",
-      selected: false,
-    },
-    { exercise: "YOGA", description: "ÁRVORE", selected: true },
-    { exercise: "YOGA", description: "MONTANHA", selected: true },
-    { exercise: "YOGA", description: "GUERREIRO", selected: true },
-    { exercise: "YOGA", description: "TRIÂNGULO", selected: true },
-    { exercise: "YOGA", description: "CADEIRA", selected: false },
-    { exercise: "YOGA", description: "MEIA LUA", selected: false },
-  ];
+  const [exercises, setExercises] = useState([]);
   var exercisesList = [];
   var aux = 0;
 
-  for (var i = 0; i < (edit ? exercises.length : userExercises.length); i++) {
-    var chosenColor = "";
+  const setChosenExercise = async (id) => {
+    await AsyncStorage.setItem(
+      "chosenExercise",
+      JSON.stringify(exercises.find((x) => x.id === id)),
+    );
+  };
 
-    if (aux < 4) {
-      chosenColor = colors[aux];
-      aux++;
-    } else {
-      aux = 0;
-      chosenColor = colors[aux];
-      aux++;
-    }
+  const setList = () => {
+    for (var i = 0; i < exercises.length; i++) {
+      var chosenColor = "";
 
-    if (edit) {
-      exercisesList.push(
-        <ExerciseCardEdit
-          key={i}
-          exercise={exercises[i].exercise}
-          description={exercises[i].description}
-          selected={exercises[i].selected}
-        ></ExerciseCardEdit>,
-      );
-    } else {
+      if (aux < 4) {
+        chosenColor = colors[aux];
+        aux++;
+      } else {
+        aux = 0;
+        chosenColor = colors[aux];
+        aux++;
+      }
+
       exercisesList.push(
         <ExerciseCard
-          key={i}
+          key={exercises[i].id}
+          idExercise={exercises[i].id}
           color={chosenColor}
-          exercise={userExercises[i].exercise}
-          description={userExercises[i].description}
+          exercise={exercises[i].categoria}
+          description={exercises[i].nome}
           list={true}
+          onPress={(id) => {
+            setChosenExercise(id);
+            onPress(true);
+          }}
         ></ExerciseCard>,
       );
     }
-  }
 
+    return exercisesList;
+  };
+
+  const getExercises = async () => {
+    if (exercises.length === 0) {
+      const configurationObject = {
+        url: "http://192.168.15.5:8000/exercicio",
+        method: "GET",
+      };
+      axios(configurationObject)
+        .then((response) => {
+          if (response.status === 200) {
+            setExercises(response.data);
+          } else {
+            throw new Error("An error has occurred");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  getExercises();
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.exercisesList(edit)}>{exercisesList}</View>
+      <View style={styles.exercisesList}>{setList()}</View>
     </ScrollView>
   );
 };

@@ -18,14 +18,14 @@ const MyExercises: React.FC<Props> = ({ userLevel, navigation }) => {
       style={styles.myExercises}
     >
       <View style={styles.headerMyExercises}>
-        <Text style={styles.subtitleHome}>MEUS EXERCÍCIOS</Text>
+        <Text style={styles.subtitleHome}>EXERCÍCIOS</Text>
         <Image
           source={require("../../../assets/angle-right-black.png")}
         ></Image>
       </View>
       <View style={styles.cardMyExercises}>
         <View style={styles.descriptionMyExercises}>
-          <Text style={styles.levelDescription}>NÍVEL {userLevel}</Text>
+          <Text style={styles.levelDescription}>CATEGORIAS</Text>
           <View style={styles.startMyExercises}>
             <Text style={styles.descriptionExerciseTitle(COLORS.green)}>
               COMEÇAR

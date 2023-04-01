@@ -38,13 +38,12 @@ const Login: React.FC<Props> = ({ navigation }) => {
     setEmail(email);
   };
 
-  const saveData = async ({ token }) => {
+  const saveData = async (data) => {
     try {
-      console.log(token);
-      await AsyncStorage.setItem("token", token);
-      alert("Data successfully saved");
+      await AsyncStorage.setItem("token", data.jwt);
+      await AsyncStorage.setItem("user", JSON.stringify(data.usuario));
     } catch (e) {
-      alert("Failed to save the data to the storage");
+      alert(e);
     }
   };
 
@@ -57,19 +56,15 @@ const Login: React.FC<Props> = ({ navigation }) => {
     setInvalidInput(false);
 
     const configurationObject = {
-      url: "http://192.168.15.8:8000/login",
+      url: "http://192.168.15.5:8000/login",
       method: "POST",
       data: { password, email },
     };
 
-    console.log(configurationObject);
-
     axios(configurationObject)
       .then((response) => {
-        console.log(response.status);
         if (response.status === 200) {
-          console.log(response.data);
-          saveData(response.data.jwt);
+          saveData(response.data);
           setPassword("");
           setEmail("");
           home();

@@ -42,9 +42,8 @@ const BlankTextBox: React.FC<Props> = ({
             placeholder="dd/mm/aaaa"
             onBlur={onBlur}
             onSubmitEditing={submitEdit}
-          >
-            {text}
-          </TextInputMask>
+            value={text}
+          ></TextInputMask>
         </View>
       ) : (
         <View style={styles.blankTextBoxComp}>
@@ -58,9 +57,8 @@ const BlankTextBox: React.FC<Props> = ({
             onTouchStart={onTouchStart}
             onBlur={onBlur}
             onSubmitEditing={submitEdit}
-          >
-            {text}
-          </TextInput>
+            value={text}
+          ></TextInput>
           <Text style={styles.complementaryText}> {complementaryText}</Text>
         </View>
       )}

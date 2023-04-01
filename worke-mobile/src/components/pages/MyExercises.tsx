@@ -4,6 +4,9 @@ import HeaderTitleButton from "../organisms/HeaderTitleButton";
 import styles from "../../styles";
 import ExercisesList from "../organisms/ExercisesList";
 import ListButton from "../atoms/ListButton";
+import axios from "axios";
+import DefaultModal from "../molecules/DefaultModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
   navigation: any;
@@ -11,26 +14,46 @@ interface Props {
 
 const MyExercises: React.FC<Props> = ({ navigation }) => {
   const home = () => navigation.navigate("Menu");
-  const list = () => setListEdit(false);
-  const [listEdit, setListEdit] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [exercise, setExercise] = useState([]);
+  const getModal = async (visible) => {
+    setModalVisible(visible);
+    setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
+  };
+  const closeModal = (visible) => {
+    setModalVisible(visible);
+  };
 
   return (
     <View>
+      {modalVisible ? (
+        <DefaultModal
+          buttonText="INICIAR"
+          text={
+            "VOCÊ SELECIONOU O EXERCÍCIO " +
+            exercise.nome +
+            " DA CATEGORIA " +
+            exercise.categoria +
+            "!"
+          }
+          title="VAMOS?"
+          type="exercise"
+          onPressClose={(visible) => closeModal(visible)}
+          navigation={navigation}
+        ></DefaultModal>
+      ) : (
+        ""
+      )}
       <HeaderTitleButton
-        onPress={listEdit ? list : home}
-        title="meus exercícios"
+        onPress={home}
+        title="exercícios"
         search={true}
       ></HeaderTitleButton>
       <View style={styles.view}>
         <View style={styles.myExercisesList}>
-          <ExercisesList edit={listEdit}></ExercisesList>
-        </View>
-        <View style={styles.buttonEditList}>
-          <ListButton
-            edit={listEdit}
-            text={listEdit ? "salvar" : "editar lista"}
-            onPress={(type) => setListEdit(type)}
-          ></ListButton>
+          <ExercisesList
+            onPress={(visible) => getModal(visible)}
+          ></ExercisesList>
         </View>
       </View>
     </View>

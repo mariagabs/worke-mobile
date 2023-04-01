@@ -12,6 +12,7 @@ interface Props {
   buttonText: string;
   type: string;
   onPressClose: (visible: boolean) => void;
+  navigation: any;
 }
 
 const DefaultModal: React.FC<Props> = ({
@@ -20,6 +21,7 @@ const DefaultModal: React.FC<Props> = ({
   buttonText,
   type,
   onPressClose,
+  navigation,
 }) => {
   const images = [
     { type: "yoga", image: require("../../../assets/letsyoga.png") },
@@ -30,11 +32,19 @@ const DefaultModal: React.FC<Props> = ({
 
   const image = images.find((x) => x.type === type).image;
 
+  const onPress = () => {
+    navigation.navigate("Exercise");
+  };
+
   return (
     <View style={styles.modalBackground}>
       <View style={styles.modal}>
         <View style={styles.headerModal}>
-          <FontAwesome5 name="share-alt" size={24} color={COLORS.green} />
+          {type !== "shareGroup" ? (
+            <FontAwesome5 name="share-alt" size={24} color={COLORS.green} />
+          ) : (
+            ""
+          )}
           <TouchableOpacity
             activeOpacity={1}
             onPress={() => onPressClose(false)}
@@ -48,7 +58,7 @@ const DefaultModal: React.FC<Props> = ({
         </View>
         <Image style={styles.imageModal} source={image}></Image>
         <View style={styles.buttonModal}>
-          <Button buttonText={buttonText}></Button>
+          <Button buttonText={buttonText} onPress={onPress}></Button>
         </View>
       </View>
     </View>

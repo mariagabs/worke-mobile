@@ -153,7 +153,6 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
   let step = currentStep == 0 ? currentStep : currentStep - 1;
   const createGroup = async () => {
     await AsyncStorage.setItem("user", JSON.stringify(user));
-    console.log(user);
     navigation.navigate("Group");
   };
 
@@ -189,7 +188,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
     let userCreate = JSON.parse(user);
 
     const configurationObject = {
-      url: "http://172.20.10.4:8000/register",
+      url: "http://10.2.20.182:8000/register",
       method: "POST",
       data: userCreate,
       headers: {

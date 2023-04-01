@@ -9,13 +9,17 @@ interface Props {
   exercise: string;
   description: string;
   list: boolean;
+  idExercise: string;
+  onPress: (id) => void;
 }
 
 const ExerciseCard: React.FC<Props> = ({
+  idExercise,
   color,
   exercise,
   description,
   list,
+  onPress,
 }) => {
   const image = LabelButtonImages.GetImageDesc(color);
 
@@ -23,6 +27,10 @@ const ExerciseCard: React.FC<Props> = ({
     <TouchableOpacity
       activeOpacity={1}
       style={styles.exerciseCard(color, list)}
+      onPress={(id) => {
+        onPress(idExercise);
+        console.log(idExercise);
+      }}
     >
       <Text style={styles.exerciseCardTitle(color)}>{exercise}</Text>
       <Text style={styles.exerciseCardDesc}>{description}</Text>

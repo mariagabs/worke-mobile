@@ -43,7 +43,6 @@ const CreateGroup: React.FC<Props> = ({ navigation }) => {
     let userGroup = JSON.parse(group);
     let user = await AsyncStorage.getItem("user");
     let userJSON = JSON.parse(user);
-    console.log(userJSON);
     const configurationObject = {
       url: "http://172.20.10.4:8000/criarGrupo/" + userJSON.id,
       method: "POST",
