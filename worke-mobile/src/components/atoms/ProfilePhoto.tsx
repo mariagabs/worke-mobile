@@ -16,21 +16,20 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
   const [image, setImage] = useState(null);
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
-  // useEffect(() => {
-  //   const getImage = async () => {
-  //     let user = await AsyncStorage.getItem("user");
-  //     let userJSON = JSON.parse(user);
-  //     console.log(userJSON.image);
-  //     setImage(userJSON.image);
-  //   };
+  useEffect(() => {
+    const getImage = async () => {
+      let user = await AsyncStorage.getItem("user");
+      let userJSON = JSON.parse(user);
+      if (userJSON.image !== null) setImage(userJSON.image);
+    };
 
-  //   getImage();
-  // }, []);
+    getImage();
+  }, []);
 
   const saveImage = async (image) => {
     user.image = image;
     const configurationObject = {
-      url: "http://192.168.15.5:8000/funcionario/" + user.id,
+      url: "http://192.168.15.9:8000/funcionario/" + user.id,
       method: "POST",
       data: user,
       headers: {
@@ -69,7 +68,8 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
     }
   };
 
-  let imageUser = "data:image/png;base64," + user.image;
+  let imageUser = image !== null ? "data:image/png;base64," + image : null;
+  console.log(imageUser);
   return (
     <View style={styles.profilePhoto}>
       <Image
@@ -77,7 +77,7 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
         source={require("../../../assets/2-lines.png")}
       ></Image>
       <View>
-        {image !== null && image !== "" ? (
+        {imageUser !== null && imageUser !== "" ? (
           <Image style={styles.userPhoto} source={{ uri: imageUser }}></Image>
         ) : (
           <View style={styles.backgroundNoPhotoProfile}>

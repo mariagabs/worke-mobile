@@ -19,7 +19,7 @@ const Exercise: React.FC = () => {
   const device = devices.back;
   return (
     <Camera
-      // ref={camera}
+      ref={camera}
       style={{ flex: 1 }}
       device={device}
       isActive={true}

@@ -8,9 +8,10 @@ import { COLORS } from "../../../assets/colors";
 interface Props {
   image: string;
   color: string;
+  level: string;
 }
 
-const UserPhotoIcon: React.FC<Props> = ({ image, color }) => {
+const UserPhotoIcon: React.FC<Props> = ({ image, color, level }) => {
   let imageUser = "data:image/png;base64," + image;
   return (
     <View>
@@ -22,7 +23,7 @@ const UserPhotoIcon: React.FC<Props> = ({ image, color }) => {
         </View>
       )}
       <View style={styles.photoStar}>
-        <Star color={color} level="10"></Star>
+        <Star color={color} level={level}></Star>
       </View>
     </View>
   );

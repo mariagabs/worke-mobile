@@ -24,8 +24,11 @@ const HomeHeader: React.FC<Props> = ({ color }) => {
       let userJSON = JSON.parse(userStorage);
       setUser(userJSON);
       setImage(userJSON.image);
-      setName(userJSON.name);
       setLevel(userJSON.level);
+
+      let name = userJSON.name;
+      if (name.indexOf(" ") > -1) name = name.split(" ")[0];
+      setName(name);
     }
   };
 
@@ -35,7 +38,11 @@ const HomeHeader: React.FC<Props> = ({ color }) => {
     <View style={styles.fullWidth}>
       <View style={styles.homeNotification}>
         <View style={styles.homePhotoName}>
-          <UserPhotoIcon color={color} image={image}></UserPhotoIcon>
+          <UserPhotoIcon
+            color={color}
+            image={image}
+            level={level}
+          ></UserPhotoIcon>
           <View style={styles.userNameGreeting}>
             <HelloUser color={color} name={name}></HelloUser>
           </View>

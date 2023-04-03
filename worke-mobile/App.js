@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { View } from "react-native";
+import { View, LogBox } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import styles from "./src/styles.js";
@@ -7,6 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import AppNavigator from "./app.navigator";
 
 SplashScreen.preventAutoHideAsync();
+LogBox.ignoreLogs(["Overwriting fontFamily style attribute preprocessor"]);
 
 export default function App() {
   const [fontsLoaded] = useFonts({
