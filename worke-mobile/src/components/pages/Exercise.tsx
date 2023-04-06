@@ -1,31 +1,80 @@
-import React, { useEffect, useRef } from "react";
-import { Linking, View } from "react-native";
-import { Camera, useCameraDevices } from "react-native-vision-camera";
+import React, { useState, useEffect } from "react";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { Camera, CameraType, FlashMode } from "expo-camera";
+import { cameraWithTensors } from "@tensorflow/tfjs-react-native";
+
+const TensorCamera = cameraWithTensors(Camera);
 
 const Exercise: React.FC = () => {
+  const [type, setType] = useState(CameraType.back);
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+
   useEffect(() => {
-    console.log("USEEFFECTTTTTTTTTTTTTTTTTTT");
-    async function getPermission() {
-      const permission = await Camera.requestCameraPermission();
-      console.log(`Camera permission status: ${permission}`);
-      if (permission === "denied") await Linking.openSettings();
-    }
+    const getPermission = async () => {
+      await requestPermission();
+    };
+
     getPermission();
+
+    console.log(permission);
   }, []);
 
-  const camera = useRef(null);
-  const devices = useCameraDevices();
-  console.log("DEVICESSSSSSSSSSSSSSSSSSSSSS", devices);
-  const device = devices.back;
+  function toggleCameraType() {
+    setType((current) =>
+      current === CameraType.back ? CameraType.front : CameraType.back,
+    );
+  }
+
+  function handleCameraStream(images, updatePreview, gl) {
+    const loop = async () => {
+      const nextImageTensor = images.next().value;
+
+      //
+      // do something with tensor here
+      //
+
+      // if autorender is false you need the following two lines.
+      // updatePreview();
+      // gl.endFrameEXP();
+
+      requestAnimationFrame(loop);
+    };
+    loop();
+  }
+
+  let camera: Camera;
   return (
-    <Camera
-      ref={camera}
-      style={{ flex: 1 }}
-      device={device}
-      isActive={true}
-      photo={true}
-    />
+    <View style={styles.container}>
+      <TensorCamera
+        // Standard Camera props
+        style={{ flex: 1, width: "100%" }}
+        type={CameraType.front}
+        // Tensor related props
+        resizeHeight={200}
+        resizeWidth={152}
+        resizeDepth={3}
+        onReady={handleCameraStream}
+        autorender={true}
+        autoFocus={true}
+        flashMode={FlashMode.off}
+      />
+      {/* <Camera
+        ref={(r) => {
+          camera = r;
+        }}
+        type={CameraType.front}
+        style={{ flex: 1, width: "100%" }}
+      ></Camera> */}
+    </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
 export default Exercise;

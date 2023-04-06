@@ -40,7 +40,6 @@ const Login: React.FC<Props> = ({ navigation }) => {
 
   const saveData = async (data) => {
     try {
-      console.log(data);
       await AsyncStorage.setItem("token", data.jwt);
       await AsyncStorage.setItem("user", JSON.stringify(data.usuario));
     } catch (e) {
@@ -57,7 +56,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
     setInvalidInput(false);
 
     const configurationObject = {
-      url: "http://192.168.15.9:8000/login",
+      url: "http://192.168.15.6:8000/login",
       method: "POST",
       data: { password, email },
     };

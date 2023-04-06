@@ -29,7 +29,6 @@ const ExerciseCard: React.FC<Props> = ({
       style={styles.exerciseCard(color, list)}
       onPress={(id) => {
         onPress(idExercise);
-        console.log(idExercise);
       }}
     >
       <Text style={styles.exerciseCardTitle(color)}>{exercise}</Text>

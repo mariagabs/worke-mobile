@@ -78,8 +78,6 @@ const CreateGroup: React.FC<Props> = ({ navigation }) => {
 
     axios(configurationObject)
       .then((response) => {
-        console.log(response.data);
-
         if (response.status === 200) {
           if (!response.data) {
             let group = {

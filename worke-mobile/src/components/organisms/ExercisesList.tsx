@@ -47,7 +47,7 @@ const ExercisesList: React.FC<Props> = ({ onPress }) => {
           description={exercises[i].nome}
           list={true}
           onPress={(id) => {
-            setChosenExercise(exercises[i].id);
+            setChosenExercise(id);
             onPress(true);
           }}
         ></ExerciseCard>,
@@ -60,7 +60,7 @@ const ExercisesList: React.FC<Props> = ({ onPress }) => {
   const getExercises = async () => {
     if (exercises.length === 0) {
       const configurationObject = {
-        url: "http://192.168.15.9:8000/exercicio",
+        url: "http://192.168.15.6:8000/exercicio",
         method: "GET",
       };
       axios(configurationObject)

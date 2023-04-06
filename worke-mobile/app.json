@@ -1,49 +1,49 @@
 {
-  "expo": {
-    "name": "worke-mobile",
-    "slug": "worke-mobile",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/w-logo.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash-screen.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true,
-      "infoPlist": {
-        "NSCameraUsageDescription": "$(PRODUCT_NAME) needs access to your Camera."
-      }
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/w-gradient-logo.png",
-        "backgroundColor": "#FFFFFF"
-      },
-      "permissions": ["android.permission.CAMERA"],
-      "package": "android.worke"
-    },
-    "web": {
-      "favicon": "./assets/w-gradient-logo.png"
-    },
-    "plugins": [
-      [
-        "react-native-vision-camera",
-        {
-          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera."
+    "expo": {
+        "name": "worke-mobile",
+        "slug": "worke-mobile",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/w-logo.png",
+        "userInterfaceStyle": "light",
+        "splash": {
+            "image": "./assets/splash-screen.png",
+            "resizeMode": "cover",
+            "backgroundColor": "#ffffff"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "supportsTablet": true,
+            "infoPlist": {
+                "NSCameraUsageDescription": "$(PRODUCT_NAME) needs access to your Camera."
+            }
+        },
+        "android": {
+            "adaptiveIcon": {
+                "foregroundImage": "./assets/w-gradient-logo.png",
+                "backgroundColor": "#FFFFFF"
+            },
+            "permissions": ["android.permission.CAMERA"],
+            "package": "android.worke"
+        },
+        "web": {
+            "favicon": "./assets/w-gradient-logo.png"
+        },
+        "plugins": [
+            [
+                "expo-camera",
+                {
+                    "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera."
+                }
+            ]
+        ],
+        "extra": {
+            "eas": {
+                "projectId": "91dcff6b-67da-449a-a1f7-baf8e4c98474"
+            }
         }
-      ]
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "91dcff6b-67da-449a-a1f7-baf8e4c98474"
-      }
     }
-  }
 }
