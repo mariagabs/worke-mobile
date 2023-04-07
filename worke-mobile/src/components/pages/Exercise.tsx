@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { Camera, CameraType, FlashMode } from "expo-camera";
-import { cameraWithTensors } from "@tensorflow/tfjs-react-native";
+import { cameraWithTensors, bundleResourceIO } from "@tensorflow/tfjs-react-native";
+import { getModel } from '../../model/utils.js'
 
 const TensorCamera = cameraWithTensors(Camera);
 
@@ -29,6 +30,10 @@ const Exercise: React.FC = () => {
     const loop = async () => {
       const nextImageTensor = images.next().value;
 
+
+      const myModel = await getModel();
+    
+      const poses = await myModel.predict(images);
       //
       // do something with tensor here
       //
