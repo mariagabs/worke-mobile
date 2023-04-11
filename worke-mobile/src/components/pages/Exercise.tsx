@@ -1,130 +1,134 @@
-import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { StatusBar } from 'expo-status-bar';
+import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
+import React, { useState, useEffect, useRef } from "react";
+import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Button, Image } from "react-native";
 import { Camera, CameraType, FlashMode } from "expo-camera";
-import * as tf from "@tensorflow/tfjs"
+import * as jpeg from 'jpeg-js'
+import * as tf from '@tensorflow/tfjs'
 import '@tensorflow/tfjs-react-native';
-import { cameraWithTensors, bundleResourceIO, fetch } from "@tensorflow/tfjs-react-native";
-// import { getModel } from '../../../assets/model/model.json'
-
-const TensorCamera = cameraWithTensors(Camera);
+import { cameraWithTensors, bundleResourceIO, fetch, decodeJpeg } from "@tensorflow/tfjs-react-native";
+// import * as MediaLibrary from 'expo-media-library';
 
 const Exercise: React.FC = () => {
-  const [type, setType] = useState(CameraType.back);
-  const [permission, requestPermission] = Camera.useCameraPermissions();
+  let cameraRef = useRef();
+  const [hasCameraPermission, setHasCameraPermission] = useState();
+  const [photo, setPhoto] = useState();
   const [imageDetector, setImageDetector] = useState(null);
-  const [showCamera, setShowCamera] = useState(false);
+  const [type, setType] = useState(CameraType.front);
 
   useEffect(() => {
-    setShowCamera(true);
-
-    return () => {
-      setShowCamera(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    const getPermission = async () => {
-      await requestPermission();
-    };
-
-    getPermission();
-
+    (async () => {
+      const cameraPermission = await Camera.requestCameraPermissionsAsync();
+      setHasCameraPermission(cameraPermission.status === "granted");
+    })();
     async function loadModel(){
-      console.log('iniciou loadModel');
       const tfReady = await tf.ready();
+      console.log('tf.version');
+      console.log(tf.version);
       const modelJson = require('../../../assets/model/model.json');
-      const modelWeights = require('../../../assets/model/group1-shard.bin');
+      const modelWeight = require('../../../assets/model/group1-shard.bin');
+      // const modelWeight1 = require('../../../assets/model/group1-shard1of4.bin');
+      // const modelWeight2 = require('../../../assets/model/group1-shard2of4.bin');
+      // const modelWeight3 = require('../../../assets/model/group1-shard3of4.bin');
+      // const modelWeight4 = require('../../../assets/model/group1-shard4of4.bin');
 
-      const thisModel = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeights));
+      console.log('iniciou loadModel');
+      const thisModel = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeight));
+
       console.log('thisModel');
-      // console.log('tfjs');
-      // console.log(tf.version);
+      console.log(thisModel.summary());
 
       setImageDetector(thisModel);
       console.log('finalizou loadModel');
     }
     loadModel();
-
-    console.log(permission);
   }, []);
 
-  function toggleCameraType() {
-    setType((current) =>
-      current === CameraType.back ? CameraType.front : CameraType.back,
+  if (hasCameraPermission === undefined) {
+    return <Text>Requesting permissions...</Text>
+  } else if (!hasCameraPermission) {
+    return <Text>Permission for camera not granted. Please change this in settings.</Text>
+  }
+
+  let takePic = async () => {
+    let options = {
+      quality: 0.1,
+      base64: true,
+      exif: false
+    };
+
+    let newPhoto = await cameraRef.current.takePictureAsync(options);
+    console.log(newPhoto.uri);
+
+    const file = await manipulateAsync(newPhoto.uri, [
+        {resize: {width: 180, height: 180}},
+      ],
+      {base64: true, compress: 0.5, format: SaveFormat.JPEG}
+    );
+
+    // console.log(file.base64);
+    const imgBuffer = tf.util.encodeString(file.base64, 'base64').buffer;
+    const raw = new Uint8Array(imgBuffer);
+    const imageTensor = decodeJpeg(raw);
+    // console.log(imageTensor);
+    // imageTensor.print(); 
+
+    let expandedImageTensor = tf.expandDims(imageTensor, 0);
+    // console.log(JSON.stringify(expandedImageTensor));
+    const newExpandedImageTensor = tf.cast(expandedImageTensor, 'float32')
+    console.log(newExpandedImageTensor);
+    newExpandedImageTensor.print(); 
+    console.log('expandedImageTensor');
+    console.log('starting prediction');
+
+    const predictions = await imageDetector.predict(expandedImageTensor).data();
+    console.log(imageDetector);
+    // const res = await imageDetector.executeAsync(imageTensor);
+    
+    console.log(predictions.dataSync());
+  };
+  
+  if (photo) {
+    
+    setPhoto(undefined);
+    // let savePhoto = () => {
+    //   MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
+    //   });
+    // };
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <Image style={styles.preview} source={{ uri: "data:image/jpg;base64," + photo.base64 }} />
+        {/* <Button title="Share" onPress={sharePic} />
+        {hasMediaLibraryPermission ? <Button title="Save" onPress={savePhoto} /> : undefined} */}
+        <Button title="Discard" onPress={() => setPhoto(undefined)} />
+      </SafeAreaView>
     );
   }
 
-  function handleCameraStream(tensors) {
-    
-    const loop = async () => {
-      const nextImageTensor = tensors.next().value;
-
-      console.log(JSON.stringify(nextImageTensor));
-      // const axs = 0;
-      // const imageTensorReshaped = nextImageTensor.expandDims(axs);
-
-      const expandedImageTensor = tf.reshape(nextImageTensor, [1,180,180,3]);
-      console.log(JSON.stringify(expandedImageTensor));
-      console.log('expandedImageTensor');
-      console.log('starting prediction');
-
-      const predictions = await imageDetector.predict(nextImageTensor);
-      
-      console.log(predictions.dataSync());
-      // const newImage = nextImageTensor.reshape([1,180,180,3]);
-      // let result = await imageDetector.predict(newImage);
-
-      // console.log(JSON.stringify(result));
-    
-      // tf.dispose(tensors);
-      
-      // do something with tensor here
-      
-
-      // if autorender is false you need the following two lines.
-      // updatePreview();
-      // gl.endFrameEXP();
-
-      requestAnimationFrame(loop);
-    };
-    loop();
-  }
-
-  let camera: Camera;
   return (
-    <View style={styles.container}>
-      {showCamera && (
-        <TensorCamera
-          // Standard Camera props
-          style={{ flex: 1, width: "100%" }}
-          type={CameraType.front}
-          // Tensor related props
-          resizeHeight={180}
-          resizeWidth={180}
-          resizeDepth={3}
-          onReady={handleCameraStream}
-          autorender={true}
-          autoFocus={true}
-          flashMode={FlashMode.off}
-        />
-      )}
-      {/* <Camera
-        ref={(r) => {
-          camera = r;
-        }}
-        type={CameraType.front}
-        style={{ flex: 1, width: "100%" }}
-      ></Camera> */}
-    </View>
+    <Camera style={styles.container} ref={cameraRef} type={type} ratio="16:9">
+      <View style={styles.buttonContainer}>
+        <Button title="Take Pic" onPress={takePic} />
+      </View>
+      <StatusBar style="auto" />
+    </Camera>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+  buttonContainer: {
+    backgroundColor: '#fff',
+    alignSelf: 'flex-end'
+  },
+  preview: {
+    alignSelf: 'stretch',
+    flex: 1
+  }
 });
 export default Exercise;
