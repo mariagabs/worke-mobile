@@ -62,9 +62,11 @@ const Exercise: React.FC = () => {
       console.log(JSON.stringify(expandedImageTensor));
       expandedImageTensor.print();
   
-      const predictions = await imageDetector.predict(expandedImageTensor).data();
+      const predictions = await imageDetector.predict(expandedImageTensor);
       console.log(imageDetector);
   
+      console.log(predictions.dataSync());
+
       requestAnimationFrame(loop);
     };
     loop();
