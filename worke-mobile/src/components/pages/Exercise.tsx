@@ -1,6 +1,6 @@
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 import React, { useState, useEffect, useRef } from "react";
-import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Button, Image } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet, SafeAreaView, Button, Image, Platform } from "react-native";
 import { Camera, CameraType, FlashMode } from "expo-camera";
 import * as tf from '@tensorflow/tfjs'
 import '@tensorflow/tfjs-react-native';
@@ -71,7 +71,12 @@ const Exercise: React.FC = () => {
     };
     loop();
   };
-  
+
+  const textureDims =
+    Platform.OS === 'ios'
+      ? { width: 1080, height: 1920 }
+      : { width: 1600, height: 1200 };
+      
   let camera: Camera;
   return (
     <View style={styles.container}>
@@ -81,6 +86,8 @@ const Exercise: React.FC = () => {
           style={{ flex: 1, width: "100%" }}
           type={type}
           // Tensor related props
+          cameraTextureHeight={textureDims.height}
+          cameraTextureWidth={textureDims.width}
           resizeHeight={200}
           resizeWidth={200}
           resizeDepth={3}
