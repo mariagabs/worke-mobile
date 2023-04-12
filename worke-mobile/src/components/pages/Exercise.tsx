@@ -34,10 +34,8 @@ const Exercise: React.FC = () => {
       const tfReady = await tf.ready();
       const modelJson = require('../../../assets/model/model.json');
       const modelWeight = require('../../../assets/model/group1-shard.bin');
-      // const modelWeight1 = require('../../../assets/model/group1-shard1of4.bin');
-      // const modelWeight2 = require('../../../assets/model/group1-shard2of4.bin');
-      // const modelWeight3 = require('../../../assets/model/group1-shard3of4.bin');
-      // const modelWeight4 = require('../../../assets/model/group1-shard4of4.bin');
+      // const modelJson = require('../../../assets/model/modellib.json');
+      // const modelWeight = require('../../../assets/model/group-shardlib.bin');
 
       console.log('iniciou loadModel');
       // const thisModel = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeight));
@@ -47,7 +45,7 @@ const Exercise: React.FC = () => {
       console.log('modelo is on');
 
       console.log('thisModel');
-      // console.log(thisModel);
+      console.log(tf.version);
 
       setImageDetector(thisModel);
       console.log('finalizou loadModel');
@@ -60,8 +58,19 @@ const Exercise: React.FC = () => {
     const loop = async () => {
 
       const nextImageTensor = images.next().value;
-      // console.log(JSON.stringify(nextImageTensor));
-      // nextImageTensor.print();
+      console.log(JSON.stringify(nextImageTensor));
+      nextImageTensor.print();
+
+      const resized = tf.image.resizeBilinear(nextImageTensor, [640, 480]);
+      // resized.isDisposedInternal = true;
+  
+      const casted = resized.cast('int32');
+  
+      const expanded = casted.expandDims(0);
+  
+  
+      // faz a previsão.
+      const obj = await imageDetector.executeAsync(expanded);
 
       // const resized = tf.image.resizeBilinear(nextImageTensor, [224,224]);
       // console.log(JSON.stringify(resized));
@@ -80,8 +89,8 @@ const Exercise: React.FC = () => {
       // const inputs = tf.ones([1, 224, 224, 3]);
       
       // inputs.print();
-      const obj = await imageDetector.executeAsync(expandedImageTensor);
-      console.log(obj.dataSync());
+      // const obj = await imageDetector.executeAsync(expandedImageTensor);
+      // console.log(obj.dataSync());
 
       // console.log(predictions.dataSync());
 
