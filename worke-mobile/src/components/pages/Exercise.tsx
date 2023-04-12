@@ -79,7 +79,7 @@ const Exercise: React.FC = () => {
         <TensorCamera
           // Standard Camera props
           style={{ flex: 1, width: "100%" }}
-          type={CameraType.front}
+          type={type}
           // Tensor related props
           resizeHeight={200}
           resizeWidth={200}
