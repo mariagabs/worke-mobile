@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, View, Text, ScrollView } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import styles from "../../styles";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { COLORS } from "../../../assets/colors";
 import BodyCard from "../atoms/BodyCard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Body: React.FC = () => {
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+
+  useEffect(() => {
+    const getData = async () => {
+      let user = JSON.parse(await AsyncStorage.getItem("user"));
+      setHeight(user.height);
+      setWeight(user.weight);
+    };
+
+    getData();
+  }, []);
+
   const data = {
     labels: [
       "Janeiro",
@@ -62,8 +76,8 @@ const Body: React.FC = () => {
           />
         </View>
         <View style={styles.bodyCards}>
-          <BodyCard weight="67" height=""></BodyCard>
-          <BodyCard height="1,66" weight=""></BodyCard>
+          <BodyCard weight={weight} height=""></BodyCard>
+          <BodyCard height={height} weight=""></BodyCard>
         </View>
       </ScrollView>
     </View>

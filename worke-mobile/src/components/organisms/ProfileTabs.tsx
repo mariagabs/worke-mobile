@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { COLORS } from "../../../assets/colors";
 import {
@@ -12,10 +12,14 @@ import Body from "./Body";
 import PersonalInfo from "./PersonalInfo";
 import GroupProfile from "./GroupProfile";
 import styles from "../../styles";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const ProfileTabs: React.FC = () => {
+interface Props {
+  user: any;
+}
+
+const ProfileTabs: React.FC<Props> = ({ user }) => {
   const Tab = createMaterialTopTabNavigator();
-
   function MyTabs() {
     return (
       <Tab.Navigator

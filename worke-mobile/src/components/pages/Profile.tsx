@@ -19,7 +19,7 @@ const Profile: React.FC<Props> = ({ user }) => {
     <View style={styles.container}>
       <View style={styles.profile}>
         <ProfilePhoto user={user}></ProfilePhoto>
-        <ProfileTabs />
+        <ProfileTabs user={user} />
       </View>
     </View>
   );

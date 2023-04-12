@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,16 +11,32 @@ import {
 import styles from "../../styles";
 import TextBox from "../atoms/TextBox";
 import Button from "../atoms/Button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TextInputMask } from "react-native-masked-text";
+import { COLORS } from "../../../assets/colors";
 
-interface Props {
-  userInfo: { name: string; dateBirth: string; email: string };
-}
+const PersonalInfo: React.FC = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [birthDate, setBirthDate] = useState("");
 
-const PersonalInfo: React.FC<Props> = ({ userInfo }) => {
-  userInfo = {
-    name: "Karina Oliveira",
-    dateBirth: "10/05/1966",
-    email: "karina.oliveira@gmail.com",
+  useEffect(() => {
+    const getData = async () => {
+      let user = JSON.parse(await AsyncStorage.getItem("user"));
+      setName(user.name);
+      setEmail(user.email);
+
+      let day = user.birth_date.split("-")[2];
+      let month = user.birth_date.split("-")[1];
+      let year = user.birth_date.split("-")[0];
+      setBirthDate(day + "/" + month + "/" + year);
+    };
+
+    getData();
+  }, []);
+
+  const onChangeDateHandler = (date) => {
+    setBirthDate(date);
   };
 
   return (
@@ -28,27 +44,37 @@ const PersonalInfo: React.FC<Props> = ({ userInfo }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <View style={styles.backgroundWhite}>
-        <ScrollView automaticallyAdjustKeyboardInsets={true} bounces={false}>
-          <View>
-            <View style={styles.personalInfo}>
-              <View style={styles.personalInfoField}>
-                <Text style={styles.fieldTitle}>nome completo</Text>
-                <TextBox text={userInfo.name}></TextBox>
-              </View>
-              <View style={styles.personalInfoField}>
-                <Text style={styles.fieldTitle}>data de nascimento</Text>
-                <TextBox text={userInfo.dateBirth}></TextBox>
-              </View>
-              <View style={styles.personalInfoField}>
-                <Text style={styles.fieldTitle}>e-mail</Text>
-                <TextBox text={userInfo.email}></TextBox>
+        <View>
+          <ScrollView automaticallyAdjustKeyboardInsets={true} bounces={false}>
+            <View>
+              <View style={styles.personalInfo}>
+                <View style={styles.personalInfoField}>
+                  <Text style={styles.fieldTitle}>nome completo</Text>
+                  <TextBox text={name}></TextBox>
+                </View>
+                <View style={styles.personalInfoField}>
+                  <Text style={styles.fieldTitle}>data de nascimento</Text>
+                  <TextInputMask
+                    type={"datetime"}
+                    options={{ format: "DD/MM/YYYY" }}
+                    placeholder="dd/mm/aaaa"
+                    style={styles.input}
+                    value={birthDate}
+                    onChangeText={onChangeDateHandler}
+                    placeholderTextColor={COLORS.lightGray}
+                  ></TextInputMask>
+                </View>
+                <View style={styles.personalInfoField}>
+                  <Text style={styles.fieldTitle}>e-mail</Text>
+                  <TextBox text={email}></TextBox>
+                </View>
               </View>
             </View>
-            <View style={styles.buttonBottomBar}>
-              <Button buttonText="salvar alterações"></Button>
-            </View>
+          </ScrollView>
+          <View style={styles.buttonBottomBar}>
+            <Button buttonText="salvar alterações"></Button>
           </View>
-        </ScrollView>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );

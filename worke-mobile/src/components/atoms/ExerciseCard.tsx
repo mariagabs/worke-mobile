@@ -7,7 +7,7 @@ import { LabelButtonImages } from "../../LabelButtonImages";
 interface Props {
   color: string;
   exercise: string;
-  description: string;
+  description?: string;
   list: boolean;
   idExercise: string;
   onPress: (id) => void;

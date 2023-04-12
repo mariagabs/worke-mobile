@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, ScrollView } from "react-native";
 import HeaderTitleButton from "../organisms/HeaderTitleButton";
 import styles from "../../styles";
@@ -10,12 +10,28 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Props {
   navigation: any;
+  route: any;
 }
 
-const MyExercises: React.FC<Props> = ({ navigation }) => {
-  const home = () => navigation.navigate("Menu");
+const MyExercises: React.FC<Props> = ({ navigation, route }) => {
+  const home = () => {
+    navigation.addListener("beforeRemove", (e) => {
+      e.preventDefault();
+      navigation.dispatch(e.data.action);
+    });
+
+    if (title === "exercícios") navigation.navigate("Menu");
+    else if (title === "categorias") navigation.navigate("Menu");
+    else
+      navigation.navigate("MyExercises", {
+        title: "categorias",
+        getCategoryExercise: false,
+      });
+  };
   const [modalVisible, setModalVisible] = useState(false);
   const [exercise, setExercise] = useState([]);
+  const { title } = route.params;
+  let start = true;
   const getModal = async (visible) => {
     setModalVisible(visible);
     setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
@@ -24,6 +40,11 @@ const MyExercises: React.FC<Props> = ({ navigation }) => {
     setModalVisible(visible);
   };
 
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (e) => {
+      e.preventDefault();
+    });
+  }, [navigation, start]);
   return (
     <View>
       {modalVisible ? (
@@ -46,13 +67,16 @@ const MyExercises: React.FC<Props> = ({ navigation }) => {
       )}
       <HeaderTitleButton
         onPress={home}
-        title="exercícios"
+        title={title}
         search={true}
       ></HeaderTitleButton>
       <View style={styles.view}>
         <View style={styles.myExercisesList}>
           <ExercisesList
             onPress={(visible) => getModal(visible)}
+            type={title}
+            navigation={navigation}
+            route={route}
           ></ExercisesList>
         </View>
       </View>

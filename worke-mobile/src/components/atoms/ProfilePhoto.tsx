@@ -29,7 +29,7 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
   const saveImage = async (image) => {
     user.image = image;
     const configurationObject = {
-      url: "http://192.168.15.6:8000/funcionario/" + user.id,
+      url: "http://192.168.15.12:8000/funcionario/" + user.id,
       method: "POST",
       data: user,
       headers: {
@@ -69,7 +69,6 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
   };
 
   let imageUser = image !== null ? "data:image/png;base64," + image : null;
-  console.log(imageUser);
   return (
     <View style={styles.profilePhoto}>
       <Image

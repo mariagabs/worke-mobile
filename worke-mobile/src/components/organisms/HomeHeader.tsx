@@ -25,10 +25,7 @@ const HomeHeader: React.FC<Props> = ({ color }) => {
       setUser(userJSON);
       setImage(userJSON.image);
       setLevel(userJSON.level);
-
-      let name = userJSON.name;
-      if (name.indexOf(" ") > -1) name = name.split(" ")[0];
-      setName(name);
+      setName(userJSON.first_name);
     }
   };
 
