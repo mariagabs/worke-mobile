@@ -10,10 +10,11 @@ import { cameraWithTensors, bundleResourceIO, fetch, decodeJpeg } from "@tensorf
 const TensorCamera = cameraWithTensors(Camera);
 
 const Exercise: React.FC = () => {
-  const [permission, requestPermission] = Camera.useCameraPermissions();
+  const [hasPermission, setHasPermission] = useState(null);
   const [imageDetector, setImageDetector] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [type, setType] = useState(CameraType.front);
+  // const camRef = useRef(null);
 
   useEffect(() => {
     setShowCamera(true);
@@ -24,11 +25,10 @@ const Exercise: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const getPermission = async () => {
-      await requestPermission();
-    };
-
-    getPermission();
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
 
     async function loadModel(){
       const tfReady = await tf.ready();
@@ -40,10 +40,14 @@ const Exercise: React.FC = () => {
       // const modelWeight4 = require('../../../assets/model/group1-shard4of4.bin');
 
       console.log('iniciou loadModel');
-      const thisModel = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeight));
+      // const thisModel = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeight));
+
+      const thisModel = await tf.loadGraphModel(
+        bundleResourceIO(modelJson, modelWeight));
+      console.log('modelo is on');
 
       console.log('thisModel');
-      console.log(thisModel.summary());
+      // console.log(thisModel);
 
       setImageDetector(thisModel);
       console.log('finalizou loadModel');
@@ -51,21 +55,35 @@ const Exercise: React.FC = () => {
     loadModel();
   }, []);
 
-  function handleCameraStream(tensors) {
+  async function handleCameraStream(images) {
+    
     const loop = async () => {
 
-      const nextImageTensor = tensors.next().value;
-      console.log(JSON.stringify(nextImageTensor));
-      nextImageTensor.print();
+      const nextImageTensor = images.next().value;
+      // console.log(JSON.stringify(nextImageTensor));
+      // nextImageTensor.print();
 
-      const expandedImageTensor = tf.reshape(nextImageTensor, [1,200,200,3]);
+      // const resized = tf.image.resizeBilinear(nextImageTensor, [224,224]);
+      // console.log(JSON.stringify(resized));
+      
+      // const casted = tf.cast(resized, 'int32');
+      // console.log(JSON.stringify(casted));
+
+      // const expanded = tf.expandDims(casted, 0)
+      // console.log(JSON.stringify(expanded));
+      // expanded.print();
+
+      const expandedImageTensor = tf.reshape(nextImageTensor, [1,224,224,3]);
       console.log(JSON.stringify(expandedImageTensor));
       expandedImageTensor.print();
   
-      const predictions = await imageDetector.predict(expandedImageTensor);
-      console.log(imageDetector);
-  
-      console.log(predictions.dataSync());
+      // const inputs = tf.ones([1, 224, 224, 3]);
+      
+      // inputs.print();
+      const obj = await imageDetector.executeAsync(expandedImageTensor);
+      console.log(obj.dataSync());
+
+      // console.log(predictions.dataSync());
 
       requestAnimationFrame(loop);
     };
@@ -84,12 +102,14 @@ const Exercise: React.FC = () => {
         <TensorCamera
           // Standard Camera props
           style={{ flex: 1, width: "100%" }}
-          type={type}
+          type={CameraType.front}
+          useCustomShadersToResize={false}
           // Tensor related props
           cameraTextureHeight={textureDims.height}
           cameraTextureWidth={textureDims.width}
-          resizeHeight={200}
-          resizeWidth={200}
+          resizeHeight={224}
+          resizeWidth={224}
+          zoom={0}
           resizeDepth={3}
           onReady={handleCameraStream}
           autorender={true}

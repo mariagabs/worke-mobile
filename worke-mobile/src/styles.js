@@ -820,7 +820,7 @@ export default StyleSheet.create({
         color: COLORS.black,
         fontSize: 14,
         fontFamily: "Nunito-Black",
-        fontWeight: 900,
+        fontWeight: "900",
         letterSpacing: 2,
         marginRight: 12,
     },
@@ -1130,7 +1130,7 @@ export default StyleSheet.create({
     },
     titleGroupPassword: {
         fontFamily: "Nunito-Black",
-        fontSize: "14",
+        fontSize: 14,
         color: COLORS.black,
         textTransform: "uppercase",
         marginLeft: 15,
@@ -1262,7 +1262,7 @@ export default StyleSheet.create({
     },
     exerciseEditTitle: {
         fontFamily: "Nunito-ExtraBold",
-        fontSize: "14",
+        fontSize: 14,
         textTransform: "uppercase",
         letterSpacing: 1,
         color: COLORS.black,
