@@ -61,36 +61,36 @@ const Exercise: React.FC = () => {
       console.log(JSON.stringify(nextImageTensor));
       nextImageTensor.print();
 
-      const resized = tf.image.resizeBilinear(nextImageTensor, [640, 480]);
-      // resized.isDisposedInternal = true;
+      // const resized = tf.image.resizeBilinear(nextImageTensor, [640, 480]);
+      // // resized.isDisposedInternal = true;
   
-      const casted = resized.cast('int32');
+      // const casted = resized.cast('int32');
   
-      const expanded = casted.expandDims(0);
+      // const expanded = casted.expandDims(0);
   
   
-      // faz a previsão.
-      const obj = await imageDetector.executeAsync(expanded);
+      // // faz a previsão.
+      // const obj = await imageDetector.executeAsync(expanded);
 
-      // const resized = tf.image.resizeBilinear(nextImageTensor, [224,224]);
-      // console.log(JSON.stringify(resized));
+      const resized = tf.image.resizeBilinear(nextImageTensor, [224,224]);
+      console.log(JSON.stringify(resized));
       
-      // const casted = tf.cast(resized, 'int32');
-      // console.log(JSON.stringify(casted));
+      const casted = tf.cast(resized, 'float32');
+      console.log(JSON.stringify(casted));
 
-      // const expanded = tf.expandDims(casted, 0)
-      // console.log(JSON.stringify(expanded));
-      // expanded.print();
+      const expanded = tf.expandDims(casted, 0)
+      console.log(JSON.stringify(expanded));
+      expanded.print();
 
-      const expandedImageTensor = tf.reshape(nextImageTensor, [1,224,224,3]);
-      console.log(JSON.stringify(expandedImageTensor));
-      expandedImageTensor.print();
+      // const expandedImageTensor = tf.reshape(nextImageTensor, [1,224,224,3]);
+      // console.log(JSON.stringify(expandedImageTensor));
+      // expandedImageTensor.print();
   
       // const inputs = tf.ones([1, 224, 224, 3]);
       
       // inputs.print();
-      // const obj = await imageDetector.executeAsync(expandedImageTensor);
-      // console.log(obj.dataSync());
+      const obj = await imageDetector.executeAsync(expanded);
+      console.log(obj.dataSync());
 
       // console.log(predictions.dataSync());
 
