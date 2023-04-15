@@ -1,4 +1,3 @@
-import { manipulateAsync, FlipType, SaveFormat } from "expo-image-manipulator";
 import React, { useState, useEffect, useRef } from "react";
 import {
   View,
@@ -9,6 +8,7 @@ import {
   Button,
   Image,
   Platform,
+  Dimensions,
 } from "react-native";
 import { Camera, CameraType, FlashMode } from "expo-camera";
 import * as tf from "@tensorflow/tfjs";
@@ -23,52 +23,41 @@ import { createNativeWrapper } from "react-native-gesture-handler";
 // import * as MediaLibrary from 'expo-media-library';
 
 const TensorCamera = cameraWithTensors(Camera);
-
+let modeloTensorFlow = null;
+const { width, height } = Dimensions.get("window");
 const Exercise: React.FC = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [imageDetector, setImageDetector] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
-  const [type, setType] = useState(CameraType.front);
-  // const camRef = useRef(null);
-
-  useEffect(() => {
-    setShowCamera(true);
-
-    return () => {
-      setShowCamera(false);
-    };
-  }, []);
 
   useEffect(() => {
     (async () => {
+      setShowCamera(true);
+
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
-
-      // async function loadModel() {
+      loadModel();
+    })();
+    async function loadModel() {
       const tfReady = await tf.ready();
       const modelJson = require("../../../assets/model/model.json");
       const modelWeight = require("../../../assets/model/group1-shard.bin");
-      // const modelJson = require('../../../assets/model/modellib.json');
-      // const modelWeight = require('../../../assets/model/group-shardlib.bin');
 
       console.log("iniciou loadModel");
-      // const thisModel = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeight));
 
       const thisModel = await tf.loadGraphModel(
         bundleResourceIO(modelJson, modelWeight),
       );
+      await sleep(3000);
 
-      await sleep(5000);
+      const model = thisModel;
+      await setImageDetector(model);
+    }
 
-      console.log("modelo is on");
-
-      await setImageDetector(thisModel);
-
-      console.log("finalizou loadModel: ", imageDetector);
-      // }
-      // loadModel();
-    })();
+    // setShowCamera(false);
   }, [imageDetector]);
+
+  // setImageDetector(loadModel);
 
   function sleep(milliseconds) {
     const date = Date.now();
@@ -79,23 +68,15 @@ const Exercise: React.FC = () => {
   }
 
   async function handleCameraStream(images) {
+    console.log("inside");
+
     const loop = async () => {
       const nextImageTensor = images.next().value;
       // console.log(JSON.stringify(nextImageTensor));
-      nextImageTensor.print();
-
-      // const resized = tf.image.resizeBilinear(nextImageTensor, [640, 480]);
-      // // resized.isDisposedInternal = true;
-
-      // const casted = resized.cast('int32');
-
-      // const expanded = casted.expandDims(0);
-
-      // // faz a previsão.
-      // const obj = await imageDetector.executeAsync(expanded);
+      // nextImageTensor.print();
 
       const resized = tf.image.resizeBilinear(nextImageTensor, [224, 224]);
-      console.log(JSON.stringify(resized));
+      // console.log(JSON.stringify(resized));
 
       const casted = tf.cast(resized, "float32");
       // console.log(JSON.stringify(casted));
@@ -111,17 +92,12 @@ const Exercise: React.FC = () => {
       // const inputs = tf.ones([1, 224, 224, 3]);
 
       // inputs.print();
-      await sleep(5000);
-      console.log("imageDetector", imageDetector);
-      const obj = imageDetector.execute(expanded);
+      const obj = await imageDetector.execute(expanded);
       console.log(obj.data());
-
-      // console.log(predictions.dataSync());
       tf.dispose(images);
       requestAnimationFrame(loop);
       await sleep(5000);
     };
-
     loop();
   }
 
@@ -144,11 +120,9 @@ const Exercise: React.FC = () => {
           cameraTextureWidth={textureDims.width}
           resizeHeight={224}
           resizeWidth={224}
-          zoom={0}
           resizeDepth={3}
           onReady={handleCameraStream}
-          autorender={false}
-          autoFocus={true}
+          autorender={true}
           flashMode={FlashMode.off}
         />
       )}

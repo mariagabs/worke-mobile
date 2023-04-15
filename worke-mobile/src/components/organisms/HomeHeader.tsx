@@ -18,18 +18,20 @@ const HomeHeader: React.FC<Props> = ({ color }) => {
   const [name, setName] = useState("");
   const [level, setLevel] = useState("");
 
-  const getUser = async () => {
-    if (user === null) {
-      let userStorage = await AsyncStorage.getItem("user");
-      let userJSON = JSON.parse(userStorage);
-      setUser(userJSON);
-      setImage(userJSON.image);
-      setLevel(userJSON.level);
-      setName(userJSON.first_name);
-    }
-  };
+  useEffect(() => {
+    const getUser = async () => {
+      if (user === null) {
+        let userStorage = await AsyncStorage.getItem("user");
+        let userJSON = JSON.parse(userStorage);
+        setUser(userJSON);
+        setImage(userJSON.image);
+        setLevel(userJSON.level);
+        setName(userJSON.first_name);
+      }
+    };
 
-  getUser();
+    getUser();
+  }, []);
 
   return (
     <View style={styles.fullWidth}>

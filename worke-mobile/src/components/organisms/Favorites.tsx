@@ -21,7 +21,7 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
       const user = JSON.parse(await AsyncStorage.getItem("user"));
       const userId = user.id;
       const configurationObject = {
-        url: "http://192.168.15.12:8000/exercicioUsuario" + userId,
+        url: "http://192.168.15.10:8000/exercicioUsuario/" + userId,
         method: "GET",
       };
 

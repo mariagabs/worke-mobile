@@ -28,8 +28,9 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
 
   const saveImage = async (image) => {
     user.image = image;
+    await AsyncStorage.setItem("user", JSON.stringify(user));
     const configurationObject = {
-      url: "http://192.168.15.12:8000/funcionario/" + user.id,
+      url: "http://192.168.15.10:8000/funcionario/" + user.id,
       method: "POST",
       data: user,
       headers: {
@@ -57,18 +58,14 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
         allowsEditing: true,
         aspect: [4, 4],
         quality: 0.5,
-        base64: true,
       });
-      if (!result.cancelled) {
-        setImage(result.base64);
-        saveImage(result.base64);
-      }
+      setImage(result.assets[0].uri);
+      saveImage(result.assets[0].uri);
     } else {
       requestPermission();
     }
   };
 
-  let imageUser = image !== null ? "data:image/png;base64," + image : null;
   return (
     <View style={styles.profilePhoto}>
       <Image
@@ -76,8 +73,8 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
         source={require("../../../assets/2-lines.png")}
       ></Image>
       <View>
-        {imageUser !== null && imageUser !== "" ? (
-          <Image style={styles.userPhoto} source={{ uri: imageUser }}></Image>
+        {image !== null ? (
+          <Image style={styles.userPhoto} source={{ uri: image }}></Image>
         ) : (
           <View style={styles.backgroundNoPhotoProfile}>
             <FontAwesome5 name="user-alt" size={63} color={COLORS.lightGray} />

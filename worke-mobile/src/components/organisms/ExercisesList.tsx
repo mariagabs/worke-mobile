@@ -105,7 +105,7 @@ const ExercisesList: React.FC<Props> = ({
         (type === "categorias" && categories.length === 0))
     ) {
       const configurationObject = {
-        url: "http://192.168.15.12:8000/" + api,
+        url: "http://192.168.15.10:8000/" + api,
         method: "GET",
       };
       axios(configurationObject)
@@ -129,7 +129,7 @@ const ExercisesList: React.FC<Props> = ({
     type = "exercícios";
     const category = await AsyncStorage.getItem("chosenCategory");
     const configurationObject = {
-      url: "http://192.168.15.12:8000/exercicioCategoria/" + category,
+      url: "http://192.168.15.10:8000/exercicioCategoria/" + category,
       method: "GET",
     };
     axios(configurationObject)
@@ -147,7 +147,7 @@ const ExercisesList: React.FC<Props> = ({
     setList();
   };
 
-  if (getCategoryExercise) getExerciseCategory();
+  if (getCategoryExercise && exercises.length === 0) getExerciseCategory();
   else getExercises();
 
   return (
