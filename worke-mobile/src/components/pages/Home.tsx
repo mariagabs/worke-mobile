@@ -48,13 +48,19 @@ const Home: React.FC<Props> = ({ navigation }) => {
       console.log('backend is on');
 
       // Get reference to bundled model assets 
-      const modelJson = require('../../../assets/model/model.json');
-      const modelWeights = require('../../../assets/model/group1-shard.bin');
+      // const modelJson = require('../../../assets/model/model.json');
+      // const modelWeights = require('../../../assets/model/group1-shard.bin');
+        const modelJson = require("../../../assets/workemodel/model.json");
+        const modelWeights = require("../../../assets/workemodel/weights.bin");
 
 
       // 3. TODO - Load network      
-      const net = await tf.loadGraphModel(
-        bundleResourceIO(modelJson, modelWeights));
+      // const net = await tf.loadGraphModel(
+      //   bundleResourceIO(modelJson, modelWeights));
+
+      const net = await tf.loadLayersModel(
+        bundleResourceIO(modelJson, modelWeights),
+      );
       console.log('modelo is on');
       
       let modelo = ModelSingleton.getInstance();

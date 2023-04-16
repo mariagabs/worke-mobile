@@ -20,7 +20,11 @@ import {
   decodeJpeg,
 } from "@tensorflow/tfjs-react-native";
 import { createNativeWrapper } from "react-native-gesture-handler";
+import ModelSingleton from '../../modelSingleton';
 // import * as MediaLibrary from 'expo-media-library';
+
+const RESULT_MAPPING = ['Cima', 'Pulso', 'Diagonal', 'Joelho', 'Lateral', 'Parado'];
+const URL = "https://teachablemachine.withgoogle.com/models/9jDgOM0XD/";
 
 const TensorCamera = cameraWithTensors(Camera);
 let modeloTensorFlow = null;
@@ -28,6 +32,7 @@ const { width, height } = Dimensions.get("window");
 const Exercise: React.FC = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [imageDetector, setImageDetector] = useState(null);
+  const [presentedShape, setPresentedShape] = useState('');
   const [showCamera, setShowCamera] = useState(false);
 
   useEffect(() => {
@@ -36,23 +41,10 @@ const Exercise: React.FC = () => {
 
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === "granted");
-      loadModel();
+      let modelo = ModelSingleton.getInstance();
+      modeloTensorFlow = modelo.getModelo();
+      console.log('pegou modelo da Home');
     })();
-    async function loadModel() {
-      const tfReady = await tf.ready();
-      const modelJson = require("../../../assets/model/model.json");
-      const modelWeight = require("../../../assets/model/group1-shard.bin");
-
-      console.log("iniciou loadModel");
-
-      const thisModel = await tf.loadGraphModel(
-        bundleResourceIO(modelJson, modelWeight),
-      );
-      await sleep(3000);
-
-      const model = thisModel;
-      await setImageDetector(model);
-    }
 
     // setShowCamera(false);
   }, [imageDetector]);
@@ -71,34 +63,56 @@ const Exercise: React.FC = () => {
     console.log("inside");
 
     const loop = async () => {
-      const nextImageTensor = images.next().value;
-      // console.log(JSON.stringify(nextImageTensor));
-      // nextImageTensor.print();
+      if (modeloTensorFlow != null) {
+        const nextImageTensor = images.next().value;
+        await detect(modeloTensorFlow, nextImageTensor);
+      }      
 
-      const resized = tf.image.resizeBilinear(nextImageTensor, [224, 224]);
-      // console.log(JSON.stringify(resized));
-
-      const casted = tf.cast(resized, "float32");
-      // console.log(JSON.stringify(casted));
-
-      const expanded = tf.expandDims(casted, 0);
-      // console.log(JSON.stringify(expanded));
-      expanded.print();
-
-      // const expandedImageTensor = tf.reshape(nextImageTensor, [1,224,224,3]);
-      // console.log(JSON.stringify(expandedImageTensor));
-      // expandedImageTensor.print();
-
-      // const inputs = tf.ones([1, 224, 224, 3]);
-
-      // inputs.print();
-      const obj = await imageDetector.execute(expanded);
-      console.log(obj.data());
       tf.dispose(images);
       requestAnimationFrame(loop);
-      await sleep(5000);
+      // await sleep(5000);
     };
     loop();
+  }
+
+  const detect = async (net, images) => {
+    const nextImageTensor = images;
+
+    const resized = tf.image.resizeBilinear(nextImageTensor, [224, 224]);
+
+    const casted = tf.cast(resized, "float32");
+    // console.log(JSON.stringify(casted));
+
+    const expanded = tf.expandDims(casted, 0);
+    
+    const normalized = expanded.cast('float32').div(127.5).sub(1);
+    // // console.log(JSON.stringify(expanded));
+    // expanded.print();
+
+    // const obj = await imageDetector.execute(expanded);
+    console.log('predição');
+    const obj = await net.predict(normalized);
+    // console.log(obj.dataSync());
+    // console.log(obj.dataSync());
+
+    let biggest = 0;
+    let biggestIdex = 0;
+    if (obj) {
+      for (let index = 0; index < obj.dataSync().length; index++) {
+        const element = obj.dataSync()[index];
+        if (element > biggest) {
+          biggest = element;
+          biggestIdex = index;
+        }
+      }
+      console.log('biggest = ' + RESULT_MAPPING[biggestIdex]+ ' : '+biggest)
+      console.log('');
+      // const highestPrediction = obj.indexOf(
+      //   Math.max.apply(null, obj),  
+      // );
+    }
+    
+    // setPresentedShape(RESULT_MAPPING[highestPrediction]);
   }
 
   const textureDims =
