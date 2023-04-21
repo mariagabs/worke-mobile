@@ -22,20 +22,16 @@ const Menu: React.FC<Props> = ({ selectedTab, navigation }) => {
   };
 
   useEffect(() => {
-    const getUser = async () => {
-      let user = await AsyncStorage.getItem("user");
-      let userJSON = JSON.parse(user);
-      setUser(userJSON);
-    };
-
-    getUser();
+    AsyncStorage.getItem("user").then((user) => {
+      setUser(JSON.parse(user));
+    });
   }, []);
   return (
     <View style={styles.container}>
       {activeTab === "home" ? (
         <Home navigation={navigation} />
       ) : activeTab === "ranking" ? (
-        <Ranking />
+        <Ranking user={user} />
       ) : activeTab === "profile" ? (
         <Profile user={user} />
       ) : (

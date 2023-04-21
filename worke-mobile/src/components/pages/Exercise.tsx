@@ -3,9 +3,6 @@ import {
   View,
   TouchableOpacity,
   Text,
-  StyleSheet,
-  SafeAreaView,
-  Button,
   Image,
   Platform,
   Dimensions,
@@ -13,43 +10,67 @@ import {
 import { Camera, CameraType, FlashMode } from "expo-camera";
 import * as tf from "@tensorflow/tfjs";
 import "@tensorflow/tfjs-react-native";
-import {
-  cameraWithTensors,
-  bundleResourceIO,
-  fetch,
-  decodeJpeg,
-} from "@tensorflow/tfjs-react-native";
-import { createNativeWrapper } from "react-native-gesture-handler";
-import ModelSingleton from '../../modelSingleton';
-// import * as MediaLibrary from 'expo-media-library';
+import { cameraWithTensors } from "@tensorflow/tfjs-react-native";
+import ModelSingleton from "../../modelSingleton";
+import styles from "../../styles";
+import ButtonExercise from "../atoms/ButtonExercise";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const RESULT_MAPPING = ['Cima', 'Pulso', 'Diagonal', 'Joelho', 'Lateral', 'Parado'];
+const RESULT_MAPPING = [
+  "Cima",
+  "Pulso",
+  "Diagonal",
+  "Joelho",
+  "Lateral",
+  "Parado",
+];
 const URL = "https://teachablemachine.withgoogle.com/models/9jDgOM0XD/";
 
 const TensorCamera = cameraWithTensors(Camera);
 let modeloTensorFlow = null;
-const { width, height } = Dimensions.get("window");
-const Exercise: React.FC = () => {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [imageDetector, setImageDetector] = useState(null);
-  const [presentedShape, setPresentedShape] = useState('');
-  const [showCamera, setShowCamera] = useState(false);
+
+interface Props {
+  navigation: any;
+}
+
+const Exercise: React.FC<Props> = ({ navigation }) => {
+  const [started, setStarted] = useState(false);
+  const [timerStart, setTimerStart] = useState(3);
+  const [showTimerStart, setShowTimerStart] = useState(false);
+  const [showButton, setShowButton] = useState(true);
+
+  const startExercise = () => {
+    setShowTimerStart(true);
+    setShowButton(false);
+    const timer = setInterval(() => {
+      setTimerStart((lastTimerCount) => {
+        lastTimerCount <= 1 && clearInterval(timer);
+        return lastTimerCount - 1;
+      });
+    }, 1000);
+  };
+
+  if (timerStart === 0 && !started) {
+    setStarted(true);
+  }
+
+  const back = async () => {
+    setStarted(false);
+    const page = await AsyncStorage.getItem("currentExercisePage");
+    const category = await AsyncStorage.getItem("isCategoryPage");
+    navigation.navigate("MyExercises", {
+      title: page,
+      getCategoryExercise: category === "1",
+    });
+  };
 
   useEffect(() => {
     (async () => {
-      setShowCamera(true);
-
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
       let modelo = ModelSingleton.getInstance();
       modeloTensorFlow = modelo.getModelo();
-      console.log('pegou modelo da Home');
+      console.log("pegou modelo da Home");
     })();
-
-    // setShowCamera(false);
-  }, [imageDetector]);
-
-  // setImageDetector(loadModel);
+  }, []);
 
   function sleep(milliseconds) {
     const date = Date.now();
@@ -60,17 +81,20 @@ const Exercise: React.FC = () => {
   }
 
   async function handleCameraStream(images) {
-    console.log("inside");
-
     const loop = async () => {
-      if (modeloTensorFlow != null) {
-        const nextImageTensor = images.next().value;
-        await detect(modeloTensorFlow, nextImageTensor);
-      }      
+      console.log("handle: ", started);
+      if (started) {
+        tf.engine().startScope();
+        if (modeloTensorFlow != null) {
+          const nextImageTensor = images.next().value;
+          await detect(modeloTensorFlow, nextImageTensor);
+        }
 
-      tf.dispose(images);
+        tf.dispose(images);
+        tf.engine().endScope();
+      }
       requestAnimationFrame(loop);
-      // await sleep(5000);
+      await sleep(100);
     };
     loop();
   }
@@ -81,19 +105,12 @@ const Exercise: React.FC = () => {
     const resized = tf.image.resizeBilinear(nextImageTensor, [224, 224]);
 
     const casted = tf.cast(resized, "float32");
-    // console.log(JSON.stringify(casted));
 
     const expanded = tf.expandDims(casted, 0);
-    
-    const normalized = expanded.cast('float32').div(127.5).sub(1);
-    // // console.log(JSON.stringify(expanded));
-    // expanded.print();
 
-    // const obj = await imageDetector.execute(expanded);
-    console.log('predição');
+    const normalized = expanded.cast("float32").div(127.5).sub(1);
+    console.log("predição");
     const obj = await net.predict(normalized);
-    // console.log(obj.dataSync());
-    // console.log(obj.dataSync());
 
     let biggest = 0;
     let biggestIdex = 0;
@@ -105,58 +122,88 @@ const Exercise: React.FC = () => {
           biggestIdex = index;
         }
       }
-      console.log('biggest = ' + RESULT_MAPPING[biggestIdex]+ ' : '+biggest)
-      console.log('');
-      // const highestPrediction = obj.indexOf(
-      //   Math.max.apply(null, obj),  
-      // );
+      console.log("biggest = " + RESULT_MAPPING[biggestIdex] + " : " + biggest);
+      console.log("");
+      tf.dispose(obj);
+      tf.dispose(resized);
+      tf.dispose(expanded);
+      tf.dispose(normalized);
+      tf.dispose(nextImageTensor);
+      tf.dispose(casted);
     }
-    
-    // setPresentedShape(RESULT_MAPPING[highestPrediction]);
-  }
+  };
 
   const textureDims =
     Platform.OS === "ios"
       ? { width: 1080, height: 1920 }
       : { width: 1600, height: 1200 };
 
-  let camera: Camera;
+  const camRef = useRef(null);
   return (
     <View style={styles.container}>
-      {showCamera && (
-        <TensorCamera
-          // Standard Camera props
-          style={{ flex: 1, width: "100%" }}
-          type={CameraType.front}
-          useCustomShadersToResize={false}
-          // Tensor related props
-          cameraTextureHeight={textureDims.height}
-          cameraTextureWidth={textureDims.width}
-          resizeHeight={224}
-          resizeWidth={224}
-          resizeDepth={3}
-          onReady={handleCameraStream}
-          autorender={true}
-          flashMode={FlashMode.off}
-        />
+      {!started ? (
+        <Image
+          source={require("../../../assets/background-exercise-waiting.png")}
+          style={styles.exerciseBackgroundWaiting}
+        ></Image>
+      ) : (
+        ""
       )}
-      {/* <Camera
-        ref={(r) => {
-          camera = r;
+      <TouchableOpacity
+        style={styles.arrowBack}
+        onPress={back}
+        activeOpacity={1}
+      >
+        <Image source={require("../../../assets/arrow-back.png")} />
+      </TouchableOpacity>
+
+      <TensorCamera
+        ref={camRef}
+        // Standard Camera props
+        style={{
+          flex: 1,
+          position: "absolute",
+          elevation: 0,
+          width: "122%",
+          height: "100%",
         }}
         type={CameraType.front}
-        style={{ flex: 1, width: "100%" }}
-      ></Camera> */}
+        useCustomShadersToResize={false}
+        // Tensor related props
+        cameraTextureHeight={textureDims.height}
+        cameraTextureWidth={textureDims.width}
+        resizeHeight={224}
+        resizeWidth={224}
+        resizeDepth={3}
+        onReady={handleCameraStream}
+        autorender={true}
+        flashMode={FlashMode.off}
+      />
+      {!started ? (
+        <View style={styles.textExerciseStart}>
+          <Image
+            source={require("../../../assets/background-exercise-waiting.png")}
+            style={styles.exerciseBackgroundWaiting}
+          ></Image>
+          {showTimerStart ? (
+            <Text style={styles.timerStart}>{timerStart}</Text>
+          ) : (
+            <Text style={styles.textStart}>PREPARE-SE</Text>
+          )}
+          {showButton ? (
+            <ButtonExercise
+              text="INICIAR"
+              onPress={startExercise}
+            ></ButtonExercise>
+          ) : (
+            ""
+          )}
+        </View>
+      ) : (
+        ""
+      )}
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-  },
-});
 export default Exercise;

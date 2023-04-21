@@ -187,10 +187,9 @@ export default StyleSheet.create({
         alignSelf: "flex-start",
         left: 30,
         top: 65,
-        // top: biggerMarginTop ? 90 : 65,
         paddingVertical: 10,
         paddingRight: 10,
-        zIndex: 5,
+        zIndex: 100,
     },
     step: (color, qtd) => ({
         backgroundColor: color,
@@ -1400,5 +1399,53 @@ export default StyleSheet.create({
     spanFavorites: {
         color: COLORS.pink,
         fontFamily: "Nunito-Black"
-    }
+    },
+    exerciseBackgroundWaiting: {
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        flex: 0,
+        flexDirection: "row",
+        justifyContent: "center",
+        zIndex: 0,
+    },
+    textExerciseStart: {
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        flex: 0,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 10,
+    },
+    textStart: {
+        fontSize: 38,
+        color: COLORS.white,
+        fontFamily: 'Nunito-Black',
+        letterSpacing: 4
+    },
+    timerStart: {
+        fontSize: 80,
+        color: COLORS.white,
+        fontFamily: 'Nunito-Black',
+        letterSpacing: 4
+    },
+    buttonExercise: {
+        backgroundColor: COLORS.white,
+        paddingVertical: 20,
+        width: Dimensions.get('window').width - 60,
+        borderRadius: 7,
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 60
+    },
+    buttonExerciseText: {
+        fontSize: 22,
+        color: COLORS.blue,
+        fontFamily: 'Nunito-Black',
+        letterSpacing: 2,
+    },
+
 });

@@ -18,15 +18,15 @@ const RankingTop: React.FC<Props> = ({ users }) => {
   //**atenção** CONDIÇÕES SE USERS > 0
   return (
     <View style={styles.ranking}>
-      <View style={styles.rankingLow}>
-        <RankingTopIcon key={0} userInfo={users[0]} color={colors[0]} />
+      {/* <View style={styles.rankingLow}>
+        <RankingTopIcon key={0} user={users[0]} color={colors[0]} />
       </View>
       <View style={styles.rankingTop}>
-        <RankingTopIcon key={1} userInfo={users[1]} color={colors[1]} />
+        <RankingTopIcon key={1} user={users[1]} color={colors[1]} />
       </View>
       <View style={styles.rankingLow}>
-        <RankingTopIcon key={2} userInfo={users[2]} color={colors[2]} />
-      </View>
+        <RankingTopIcon key={2} user={users[2]} color={colors[2]} />
+      </View> */}
     </View>
   );
 };

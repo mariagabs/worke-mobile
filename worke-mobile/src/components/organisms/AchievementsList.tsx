@@ -4,9 +4,11 @@ import { View } from "react-native";
 import styles from "../../styles";
 import { COLORS } from "../../../assets/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 
-const AchievementsList: React.FC = () => {
+interface Props {
+  user: any;
+}
+const AchievementsList: React.FC<Props> = ({ user }) => {
   let colors = [COLORS.green, COLORS.blue, COLORS.pink, COLORS.purple];
   let list = [
     { number: "", description: "minutos", sub: "" },
@@ -15,17 +17,6 @@ const AchievementsList: React.FC = () => {
     { number: "", description: "semanas", sub: "na mesma posição" },
   ];
   const cardsList = [];
-
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const getUser = async () => {
-      const user = JSON.parse(await AsyncStorage.getItem("user"));
-      setUser(user);
-    };
-
-    getUser();
-  }, []);
 
   const listAchievements = () => {
     list[0].number = user.total_minutes === null ? "0" : user.total_minutes;

@@ -14,6 +14,7 @@ interface Props {
   type?: string;
   navigation: any;
   route: any;
+  getCategoryExercise: boolean;
 }
 
 const ExercisesList: React.FC<Props> = ({
@@ -21,18 +22,21 @@ const ExercisesList: React.FC<Props> = ({
   type,
   navigation,
   route,
+  getCategoryExercise,
 }) => {
   let colors = [COLORS.purple, COLORS.green, COLORS.pink, COLORS.blue];
   const [exercises, setExercises] = useState([]);
   const [categories, setCategories] = useState([]);
-  const { getCategoryExercise, title } = route.params;
+  const { title } = route.params;
   if (title !== "") type = title;
   var exercisesList = [];
   var aux = 0;
 
   const api = type === "exercícios" ? "exercicio" : "categorias";
 
-  const myCategoryExercises = (category) => {
+  const myCategoryExercises = async (category) => {
+    await AsyncStorage.setItem("currentExercisePage", category);
+    await AsyncStorage.setItem("isCategoryPage", "1");
     navigation.navigate("MyExercises", {
       getCategoryExercise: true,
       title: category,
@@ -44,6 +48,7 @@ const ExercisesList: React.FC<Props> = ({
       "chosenExercise",
       JSON.stringify(exercises.find((x) => x.id === id)),
     );
+    await AsyncStorage.setItem("choseCategory", "0");
   };
 
   const setChosenCategory = async (id) => {
@@ -105,14 +110,19 @@ const ExercisesList: React.FC<Props> = ({
         (type === "categorias" && categories.length === 0))
     ) {
       const configurationObject = {
-        url: "http://192.168.15.10:8000/" + api,
+        url: "http://54.237.75.229:8000/" + api,
         method: "GET",
       };
       axios(configurationObject)
         .then((response) => {
           if (response.status === 200) {
-            if (type === "categorias") setCategories(response.data);
-            else setExercises(response.data);
+            if (type === "categorias") {
+              setExercises([]);
+              setCategories(response.data);
+            } else {
+              setCategories([]);
+              setExercises(response.data);
+            }
           } else {
             throw new Error("An error has occurred");
           }
@@ -129,12 +139,13 @@ const ExercisesList: React.FC<Props> = ({
     type = "exercícios";
     const category = await AsyncStorage.getItem("chosenCategory");
     const configurationObject = {
-      url: "http://192.168.15.10:8000/exercicioCategoria/" + category,
+      url: "http://54.237.75.229:8000/exercicioCategoria/" + category,
       method: "GET",
     };
     axios(configurationObject)
       .then((response) => {
         if (response.status === 200) {
+          setCategories([]);
           setExercises(response.data);
         } else {
           throw new Error("An error has occurred");

@@ -38,13 +38,14 @@ const Login: React.FC<Props> = ({ navigation }) => {
     setEmail(email);
   };
 
-  const saveData = async (data) => {
+  const saveDataRedirect = async (data) => {
     try {
       await AsyncStorage.setItem("token", data.jwt);
       await AsyncStorage.setItem("user", JSON.stringify(data.usuario));
-    } catch (e) {
-      // alert(e);
-    }
+      setPassword("");
+      setEmail("");
+      home();
+    } catch (e) {}
   };
 
   const onSubmitFormHandler = async (event) => {
@@ -56,7 +57,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
     setInvalidInput(false);
 
     const configurationObject = {
-      url: "http://192.168.15.12:8000/login",
+      url: "http://54.237.75.229:8000/login",
       method: "POST",
       data: { password, email },
     };
@@ -68,10 +69,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
           response.data !== "Email inválido!" &&
           response.data !== "Senha incorreta!"
         ) {
-          saveData(response.data);
-          setPassword("");
-          setEmail("");
-          home();
+          saveDataRedirect(response.data);
         } else {
           throw new Error("An error has occurred");
         }

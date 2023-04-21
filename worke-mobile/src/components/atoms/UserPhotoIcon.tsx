@@ -13,10 +13,11 @@ interface Props {
 }
 
 const UserPhotoIcon: React.FC<Props> = ({ image, color, level }) => {
+  let imageUser = "data:image/png;base64," + image;
   return (
     <View>
-      {image !== "" ? (
-        <Image style={styles.userPhotoIcon} source={{ uri: image }}></Image>
+      {image !== null && image !== "" ? (
+        <Image style={styles.userPhotoIcon} source={{ uri: imageUser }}></Image>
       ) : (
         <View style={styles.backgroundNoPhoto}>
           <FontAwesome5 name="user-alt" size={24} color={COLORS.lightGray} />

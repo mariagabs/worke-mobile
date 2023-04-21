@@ -44,7 +44,7 @@ const CreateGroup: React.FC<Props> = ({ navigation }) => {
     let user = await AsyncStorage.getItem("user");
     let userJSON = JSON.parse(user);
     const configurationObject = {
-      url: "http://172.20.10.4:8000/criarGrupo/" + userJSON.id,
+      url: "http://54.237.75.229:8000/criarGrupo/" + userJSON.id,
       method: "POST",
       data: userGroup,
       headers: {
@@ -69,7 +69,7 @@ const CreateGroup: React.FC<Props> = ({ navigation }) => {
     let code = generateCode();
 
     const configurationObject = {
-      url: "http://172.20.10.4:8000/grupoCodigo/" + code,
+      url: "http://54.237.75.229:8000/grupoCodigo/" + code,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

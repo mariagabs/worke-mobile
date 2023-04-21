@@ -18,10 +18,10 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
 
   useEffect(() => {
     const getFavorites = async () => {
-      const user = JSON.parse(await AsyncStorage.getItem("user"));
-      const userId = user.id;
+      const user = await AsyncStorage.getItem("user");
+      const id = JSON.parse(user).id;
       const configurationObject = {
-        url: "http://192.168.15.10:8000/exercicioUsuario/" + userId,
+        url: "http://54.237.75.229:8000/exercicioUsuario/" + id,
         method: "GET",
       };
 

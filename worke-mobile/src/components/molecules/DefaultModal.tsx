@@ -5,6 +5,7 @@ import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { COLORS } from "../../../assets/colors";
 import styles from "../../styles";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { Camera } from "expo-camera";
 
 interface Props {
   title: string;
@@ -32,8 +33,15 @@ const DefaultModal: React.FC<Props> = ({
 
   const image = images.find((x) => x.type === type).image;
 
-  const onPress = () => {
-    navigation.navigate("Exercise");
+  const onPress = async () => {
+    const cameraPermission = await Camera.requestCameraPermissionsAsync();
+
+    if (cameraPermission.status !== "granted") {
+      alert("Permission for media access needed.");
+    } else {
+      onPressClose(false);
+      navigation.navigate("Exercise");
+    }
   };
 
   return (

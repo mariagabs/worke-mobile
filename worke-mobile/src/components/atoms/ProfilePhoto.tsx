@@ -6,7 +6,6 @@ import * as ImagePicker from "expo-image-picker";
 import { COLORS } from "../../../assets/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import { decode as atob, encode as btoa } from "base-64";
 
 interface Props {
   user: any;
@@ -18,19 +17,18 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
 
   useEffect(() => {
     const getImage = async () => {
-      let user = await AsyncStorage.getItem("user");
-      let userJSON = JSON.parse(user);
-      if (userJSON.image !== null) setImage(userJSON.image);
+      if (user.image !== null) setImage(user.image);
     };
 
     getImage();
   }, []);
 
   const saveImage = async (image) => {
+    setImage(image);
+
     user.image = image;
-    await AsyncStorage.setItem("user", JSON.stringify(user));
     const configurationObject = {
-      url: "http://192.168.15.10:8000/funcionario/" + user.id,
+      url: "http://54.237.75.229:8000/funcionario/" + user.id,
       method: "POST",
       data: user,
       headers: {
@@ -49,6 +47,8 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
       .catch((error) => {
         console.log(error);
       });
+
+    await AsyncStorage.setItem("user", JSON.stringify(user));
   };
 
   const pickImage = async () => {
@@ -58,14 +58,14 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
         allowsEditing: true,
         aspect: [4, 4],
         quality: 0.5,
+        base64: true,
       });
-      setImage(result.assets[0].uri);
-      saveImage(result.assets[0].uri);
+      saveImage(result.assets[0].base64);
     } else {
       requestPermission();
     }
   };
-
+  let imageUser = image !== null ? "data:image/png;base64," + image : null;
   return (
     <View style={styles.profilePhoto}>
       <Image
@@ -73,8 +73,8 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
         source={require("../../../assets/2-lines.png")}
       ></Image>
       <View>
-        {image !== null ? (
-          <Image style={styles.userPhoto} source={{ uri: image }}></Image>
+        {imageUser !== null && imageUser !== "" ? (
+          <Image style={styles.userPhoto} source={{ uri: imageUser }}></Image>
         ) : (
           <View style={styles.backgroundNoPhotoProfile}>
             <FontAwesome5 name="user-alt" size={63} color={COLORS.lightGray} />

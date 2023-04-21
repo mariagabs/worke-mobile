@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Dimensions } from "react-native";
 import { COLORS } from "../../../assets/colors";
 import styles from "../../styles";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import RankingTab from "../organisms/RankingTab";
 import AchievementsTab from "../organisms/AchievementsTab";
-
-const Ranking: React.FC = () => {
+interface Props {
+  user: any;
+}
+const Ranking: React.FC<Props> = ({ user }) => {
   const Tab = createMaterialTopTabNavigator();
 
   function MyTabs() {
@@ -43,8 +45,14 @@ const Ranking: React.FC = () => {
             tabBarInactiveTintColor: COLORS.lightGray,
           }}
         >
-          <Tab.Screen name="Ranking" component={RankingTab} />
-          <Tab.Screen name="Conquistas" component={AchievementsTab} />
+          <Tab.Screen
+            name="Ranking"
+            children={() => <RankingTab user={user}></RankingTab>}
+          />
+          <Tab.Screen
+            name="Conquistas"
+            children={() => <AchievementsTab user={user}></AchievementsTab>}
+          />
         </Tab.Navigator>
       </View>
     );

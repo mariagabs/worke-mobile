@@ -17,6 +17,7 @@ const HomeHeader: React.FC<Props> = ({ color }) => {
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [level, setLevel] = useState("");
+  let id = "";
 
   useEffect(() => {
     const getUser = async () => {
@@ -27,6 +28,7 @@ const HomeHeader: React.FC<Props> = ({ color }) => {
         setImage(userJSON.image);
         setLevel(userJSON.level);
         setName(userJSON.first_name);
+        id = userJSON.id.toString();
       }
     };
 

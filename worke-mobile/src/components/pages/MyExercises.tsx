@@ -3,8 +3,6 @@ import { View, ScrollView } from "react-native";
 import HeaderTitleButton from "../organisms/HeaderTitleButton";
 import styles from "../../styles";
 import ExercisesList from "../organisms/ExercisesList";
-import ListButton from "../atoms/ListButton";
-import axios from "axios";
 import DefaultModal from "../molecules/DefaultModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -30,7 +28,7 @@ const MyExercises: React.FC<Props> = ({ navigation, route }) => {
   };
   const [modalVisible, setModalVisible] = useState(false);
   const [exercise, setExercise] = useState([]);
-  const { title } = route.params;
+  const { title, getCategoryExercise } = route.params;
   let start = true;
   const getModal = async (visible) => {
     setModalVisible(visible);
@@ -77,6 +75,7 @@ const MyExercises: React.FC<Props> = ({ navigation, route }) => {
             type={title}
             navigation={navigation}
             route={route}
+            getCategoryExercise={getCategoryExercise}
           ></ExercisesList>
         </View>
       </View>
