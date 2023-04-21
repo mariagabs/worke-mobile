@@ -28,13 +28,14 @@ const URL = "https://teachablemachine.withgoogle.com/models/9jDgOM0XD/";
 
 const TensorCamera = cameraWithTensors(Camera);
 let modeloTensorFlow = null;
+let started = false;
 
 interface Props {
   navigation: any;
 }
 
 const Exercise: React.FC<Props> = ({ navigation }) => {
-  const [started, setStarted] = useState(false);
+  // const [started, setStarted] = useState(false);
   const [timerStart, setTimerStart] = useState(3);
   const [showTimerStart, setShowTimerStart] = useState(false);
   const [showButton, setShowButton] = useState(true);
@@ -45,17 +46,18 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
     const timer = setInterval(() => {
       setTimerStart((lastTimerCount) => {
         lastTimerCount <= 1 && clearInterval(timer);
+        if (lastTimerCount == 1) started = true;
         return lastTimerCount - 1;
       });
     }, 1000);
   };
 
   if (timerStart === 0 && !started) {
-    setStarted(true);
+    started = true;
   }
 
   const back = async () => {
-    setStarted(false);
+    started = false;
     const page = await AsyncStorage.getItem("currentExercisePage");
     const category = await AsyncStorage.getItem("isCategoryPage");
     navigation.navigate("MyExercises", {
