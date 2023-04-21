@@ -23,6 +23,8 @@ const RESULT_MAPPING = [
   "Joelho",
   "Lateral",
   "Parado",
+  "Pescoço",
+  "Vazio",
 ];
 const URL = "https://teachablemachine.withgoogle.com/models/9jDgOM0XD/";
 
