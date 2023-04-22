@@ -31,6 +31,7 @@ const RESULT_MAPPING = [
 const TensorCamera = cameraWithTensors(Camera);
 let modeloTensorFlow = null;
 let started = false;
+let leavePage = false;
 
 // tudo isso aqui eu tinha criado como useState,
 // mas ficou sem atualizar certo e eu meti o louco
@@ -96,6 +97,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
 
   const back = async () => {
     started = false;
+    leavePage = true;
     const page = await AsyncStorage.getItem("currentExercisePage");
     const category = await AsyncStorage.getItem("isCategoryPage");
     navigation.navigate("MyExercises", {
@@ -123,6 +125,11 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
 
   async function handleCameraStream(images) {
     const loop = async () => {
+      console.log("handle: ", started);
+      if (leavePage) {
+        leavePage = false;
+        return;
+      }
       if (started) {
         tf.engine().startScope();
         if (modeloTensorFlow != null) {
