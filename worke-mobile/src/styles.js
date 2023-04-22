@@ -1447,5 +1447,30 @@ export default StyleSheet.create({
         fontFamily: 'Nunito-Black',
         letterSpacing: 2,
     },
-
+    labelExercise: {
+        position: 'absolute',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: "100%",
+        bottom: 50
+    },
+    timerExercise: {
+        width: 90,
+        height: 90,
+        backgroundColor: COLORS.black,
+        position: 'absolute',
+        top: 65,
+        right: 30,
+        zIndex: 100,
+        borderRadius: 100,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    textTimerExercise: {
+        color: COLORS.white,
+        fontSize: 50,
+        fontFamily: 'Nunito-ExtraBold'
+    }
 });

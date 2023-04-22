@@ -25,23 +25,40 @@ const RESULT_MAPPING = [
   "Parado",
   "Pescoço",
   "Vazio",
+  "Pra baixo",
 ];
-const URL = "https://teachablemachine.withgoogle.com/models/9jDgOM0XD/";
 
 const TensorCamera = cameraWithTensors(Camera);
 let modeloTensorFlow = null;
 let started = false;
+
+// tudo isso aqui eu tinha criado como useState,
+// mas ficou sem atualizar certo e eu meti o louco
+// e criei tudo aqui (y)
+let changed = false;
+let wrongExercise = false;
+let beingExecuted = "";
+let exerciseTimer = null;
+let showContinue = false,
+  showAlmostDone = false,
+  showFixExercise = false;
+let goodAccuracyCount = 0,
+  badAccuracyCount = 0;
+let executedExercise = {
+  name: "",
+  accuracy: 0,
+};
 
 interface Props {
   navigation: any;
 }
 
 const Exercise: React.FC<Props> = ({ navigation }) => {
-  // const [started, setStarted] = useState(false);
   const [timerStart, setTimerStart] = useState(3);
   const [showTimerStart, setShowTimerStart] = useState(false);
   const [showButton, setShowButton] = useState(true);
-
+  const [timer, setTimer] = useState(15);
+  const [exercise, setExercise] = useState([]);
   const startExercise = () => {
     setShowTimerStart(true);
     setShowButton(false);
@@ -52,6 +69,25 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
         return lastTimerCount - 1;
       });
     }, 1000);
+  };
+
+  const startExerciseTimer = () => {
+    console.log("startExerciseTimer");
+    exerciseTimer = setInterval(() => {
+      setTimer((lastTimerCount) => {
+        lastTimerCount === 0 && stopTimer();
+        if (lastTimerCount === 10) showContinue = true;
+        if (lastTimerCount === 14) showContinue = false;
+        if (lastTimerCount <= 5) showAlmostDone = true;
+        return lastTimerCount - 1;
+      });
+    }, 1000);
+  };
+
+  const stopTimer = () => {
+    clearInterval(exerciseTimer);
+    showAlmostDone = false;
+    showContinue = false;
   };
 
   if (timerStart === 0 && !started) {
@@ -70,6 +106,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
 
   useEffect(() => {
     (async () => {
+      setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
       let modelo = ModelSingleton.getInstance();
       modeloTensorFlow = modelo.getModelo();
       console.log("pegou modelo da Home");
@@ -86,19 +123,66 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
 
   async function handleCameraStream(images) {
     const loop = async () => {
-      console.log("handle: ", started);
       if (started) {
         tf.engine().startScope();
         if (modeloTensorFlow != null) {
           const nextImageTensor = images.next().value;
           await detect(modeloTensorFlow, nextImageTensor);
         }
-
         tf.dispose(images);
         tf.engine().endScope();
+
+        requestAnimationFrame(loop);
+
+        // valida se o exercício que retornou do detect
+        // é o mesmo que retornou anteriormente
+        if (beingExecuted !== executedExercise.name) {
+          changed = true;
+          goodAccuracyCount = 0;
+          badAccuracyCount = 10;
+        }
+
+        // valida se o exercício sendo executado é o
+        // mesmo exercício que foi escolhido
+        else if (executedExercise.name !== exercise.nome) {
+          wrongExercise = true;
+          goodAccuracyCount = 0;
+          badAccuracyCount = 10;
+        }
+        // dentro desse else mesmo?
+        // (atualiza só se corresponder ao exercício escolhido)
+        else {
+          beingExecuted = executedExercise.name;
+        }
+
+        // se manter o mesmo exercício com acurácia > 0.9
+        // por 2 segundos, executa o cronômetro
+        if (goodAccuracyCount === 20) {
+          startExerciseTimer();
+          goodAccuracyCount = 0;
+          validateExercise(true);
+        }
+        // se estiver executando com acurácia < 0.9
+        // por 2 segundos seguidos, pausa o cronômetro (se já estiver rodando)
+        // e mostra aviso na tela
+        else if (badAccuracyCount === 20) {
+          if (exerciseTimer !== null) stopTimer();
+          badAccuracyCount = 0;
+          validateExercise(false);
+        } else {
+          // soma quantas vezes retornou o exercício certo
+          // com acurácia > 0.9 ou < 0.9
+          if (executedExercise.accuracy > 0.9) {
+            badAccuracyCount = 0;
+            goodAccuracyCount = goodAccuracyCount + 1;
+          } else if (executedExercise.accuracy < 0.9) {
+            goodAccuracyCount = 0;
+            badAccuracyCount = badAccuracyCount + 1;
+          }
+        }
+
+        await sleep(100);
       }
-      requestAnimationFrame(loop);
-      await sleep(100);
     };
     loop();
   }
@@ -113,7 +197,6 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
     const expanded = tf.expandDims(casted, 0);
 
     const normalized = expanded.cast("float32").div(127.5).sub(1);
-    console.log("predição");
     const obj = await net.predict(normalized);
 
     let biggest = 0;
@@ -126,7 +209,9 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
           biggestIdex = index;
         }
       }
-      console.log("biggest = " + RESULT_MAPPING[biggestIdex] + " : " + biggest);
+      console.log(RESULT_MAPPING[biggestIdex] + " : " + biggest);
+      executedExercise.name = RESULT_MAPPING[biggestIdex];
+      executedExercise.accuracy = biggest;
       console.log("");
       tf.dispose(obj);
       tf.dispose(resized);
@@ -134,6 +219,14 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
       tf.dispose(normalized);
       tf.dispose(nextImageTensor);
       tf.dispose(casted);
+    }
+  };
+
+  const validateExercise = (good) => {
+    const chosenExercise = exercise.nome;
+
+    if (!good) {
+      showFixExercise = true;
     }
   };
 
@@ -160,7 +253,13 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
       >
         <Image source={require("../../../assets/arrow-back.png")} />
       </TouchableOpacity>
-
+      {started ? (
+        <View style={styles.timerExercise}>
+          <Text style={styles.textTimerExercise}>{timer}</Text>
+        </View>
+      ) : (
+        ""
+      )}
       <TensorCamera
         ref={camRef}
         // Standard Camera props
@@ -202,6 +301,27 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
           ) : (
             ""
           )}
+        </View>
+      ) : (
+        ""
+      )}
+      {started && showFixExercise ? (
+        <View style={styles.labelExercise}>
+          <Image source={require("../../../assets/arrumar.png")}></Image>
+        </View>
+      ) : (
+        ""
+      )}
+      {started && showAlmostDone && !showFixExercise ? (
+        <View style={styles.labelExercise}>
+          <Image source={require("../../../assets/faltaPouco.png")}></Image>
+        </View>
+      ) : (
+        ""
+      )}
+      {started && showContinue && !showFixExercise ? (
+        <View style={styles.labelExercise}>
+          <Image source={require("../../../assets/continue.png")}></Image>
         </View>
       ) : (
         ""

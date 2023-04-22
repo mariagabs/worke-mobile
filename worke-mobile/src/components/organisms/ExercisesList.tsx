@@ -51,10 +51,10 @@ const ExercisesList: React.FC<Props> = ({
     await AsyncStorage.setItem("choseCategory", "0");
   };
 
-  const setChosenCategory = async (id) => {
-    await AsyncStorage.setItem("chosenCategory", id.substring(0, 1));
+  const setChosenCategory = async (id, nome) => {
+    await AsyncStorage.setItem("chosenCategory", id);
 
-    myCategoryExercises(id);
+    myCategoryExercises(nome);
   };
 
   const setList = () => {
@@ -71,16 +71,24 @@ const ExercisesList: React.FC<Props> = ({
         chosenColor = colors[aux];
         aux++;
       }
+      let id = "",
+        nome = "";
+
+      if (type === "categorias") {
+        id = categories[i].id;
+        nome = categories[i].nome;
+      }
+
       exercisesList.push(
         type === "categorias" ? (
           <ExerciseCard
-            key={categories[i]}
-            idExercise={categories[i]}
+            key={id}
+            idExercise={id}
             color={chosenColor}
-            exercise={categories[i]}
+            exercise={nome}
             list={true}
             onPress={(id) => {
-              setChosenCategory(id);
+              setChosenCategory(id, nome);
             }}
           ></ExerciseCard>
         ) : (

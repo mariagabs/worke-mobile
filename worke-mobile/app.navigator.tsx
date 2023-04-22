@@ -32,6 +32,7 @@ const AppNavigator = () => (
         gestureEnabled: false,
       }}
       initialRouteName="Login"
+      detachInactiveScreens={true}
     >
       <Screen name="Login" component={Login}></Screen>
       <Screen name="Group" component={Group}></Screen>
