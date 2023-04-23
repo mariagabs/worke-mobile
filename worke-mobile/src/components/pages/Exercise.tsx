@@ -41,9 +41,7 @@ let wrongExercise = false;
 let pauseTimer = false;
 let beingExecuted = "";
 let showContinue = false,
-  showAlmostDone = false,
-  showFixExercise = false,
-  showAttention = false;
+  showAlmostDone = false;
 let goodAccuracyCount = 0,
   badAccuracyCount = 0;
 let timerInitialized = false;
@@ -62,13 +60,15 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   const [showButton, setShowButton] = useState(true);
   const [timer, setTimer] = useState(15);
   const [exercise, setExercise] = useState([]);
+  const [showFixExercise, setShowFixExercise] = useState(false);
+  const [showAttention, setShowAttention] = useState(false);
   const startExercise = () => {
     setShowTimerStart(true);
     setShowButton(false);
     const timer = setInterval(() => {
       setTimerStart((lastTimerCount) => {
         lastTimerCount <= 1 && clearInterval(timer);
-        if (lastTimerCount == 1) started = true;
+        // if (lastTimerCount == 1) started = true;
         return lastTimerCount - 1;
       });
     }, 1000);
@@ -81,10 +81,18 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
       setTimer((lastTimerCount) => {
         lastTimerCount === 0 && stopTimer(exerciseTimer);
         if (pauseTimer) stopTimer(exerciseTimer);
-        if (lastTimerCount === 10) showContinue = true;
+        if (lastTimerCount === 10) {
+          showContinue = true;
+        }
         if (lastTimerCount === 6) showContinue = false;
-        if (lastTimerCount <= 5) showAlmostDone = true;
-        if (lastTimerCount === 0) return 0;
+        if (lastTimerCount <= 5) {
+          showAlmostDone = true;
+        }
+        if (lastTimerCount === 0) {
+          showAlmostDone = false;
+          started = false;
+          return 0;
+        }
         return lastTimerCount - 1;
       });
     }, 1000);
@@ -98,16 +106,15 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   };
 
   if (timerStart === 0 && !started) {
-    started = true;
+    // started = true;
   }
 
   const back = async () => {
-    started =
-      showContinue =
-      showAlmostDone =
-      showAttention =
-      showFixExercise =
-        false;
+    started = showContinue = showAlmostDone = false;
+    setShowAttention(false);
+    setShowFixExercise(false);
+    badAccuracyCount = 0;
+    goodAccuracyCount = 0;
     leavePage = true;
     const page = await AsyncStorage.getItem("currentExercisePage");
     const category = await AsyncStorage.getItem("isCategoryPage");
@@ -120,6 +127,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   useEffect(() => {
     (async () => {
       setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
+
       let modelo = ModelSingleton.getInstance();
       modeloTensorFlow = modelo.getModelo();
     })();
@@ -149,32 +157,13 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
         tf.dispose(images);
         tf.engine().endScope();
 
-        if (beingExecuted === "") {
-          beingExecuted = executedExercise.name;
-        }
-
-        // valida se o exercício que retornou do detect
-        // é o mesmo que retornou anteriormente
-        if (beingExecuted !== executedExercise.name) {
-          changed = true;
-          goodAccuracyCount = 0;
-          badAccuracyCount++;
-        }
-
         // valida se o exercício sendo executado é o
         // mesmo exercício que foi escolhido
-        else if (executedExercise.name !== exercise.nome) {
-          showFixExercise = true;
-          console.log(154);
-          wrongExercise = true;
-          goodAccuracyCount = 0;
-          badAccuracyCount++;
-        }
-        // dentro desse else mesmo?
-        // (atualiza só se corresponder ao exercício escolhido)
-        else {
-          beingExecuted = executedExercise.name;
-        }
+        // if (executedExercise.name !== exercise.nome) {
+        //   setShowFixExercise(true);
+        //   goodAccuracyCount = 0;
+        //   badAccuracyCount++;
+        // }
 
         // se manter o mesmo exercício com acurácia > 0.9
         // por 2 segundos, executa o cronômetro
@@ -184,49 +173,39 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
             startExerciseTimer();
           }
           goodAccuracyCount = 0;
-          validateExercise(true);
+          setShowFixExercise(false);
+          setShowAttention(false);
         }
         // se estiver executando com acurácia < 0.9
         // por 2 segundos seguidos, pausa o cronômetro (se já estiver rodando)
         // e mostra aviso na tela
-        else if (badAccuracyCount === 1) {
-          console.log("bad only 1");
+        if (badAccuracyCount >= 1 && badAccuracyCount < 10) {
           pauseTimer = true;
           // badAccuracyCount = 0;
-          showAttention = true;
-          showFixExercise = false;
+          setShowAttention(true);
+          setShowFixExercise(false);
           badAccuracyCount++;
           // validateExercise(false);
-        } else {
-          if (badAccuracyCount >= 3) {
-            console.log("fix", badAccuracyCount);
-            showFixExercise = true;
-            showAttention = false;
-          }
-          // soma quantas vezes retornou o exercício certo
-          // com acurácia > 0.9 ou < 0.9
-          if (
-            executedExercise.name === exercise.nome &&
-            executedExercise.accuracy > 0.9
-          ) {
-            badAccuracyCount = 0;
-            let count = goodAccuracyCount + 1;
-            goodAccuracyCount = count;
-            console.log(goodAccuracyCount);
-          } else if (executedExercise.accuracy < 0.9) {
-            console.log(189);
-            console.log(
-              "showfix: ",
-              showFixExercise + " started: ",
-              started,
-              " attention: ",
-              showAttention,
-            );
-            goodAccuracyCount = 0;
-            badAccuracyCount++;
-          }
+        } else if (badAccuracyCount >= 10) {
+          console.log("fix accuracy", badAccuracyCount);
+          setShowFixExercise(true);
+          setShowAttention(false);
         }
+        // soma quantas vezes retornou o exercício certo
+        // com acurácia > 0.9 ou < 0.9
 
+        if (
+          executedExercise.name === exercise.nome &&
+          executedExercise.accuracy > 0.85
+        ) {
+          badAccuracyCount = 0;
+          let count = goodAccuracyCount + 1;
+          goodAccuracyCount = count;
+          console.log(goodAccuracyCount);
+        } else if (executedExercise.accuracy < 0.85) {
+          goodAccuracyCount = 0;
+          badAccuracyCount++;
+        }
         await sleep(100);
       }
       requestAnimationFrame(loop);
@@ -266,14 +245,6 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
       tf.dispose(normalized);
       tf.dispose(nextImageTensor);
       tf.dispose(casted);
-    }
-  };
-
-  const validateExercise = (good) => {
-    // const chosenExercise = exercise.nome;
-
-    if (!good) {
-      showFixExercise = true;
     }
   };
 
@@ -329,7 +300,8 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
         autorender={true}
         flashMode={FlashMode.off}
       />
-      {!started ? (
+      {/* mudar aqui */}
+      {started ? (
         <View style={styles.textExerciseStart}>
           <Image
             source={require("../../../assets/background-exercise-waiting.png")}
@@ -380,6 +352,16 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
       ) : (
         ""
       )}
+      <View style={styles.backgroundExercisePoints}>
+        <Image
+          style={styles.imageExercisePoints}
+          source={require("../../../assets/exercisePoints.png")}
+        ></Image>
+      </View>
+      <View style={styles.pointsExercise}>
+        <Text style={styles.textPoints}>+100</Text>
+        <Text style={styles.points}>PONTOS</Text>
+      </View>
     </View>
   );
 };
