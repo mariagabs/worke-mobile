@@ -1453,7 +1453,8 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: "100%",
-        bottom: 50
+        bottom: 60,
+        zIndex: 100
     },
     timerExercise: {
         width: 90,
