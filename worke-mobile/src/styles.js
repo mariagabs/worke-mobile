@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import { COLORS } from "../assets/colors.js";
 import { Dimensions, StyleSheet, PixelRatio, Platforms } from "react-native";
 
@@ -644,6 +645,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
+    marginTop: 20,
   },
   rankingContainer: {
     width: "100%",
@@ -680,7 +682,10 @@ export default StyleSheet.create({
   }),
   rankTopInfo: (horizontal) => ({
     marginTop: horizontal ? 0 : 20,
-    marginLeft: horizontal ? 20 : 0,
+    marginLeft: horizontal ? 15 : 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   }),
   rankingPhotos: (horizontal) => ({
     display: "flex",
@@ -688,6 +693,7 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: horizontal ? 25 : 0,
+    paddingHorizontal: 30,
   }),
   nameRankTop: {
     fontFamily: "Nunito-ExtraBold",
@@ -695,6 +701,8 @@ export default StyleSheet.create({
     letterSpacing: 1,
     fontSize: 16,
     textAlign: "center",
+    maxWidth: "80%",
+    marginBottom: 6,
   },
   pointsRankTop: (textColor) => ({
     fontFamily: "Nunito-ExtraBold",
@@ -1492,10 +1500,10 @@ export default StyleSheet.create({
     width: Dimensions.get("window").width,
     zIndex: 101,
     justifyContent: "flex-start",
-    marginTop: Dimensions.get("window").height - 587 + 244,
-    backgroundColor: "red",
-    // marginBottom:
-    //   Dimensions.get("window").height - (Dimensions.get("window").height - 285),
+    marginTop:
+      Platform.OS === "ios"
+        ? Dimensions.get("window").height - 353
+        : Dimensions.get("window").height - 323,
   },
   textPoints: {
     fontFamily: "Nunito-Black",

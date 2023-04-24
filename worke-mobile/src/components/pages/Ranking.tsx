@@ -5,12 +5,16 @@ import styles from "../../styles";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import RankingTab from "../organisms/RankingTab";
 import AchievementsTab from "../organisms/AchievementsTab";
-interface Props {
-  user: any;
-}
-const Ranking: React.FC<Props> = ({ user }) => {
+import AsyncStorage from "@react-native-async-storage/async-storage";
+interface Props {}
+const Ranking: React.FC<Props> = ({}) => {
   const Tab = createMaterialTopTabNavigator();
-
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    AsyncStorage.getItem("user").then((user) => {
+      setUser(JSON.parse(user));
+    });
+  }, []);
   function MyTabs() {
     return (
       <View style={styles.rankingContainer}>

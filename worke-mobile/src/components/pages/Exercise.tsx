@@ -15,6 +15,7 @@ import ModelSingleton from "../../modelSingleton";
 import styles from "../../styles";
 import ButtonExercise from "../atoms/ButtonExercise";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const RESULT_MAPPING = [
   "Cima",
@@ -59,16 +60,19 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   const [showTimerStart, setShowTimerStart] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [timer, setTimer] = useState(15);
-  const [exercise, setExercise] = useState([]);
+  const [exercise, setExercise] = useState(null);
   const [showFixExercise, setShowFixExercise] = useState(false);
   const [showAttention, setShowAttention] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [user, setUser] = useState(null);
+  const [fromFavorites, setFromFavorites] = useState(false);
   const startExercise = () => {
     setShowTimerStart(true);
     setShowButton(false);
     const timer = setInterval(() => {
       setTimerStart((lastTimerCount) => {
         lastTimerCount <= 1 && clearInterval(timer);
-        // if (lastTimerCount == 1) started = true;
+        if (lastTimerCount == 1) started = true;
         return lastTimerCount - 1;
       });
     }, 1000);
@@ -91,11 +95,60 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
         if (lastTimerCount === 0) {
           showAlmostDone = false;
           started = false;
+          showPoints();
           return 0;
         }
         return lastTimerCount - 1;
       });
     }, 1000);
+  };
+
+  const showPoints = async () => {
+    const configurationObject = {
+      url: "http://54.237.75.229:8000/exercicioUsuario/" + user.id,
+      method: "POST",
+      data: { usuario: user.id, exercicio: exercise.id },
+    };
+
+    axios(configurationObject)
+      .then((response) => {
+        if (response.status === 200) {
+          setCompleted(true);
+          updateUserPoints();
+          let count = 0;
+          setInterval(() => {
+            if (count === 3) {
+              back();
+            }
+
+            count++;
+          }, 1000);
+        } else {
+          throw new Error("An error has occurred");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const updateUserPoints = () => {
+    const configurationObject = {
+      url: "http://54.237.75.229:8000/funcionario/" + user.id,
+      method: "GET",
+    };
+
+    axios(configurationObject)
+      .then((response) => {
+        if (response.status === 200) {
+          AsyncStorage.setItem("user", JSON.stringify(response.data));
+        } else {
+          throw new Error("An error has occurred");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const stopTimer = (timer) => {
@@ -106,27 +159,38 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   };
 
   if (timerStart === 0 && !started) {
-    // started = true;
+    started = true;
   }
 
   const back = async () => {
     started = showContinue = showAlmostDone = false;
     setShowAttention(false);
     setShowFixExercise(false);
+    setCompleted(false);
+
     badAccuracyCount = 0;
     goodAccuracyCount = 0;
     leavePage = true;
     const page = await AsyncStorage.getItem("currentExercisePage");
     const category = await AsyncStorage.getItem("isCategoryPage");
-    navigation.navigate("MyExercises", {
-      title: page,
-      getCategoryExercise: category === "1",
-    });
+
+    if (fromFavorites) {
+      navigation.navigate("Menu");
+    } else {
+      navigation.navigate("MyExercises", {
+        title: page,
+        getCategoryExercise: category === "1",
+      });
+    }
   };
 
   useEffect(() => {
     (async () => {
+      const teste = JSON.parse(await AsyncStorage.getItem("chosenExercise"));
       setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
+      setFromFavorites((await AsyncStorage.getItem("fromFavorites")) === "1");
+      console.log(teste);
+      setUser(JSON.parse(await AsyncStorage.getItem("user")));
 
       let modelo = ModelSingleton.getInstance();
       modeloTensorFlow = modelo.getModelo();
@@ -144,7 +208,6 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   async function handleCameraStream(images) {
     const loop = async () => {
       if (leavePage) {
-        console.log(1);
         leavePage = false;
         return;
       }
@@ -167,8 +230,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
 
         // se manter o mesmo exercício com acurácia > 0.9
         // por 2 segundos, executa o cronômetro
-        if (goodAccuracyCount === 6) {
-          console.log("good 10");
+        if (goodAccuracyCount === 4) {
           if (!timerInitialized) {
             startExerciseTimer();
           }
@@ -187,7 +249,6 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
           badAccuracyCount++;
           // validateExercise(false);
         } else if (badAccuracyCount >= 10) {
-          console.log("fix accuracy", badAccuracyCount);
           setShowFixExercise(true);
           setShowAttention(false);
         }
@@ -201,7 +262,6 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
           badAccuracyCount = 0;
           let count = goodAccuracyCount + 1;
           goodAccuracyCount = count;
-          console.log(goodAccuracyCount);
         } else if (executedExercise.accuracy < 0.85) {
           goodAccuracyCount = 0;
           badAccuracyCount++;
@@ -300,8 +360,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
         autorender={true}
         flashMode={FlashMode.off}
       />
-      {/* mudar aqui */}
-      {started ? (
+      {!started ? (
         <View style={styles.textExerciseStart}>
           <Image
             source={require("../../../assets/background-exercise-waiting.png")}
@@ -352,16 +411,20 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
       ) : (
         ""
       )}
-      <View style={styles.backgroundExercisePoints}>
-        <Image
-          style={styles.imageExercisePoints}
-          source={require("../../../assets/exercisePoints.png")}
-        ></Image>
-      </View>
-      <View style={styles.pointsExercise}>
-        <Text style={styles.textPoints}>+100</Text>
-        <Text style={styles.points}>PONTOS</Text>
-      </View>
+      {completed ? (
+        <View style={styles.backgroundExercisePoints}>
+          <Image
+            style={styles.imageExercisePoints}
+            source={require("../../../assets/exercisePoints.png")}
+          ></Image>
+          <View style={styles.pointsExercise}>
+            <Text style={styles.textPoints}>+100</Text>
+            <Text style={styles.points}>PONTOS</Text>
+          </View>
+        </View>
+      ) : (
+        ""
+      )}
     </View>
   );
 };

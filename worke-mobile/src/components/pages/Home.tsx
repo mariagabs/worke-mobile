@@ -16,12 +16,6 @@ interface Props {
 }
 
 const Home: React.FC<Props> = ({ navigation }) => {
-  let favorites = [
-    { exercise: "alongamento", description: "tronco" },
-    { exercise: "alongamento", description: "pescoço" },
-    { exercise: "alongamento", description: "quadríceps" },
-    { exercise: "yoga", description: "árvore" },
-  ];
   const [modalVisible, setModalVisible] = useState(false);
   const [exercise, setExercise] = useState([]);
   useEffect(() => {

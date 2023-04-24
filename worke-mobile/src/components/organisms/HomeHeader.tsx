@@ -17,6 +17,7 @@ const HomeHeader: React.FC<Props> = ({ color }) => {
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
   const [level, setLevel] = useState("");
+  const [progress, setProgress] = useState("");
   let id = "";
 
   useEffect(() => {
@@ -28,6 +29,7 @@ const HomeHeader: React.FC<Props> = ({ color }) => {
         setImage(userJSON.image);
         setLevel(userJSON.level);
         setName(userJSON.first_name);
+        setProgress(userJSON.progress.toString());
         id = userJSON.id.toString();
       }
     };
@@ -50,7 +52,11 @@ const HomeHeader: React.FC<Props> = ({ color }) => {
         </View>
         <NotificationIcon></NotificationIcon>
       </View>
-      <LevelProgress color={color} level={level}></LevelProgress>
+      <LevelProgress
+        color={color}
+        level={level}
+        progress={progress}
+      ></LevelProgress>
       <Divider></Divider>
     </View>
   );

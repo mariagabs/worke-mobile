@@ -31,7 +31,7 @@ const Menu: React.FC<Props> = ({ selectedTab, navigation }) => {
       {activeTab === "home" ? (
         <Home navigation={navigation} />
       ) : activeTab === "ranking" ? (
-        <Ranking user={user} />
+        <Ranking />
       ) : activeTab === "profile" ? (
         <Profile user={user} />
       ) : (

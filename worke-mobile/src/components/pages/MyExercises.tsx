@@ -32,6 +32,7 @@ const MyExercises: React.FC<Props> = ({ navigation, route }) => {
   let start = true;
   const getModal = async (visible) => {
     setModalVisible(visible);
+    await AsyncStorage.setItem("fromFavorites", "0");
     setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
   };
   const closeModal = (visible) => {
