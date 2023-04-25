@@ -37,7 +37,6 @@ const InputCode: React.FC<Props> = ({ navigation }) => {
 
   const checkGroup = (text) => {
     setValue(text);
-    console.log(text.toUpperCase());
     if (text.length === 4) {
       const configurationObject = {
         url: "http://54.237.75.229:8000/grupoCodigo/" + text.toUpperCase(),
@@ -60,8 +59,6 @@ const InputCode: React.FC<Props> = ({ navigation }) => {
   };
 
   const checkPassword = () => {
-    console.log(password);
-    console.log(group.senha);
     if (password !== group.senha) {
       setInvalidInput(true);
     } else {
@@ -75,7 +72,6 @@ const InputCode: React.FC<Props> = ({ navigation }) => {
     user.group_code = group.codigo;
     user.group = group.id;
     await AsyncStorage.setItem("user", JSON.stringify(user));
-    console.log("user: ", user);
     const configurationObject = {
       url: "http://54.237.75.229:8000/funcionario/" + user.id,
       method: "POST",

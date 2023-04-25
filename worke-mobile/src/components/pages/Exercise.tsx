@@ -160,6 +160,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
     clearInterval(timer);
     showAlmostDone = false;
     showContinue = false;
+    // leavePage = true;
   };
 
   if (timerStart === 0 && !started) {
@@ -189,7 +190,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
     setShowAttention(false);
     setShowFixExercise(false);
     setCompleted(false);
-    started = showContinue = showAlmostDone = false;
+    started = showContinue = showAlmostDone = leavePage = false;
 
     (async () => {
       setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));

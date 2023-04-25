@@ -1540,4 +1540,15 @@ export default StyleSheet.create({
   focusCell: {
     borderColor: COLORS.lightGray,
   },
+  backgroundNoPhotoGroup: {
+    backgroundColor: COLORS.almostWhite,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    width: 50,
+    height: 50,
+    borderRadius: 10,
+    margin: 15,
+    marginRight: 10,
+  },
 });

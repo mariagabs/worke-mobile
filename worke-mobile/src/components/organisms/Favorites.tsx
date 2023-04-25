@@ -6,6 +6,7 @@ import { COLORS } from "../../../assets/colors";
 import NoInfo from "../atoms/NoInfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { useIsFocused } from "@react-navigation/native";
 
 interface Props {
   onPress: (visible) => void;
@@ -15,6 +16,7 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
   let colors = [COLORS.purple, COLORS.green, COLORS.pink, COLORS.blue];
   var favoritesList = [];
   const [favorites, setFavorites] = useState([]);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     const getFavorites = async () => {
@@ -35,9 +37,10 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
           console.log(error);
         });
     };
-
-    getFavorites();
-  }, []);
+    if (isFocused) {
+      getFavorites();
+    }
+  }, [isFocused]);
 
   const setChosenExercise = async (id) => {
     await AsyncStorage.setItem("fromFavorites", "1");
