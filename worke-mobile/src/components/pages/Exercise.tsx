@@ -37,10 +37,7 @@ let leavePage = false;
 // tudo isso aqui eu tinha criado como useState,
 // mas ficou sem atualizar certo e eu meti o louco
 // e criei tudo aqui (y)
-let changed = false;
-let wrongExercise = false;
 let pauseTimer = false;
-let beingExecuted = "";
 let showContinue = false,
   showAlmostDone = false;
 let goodAccuracyCount = 0,
@@ -66,6 +63,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   const [completed, setCompleted] = useState(false);
   const [user, setUser] = useState(null);
   const [fromFavorites, setFromFavorites] = useState(false);
+  const [saved, setSaved] = useState(false);
   const startExercise = () => {
     setShowTimerStart(true);
     setShowButton(false);
@@ -83,7 +81,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
     timerInitialized = true;
     const exerciseTimer = setInterval(() => {
       setTimer((lastTimerCount) => {
-        lastTimerCount === 0 && stopTimer(exerciseTimer);
+        lastTimerCount === 0 && clearInterval(exerciseTimer);
         if (pauseTimer) stopTimer(exerciseTimer);
         if (lastTimerCount === 10) {
           showContinue = true;
@@ -95,6 +93,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
         if (lastTimerCount === 0) {
           showAlmostDone = false;
           started = false;
+          stopTimer(exerciseTimer);
           showPoints();
           return 0;
         }
@@ -104,32 +103,37 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   };
 
   const showPoints = async () => {
-    const configurationObject = {
-      url: "http://54.237.75.229:8000/exercicioUsuario/" + user.id,
-      method: "POST",
-      data: { usuario: user.id, exercicio: exercise.id },
-    };
+    if (!saved) {
+      setSaved(true);
+      leavePage = true;
+      const configurationObject = {
+        url: "http://54.237.75.229:8000/exercicioUsuario/" + user.id,
+        method: "POST",
+        data: { usuario: user.id, exercicio: exercise.id },
+      };
 
-    axios(configurationObject)
-      .then((response) => {
-        if (response.status === 200) {
-          setCompleted(true);
-          updateUserPoints();
-          let count = 0;
-          setInterval(() => {
-            if (count === 3) {
-              back();
-            }
-
-            count++;
-          }, 1000);
-        } else {
-          throw new Error("An error has occurred");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      axios(configurationObject)
+        .then((response) => {
+          if (response.status === 200) {
+            setCompleted(true);
+            updateUserPoints();
+            let count = 0;
+            const timer = setInterval(() => {
+              if (count === 3) {
+                clearInterval(timer);
+                back();
+              } else {
+                count++;
+              }
+            }, 1000);
+          } else {
+            throw new Error("An error has occurred");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   const updateUserPoints = () => {
@@ -163,14 +167,10 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   }
 
   const back = async () => {
-    started = showContinue = showAlmostDone = false;
-    setShowAttention(false);
-    setShowFixExercise(false);
-    setCompleted(false);
-
     badAccuracyCount = 0;
     goodAccuracyCount = 0;
     leavePage = true;
+
     const page = await AsyncStorage.getItem("currentExercisePage");
     const category = await AsyncStorage.getItem("isCategoryPage");
 
@@ -185,13 +185,16 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   };
 
   useEffect(() => {
+    started = false;
+    setShowAttention(false);
+    setShowFixExercise(false);
+    setCompleted(false);
+    started = showContinue = showAlmostDone = false;
+
     (async () => {
-      const teste = JSON.parse(await AsyncStorage.getItem("chosenExercise"));
       setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
       setFromFavorites((await AsyncStorage.getItem("fromFavorites")) === "1");
-      console.log(teste);
       setUser(JSON.parse(await AsyncStorage.getItem("user")));
-
       let modelo = ModelSingleton.getInstance();
       modeloTensorFlow = modelo.getModelo();
     })();
@@ -219,15 +222,6 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
         }
         tf.dispose(images);
         tf.engine().endScope();
-
-        // valida se o exercício sendo executado é o
-        // mesmo exercício que foi escolhido
-        // if (executedExercise.name !== exercise.nome) {
-        //   setShowFixExercise(true);
-        //   goodAccuracyCount = 0;
-        //   badAccuracyCount++;
-        // }
-
         // se manter o mesmo exercício com acurácia > 0.9
         // por 2 segundos, executa o cronômetro
         if (goodAccuracyCount === 4) {

@@ -24,13 +24,12 @@ const MyExercises: React.FC<Props> = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => myExercises("exercícios")}
         activeOpacity={1}
+        style={styles.headerMyExercises}
       >
-        <View style={styles.headerMyExercises}>
-          <Text style={styles.subtitleHome}>EXERCÍCIOS</Text>
-          <Image
-            source={require("../../../assets/angle-right-black.png")}
-          ></Image>
-        </View>
+        <Text style={styles.subtitleHome}>EXERCÍCIOS</Text>
+        <Image
+          source={require("../../../assets/angle-right-black.png")}
+        ></Image>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => myExercises("categorias")}

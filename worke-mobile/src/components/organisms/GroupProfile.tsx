@@ -3,8 +3,11 @@ import { View, ScrollView } from "react-native";
 import styles from "../../styles";
 import GroupCode from "../atoms/GroupCode";
 import GroupList from "./GroupList";
-
-const Group: React.FC = () => {
+interface Props {
+  user: any;
+}
+const Group: React.FC<Props> = ({ user }) => {
+  console.log(user);
   let usersGroup = [
     {
       name: "você",
@@ -44,7 +47,7 @@ const Group: React.FC = () => {
         <View style={styles.listHeight}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.groupCode}>
-              <GroupCode code="7d6r"></GroupCode>
+              <GroupCode code={user.group_code}></GroupCode>
             </View>
             <GroupList users={usersGroup}></GroupList>
           </ScrollView>

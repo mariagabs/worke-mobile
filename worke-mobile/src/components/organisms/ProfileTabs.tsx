@@ -50,7 +50,10 @@ const ProfileTabs: React.FC<Props> = ({ user }) => {
       >
         <Tab.Screen name="Meu Corpo" component={Body} />
         <Tab.Screen name="Dados Pessoais" component={PersonalInfo} />
-        <Tab.Screen name="Grupo" component={GroupProfile} />
+        <Tab.Screen
+          name="Grupo"
+          children={() => <GroupProfile user={user}></GroupProfile>}
+        />
       </Tab.Navigator>
     );
   }

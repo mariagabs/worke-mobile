@@ -95,13 +95,14 @@ export default StyleSheet.create({
     borderColor: COLORS.lightGray,
     borderRadius: 7,
     height: 62,
-    paddingVertical: 5,
+    paddingTop: 10,
     paddingHorizontal: 12,
     textAlign: "center",
     fontSize: 32,
     fontWeight: "bold",
     fontFamily: "Nunito-SemiBold",
     justifyContent: "center",
+    textTransform: "uppercase",
   },
   eyeIcon: {
     alignSelf: "flex-end",
@@ -112,7 +113,7 @@ export default StyleSheet.create({
   buttonText: {
     color: COLORS.white,
     textAlign: "center",
-    fontSize: 12,
+    fontSize: 14,
     letterSpacing: 2,
     fontFamily: "Nunito-Black",
     textTransform: "uppercase",
@@ -364,7 +365,7 @@ export default StyleSheet.create({
     textTransform: "uppercase",
     fontFamily: "Nunito-ExtraBold",
     letterSpacing: 2,
-    whiteSpace: "nowrap",
+    // whiteSpace: Platform.OS === "android" ? "nowrap" : "",
   }),
   expectations: {
     display: "flex",
@@ -482,7 +483,7 @@ export default StyleSheet.create({
     marginLeft: 20,
   },
   homeHeader: {
-    marginBottom: 20,
+    marginBottom: 10,
     display: "flex",
     flexDirection: "row",
   },
@@ -553,12 +554,14 @@ export default StyleSheet.create({
     width: "100%",
     flexDirection: "column",
     height: 215,
+    marginBottom: 10,
   },
   headerMyExercises: {
     display: "flex",
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingVertical: 10,
   },
   subtitleHome: {
     fontFamily: "Nunito-ExtraBold",
@@ -578,7 +581,7 @@ export default StyleSheet.create({
     flexDirection: "row",
   },
   cardMyExercises: {
-    marginTop: 20,
+    marginTop: 10,
     borderColor: COLORS.green,
     borderWidth: 1,
     width: "100%",
@@ -672,7 +675,7 @@ export default StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 100,
-    paddingTop: 6,
+    paddingTop: 4,
   }),
   rankText: (textColor) => ({
     color: textColor,
@@ -827,7 +830,6 @@ export default StyleSheet.create({
     color: COLORS.black,
     fontSize: 14,
     fontFamily: "Nunito-Black",
-    fontWeight: "900",
     letterSpacing: 2,
     marginRight: 12,
   },
@@ -1130,6 +1132,9 @@ export default StyleSheet.create({
     alignItems: "center",
     // marginBottom: 35,
   },
+  groupPassword: {
+    marginBottom: 25,
+  },
   headerGroupPassword: {
     display: "flex",
     flexDirection: "row",
@@ -1305,8 +1310,15 @@ export default StyleSheet.create({
   headerModal: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "flex-end",
+    width: "100%",
+  },
+  headerModalTwoButtons: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     width: "100%",
   },
   modalTitle: {
@@ -1516,5 +1528,16 @@ export default StyleSheet.create({
     fontSize: 22,
     letterSpacing: 2,
     color: COLORS.black,
+  },
+  iconNavigationBar: {
+    paddingHorizontal: 10,
+    paddingTop: Platform.OS === "ios" ? 0 : 5,
+  },
+  root: { padding: 20, minHeight: 300 },
+  codeFieldRoot: {
+    marginBottom: 25,
+  },
+  focusCell: {
+    borderColor: COLORS.lightGray,
   },
 });

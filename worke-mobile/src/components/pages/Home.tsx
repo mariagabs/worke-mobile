@@ -13,9 +13,10 @@ import { bundleResourceIO } from "@tensorflow/tfjs-react-native";
 
 interface Props {
   navigation: any;
+  showModal: (show) => void;
 }
 
-const Home: React.FC<Props> = ({ navigation }) => {
+const Home: React.FC<Props> = ({ navigation, showModal }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [exercise, setExercise] = useState([]);
   useEffect(() => {
@@ -58,32 +59,12 @@ const Home: React.FC<Props> = ({ navigation }) => {
 
   const getModal = async (visible) => {
     setModalVisible(visible);
+    showModal(visible);
     setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
-  };
-  const closeModal = (visible) => {
-    setModalVisible(visible);
   };
 
   return (
     <View style={styles.container}>
-      {modalVisible ? (
-        <DefaultModal
-          buttonText="INICIAR"
-          text={
-            "VOCÊ SELECIONOU O EXERCÍCIO " +
-            exercise.nome +
-            " DA CATEGORIA " +
-            exercise.categoria +
-            "!"
-          }
-          title="VAMOS?"
-          type="exercise"
-          onPressClose={(visible) => closeModal(visible)}
-          navigation={navigation}
-        ></DefaultModal>
-      ) : (
-        ""
-      )}
       <View style={styles.home}>
         <View style={styles.homeHeader}>
           <HomeHeader color={COLORS.blue}></HomeHeader>

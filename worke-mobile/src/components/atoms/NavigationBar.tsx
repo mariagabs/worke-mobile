@@ -28,6 +28,7 @@ const NavigationBar: React.FC<Props> = ({ onPress }) => {
               onPress("home");
             }}
             activeOpacity={1}
+            style={styles.iconNavigationBar}
           >
             <Foundation
               name="home"
@@ -52,6 +53,7 @@ const NavigationBar: React.FC<Props> = ({ onPress }) => {
               onPress("ranking");
             }}
             activeOpacity={1}
+            style={styles.iconNavigationBar}
           >
             <FontAwesome5
               name="trophy"
@@ -74,6 +76,7 @@ const NavigationBar: React.FC<Props> = ({ onPress }) => {
               onPress("profile");
             }}
             activeOpacity={1}
+            style={styles.iconNavigationBar}
           >
             <FontAwesome5
               name="user-alt"
@@ -94,6 +97,7 @@ const NavigationBar: React.FC<Props> = ({ onPress }) => {
               onPress("settings");
             }}
             activeOpacity={1}
+            style={styles.iconNavigationBar}
           >
             <Ionicons
               name="settings-sharp"

@@ -60,7 +60,8 @@ const ProfilePhoto: React.FC<Props> = ({ user }) => {
         quality: 0.5,
         base64: true,
       });
-      saveImage(result.assets[0].base64);
+      // saveImage(result.assets[0].base64);
+      saveImage(result.base64);
     } else {
       requestPermission();
     }

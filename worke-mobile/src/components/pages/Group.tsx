@@ -21,14 +21,20 @@ const Group: React.FC<Props> = ({ navigation }) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <View style={styles.view}>
-        <Image
-          style={styles.linesOnTop}
-          source={require("../../../assets/4-lines.png")}
-        ></Image>
-        <GroupCode></GroupCode>
-        <CreateGroupLabel navigation={navigation}></CreateGroupLabel>
-      </View>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+        }}
+      >
+        <View style={styles.view}>
+          <Image
+            style={styles.linesOnTop}
+            source={require("../../../assets/4-lines.png")}
+          ></Image>
+          <GroupCode navigation={navigation}></GroupCode>
+          <CreateGroupLabel navigation={navigation}></CreateGroupLabel>
+        </View>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };

@@ -47,15 +47,27 @@ const DefaultModal: React.FC<Props> = ({
   return (
     <View style={styles.modalBackground}>
       <View style={styles.modal}>
-        <View style={styles.headerModal}>
-          {type !== "shareGroup" ? (
-            <FontAwesome5 name="share-alt" size={24} color={COLORS.green} />
+        <View
+          style={
+            type === "shareGroup"
+              ? styles.headerModalTwoButtons
+              : styles.headerModal
+          }
+        >
+          {type === "shareGroup" ? (
+            <FontAwesome5
+              style={styles.shareButton}
+              name="share-alt"
+              size={24}
+              color={COLORS.green}
+            />
           ) : (
             ""
           )}
           <TouchableOpacity
             activeOpacity={1}
             onPress={() => onPressClose(false)}
+            style={styles.closeModalButton}
           >
             <FontAwesome name="close" size={30} color={COLORS.lightGray} />
           </TouchableOpacity>

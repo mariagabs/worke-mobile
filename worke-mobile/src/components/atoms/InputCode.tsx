@@ -1,79 +1,180 @@
-import React, {useState, useRef, useEffect} from "react";
-import { View, TextInput } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import { View, TextInput, SafeAreaView, Text } from "react-native";
 import styles from "../../styles.js";
+import {
+  CodeField,
+  Cursor,
+  useBlurOnFulfill,
+  useClearByFocusCell,
+} from "react-native-confirmation-code-field";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import Button from "../atoms/Button.tsx";
+import axios from "axios";
+import PasswordTextBox from "../molecules/PasswordTextBox/PasswordTextBox.tsx";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+const CELL_COUNT = 4;
 
-const InputCode: React.FC = () => {
-  const inputRef = useRef(null);
-  const inputRef2 = useRef(null);
-  const inputRef3 = useRef(null);
-  
-  const [length, setLength] = useState(0);
-  const [length2, setLength2] = useState(0);
-  const [length3, setLength3] = useState(0);
+interface Props {
+  navigation: any;
+}
 
-  const handleChange = (e) => {
-    setLength(length + 1);
+const InputCode: React.FC<Props> = ({ navigation }) => {
+  const [value, setValue] = useState("");
+  const [group, setGroup] = useState([]);
+  const [hasPassword, setHasPassword] = useState(false);
+  const [invalidInput, setInvalidInput] = useState(false);
+  const [password, setPassword] = useState("");
+  const ref = useBlurOnFulfill({ value, cellCount: CELL_COUNT });
+  const menu = () => navigation.navigate("Menu");
+  const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+    value,
+    setValue,
+  });
+
+  const onChangePassword = (password) => {
+    setPassword(password);
   };
-  const handleChange2 = (e) => {
-    setLength2(length2 + 1);
+
+  const checkGroup = (text) => {
+    setValue(text);
+    console.log(text.toUpperCase());
+    if (text.length === 4) {
+      const configurationObject = {
+        url: "http://54.237.75.229:8000/grupoCodigo/" + text.toUpperCase(),
+        method: "GET",
+      };
+
+      axios(configurationObject)
+        .then((response) => {
+          if (response.status === 200) {
+            setGroup(response.data);
+            setHasPassword(group.senha !== "");
+          } else {
+            throw new Error("An error has occurred");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
-  const handleChange3 = (e) => {
-    setLength3(length3 + 1);
+
+  const checkPassword = () => {
+    console.log(password);
+    console.log(group.senha);
+    if (password !== group.senha) {
+      setInvalidInput(true);
+    } else {
+      setInvalidInput(false);
+      addToGroup();
+    }
   };
 
-  useEffect(() => {
-    if (!inputRef) return;
-    const input = inputRef.current;
-    if (length === 1) {
-        input.focus();
-    }
-  }, [length]);
+  const addToGroup = async () => {
+    let user = JSON.parse(await AsyncStorage.getItem("user"));
+    user.group_code = group.codigo;
+    user.group = group.id;
+    await AsyncStorage.setItem("user", JSON.stringify(user));
+    console.log("user: ", user);
+    const configurationObject = {
+      url: "http://54.237.75.229:8000/funcionario/" + user.id,
+      method: "POST",
+      data: user,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
 
-  useEffect(() => {
-    if (!inputRef2) return;
-    const input2 = inputRef2.current;
-    if (length2 === 1) {
-        input2.focus();
-    }
-  }, [length2]);
+    axios(configurationObject)
+      .then((response) => {
+        if (response.status === 200) {
+          menu();
+        } else {
+          throw new Error("An error has occurred");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-  useEffect(() => {
-    if (!inputRef3) return;
-    const input3 = inputRef3.current;
-    if (length3 === 1) {
-        input3.focus();
-    }
-  }, [length3]);
+  const checkCode = async () => {
+    const configurationObject = {
+      url: "http://54.237.75.229:8000/funcionario/" + user,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    axios(configurationObject)
+      .then((response) => {
+        if (response.status === 200) {
+          if (!response.data) {
+            let group = {
+              codigo: code,
+              qtd_participantes: 5,
+            };
+            AsyncStorage.setItem("userGroup", JSON.stringify(group));
+            setCode(code);
+          } else {
+            checkCode();
+          }
+        } else {
+          throw new Error("An error has occurred");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
-    <View style={styles.inputCodeGroup}>
-        <TextInput
-            style={[styles.inputCode, styles.margin10, styles.purple]}
-            maxLength={1}
-            keyboardType="number-pad"
-            onChange={handleChange}>
-        </TextInput>
-        <TextInput 
-            style={[styles.inputCode, styles.margin10, styles.pink]}
-            maxLength={1}
-            keyboardType="number-pad"
-            onChange={handleChange2}
-            ref={inputRef}>
-        </TextInput>
-        <TextInput 
-            style={[styles.inputCode, styles.margin10, styles.green]}
-            maxLength={1}
-            keyboardType="number-pad"
-            onChange={handleChange3}
-            ref={inputRef2}>
-        </TextInput>
-        <TextInput 
-            style={[styles.inputCode, styles.blue]}
-            maxLength={1}
-            keyboardType="number-pad"
-            returnKeyType="done"
-            ref={inputRef3}>
-        </TextInput>
+    <View style={styles.fullWidth}>
+      <CodeField
+        // onChange={() => checkGroup(value)}
+        ref={ref}
+        {...props}
+        value={value}
+        onChangeText={checkGroup}
+        cellCount={CELL_COUNT}
+        rootStyle={styles.codeFieldRoot}
+        keyboardType="default"
+        textContentType="oneTimeCode"
+        renderCell={({ index, symbol, isFocused }) => (
+          <Text
+            key={index}
+            style={[
+              styles.inputCode,
+              styles.margin10,
+              index === 1
+                ? styles.purple
+                : index === 2
+                ? styles.pink
+                : index === 3
+                ? styles.green
+                : styles.blue,
+              isFocused && styles.focusCell,
+            ]}
+            onLayout={getCellOnLayoutHandler(index)}
+          >
+            {symbol || (isFocused ? <Cursor /> : null)}
+          </Text>
+        )}
+      />
+      {hasPassword ? (
+        <View style={styles.groupPassword}>
+          <PasswordTextBox
+            placeholder="Senha"
+            onChangeText={onChangePassword}
+            errorInput={invalidInput}
+            errorText="Ops, senha inválida"
+          ></PasswordTextBox>
+        </View>
+      ) : (
+        ""
+      )}
+      <Button buttonText="ENTRAR" onPress={checkPassword}></Button>
     </View>
   );
 };
