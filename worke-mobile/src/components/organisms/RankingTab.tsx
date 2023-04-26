@@ -11,8 +11,8 @@ const RankingTab: React.FC<Props> = ({ user }) => {
   return (
     <View style={styles.container}>
       <View style={styles.view}>
-        {/* <RankingTop users={usersTop}></RankingTop>
-        <RankingList users={users}></RankingList> */}
+        {/* <RankingTop users={usersTop}></RankingTop>*/}
+        <RankingList user={user}></RankingList>
       </View>
     </View>
   );

@@ -742,6 +742,7 @@ export default StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     width: "100%",
+    height: "100%",
   },
   rankingCard: (color) => ({
     borderColor: color,
@@ -759,6 +760,17 @@ export default StyleSheet.create({
     borderRadius: 7,
     marginLeft: 20,
     marginRight: 20,
+  },
+  imageRankListNoPhoto: {
+    width: 50,
+    height: 50,
+    borderRadius: 7,
+    marginLeft: 20,
+    marginRight: 20,
+    backgroundColor: COLORS.almostWhite,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
   },
   starRankList: {
     position: "absolute",
