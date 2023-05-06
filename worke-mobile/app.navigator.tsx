@@ -20,6 +20,8 @@ import CreateGroup from "./src/components/pages/CreateGroup";
 import Group from "./src/components/pages/Group";
 import MyExercises from "./src/components/pages/MyExercises";
 import Exercise from "./src/components/pages/Exercise";
+import Workouts from "./src/components/pages/Workouts";
+import WorkoutExercises from "./src/components/pages/WorkoutExercises";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -51,6 +53,8 @@ const AppNavigator = () => (
       <Screen name="CreateGroup" component={CreateGroup}></Screen>
       <Screen name="MyExercises" component={MyExercises}></Screen>
       <Screen name="Exercise" component={Exercise}></Screen>
+      <Screen name="Workouts" component={Workouts}></Screen>
+      <Screen name="WorkoutExercises" component={WorkoutExercises}></Screen>
     </Navigator>
   </NavigationContainer>
 );

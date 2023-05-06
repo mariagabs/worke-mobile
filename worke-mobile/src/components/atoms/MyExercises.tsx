@@ -39,7 +39,7 @@ const MyExercises: React.FC<Props> = ({ navigation }) => {
           <View style={styles.descriptionMyExercises}>
             <Text style={styles.levelDescription}>CATEGORIAS</Text>
             <View style={styles.startMyExercises}>
-              <Text style={styles.descriptionExerciseTitle(COLORS.green)}>
+              <Text style={[styles.descriptionExerciseTitle, styles.textGreen]}>
                 COMEÇAR
               </Text>
               <Image

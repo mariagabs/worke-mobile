@@ -1,28 +1,13 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-  Image,
-} from "react-native";
+import { View, Text, Image } from "react-native";
 import styles from "../../styles";
-import Steps from "../atoms/Steps";
-import BackButton from "../atoms/BackButton";
-import StepsCount from "../molecules/StepsCount";
-import { COLORS } from "../../../assets/colors";
-import LabelButton from "../atoms/LabelButton";
 
 interface Props {
   navigation?: any;
 }
 
 const SignUpStep9: React.FC<Props> = ({ navigation }) => {
-  const back = () => navigation.navigate("SignUpStep6");
   const next = () => navigation.navigate("SignUpStep6");
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [invalidInput, setInvalidInput] = useState(false);
   const [selected, setSelected] = useState("");
 
@@ -49,18 +34,25 @@ const SignUpStep9: React.FC<Props> = ({ navigation }) => {
       <View style={styles.centerView}>
         <Image source={require("../../../assets/happy-green.png")}></Image>
         <Text
-          style={styles.defaultText(
-            32,
-            "center",
-            "Nunito-Black",
-            "100%",
-            2,
-            20,
-          )}
+          style={
+            (styles.defaultText,
+            styles.fontBlack,
+            styles.fullWidth,
+            styles.font32,
+            styles.marginTop20,
+            styles.letterSpacing2)
+          }
         >
           EBA!
         </Text>
-        <Text style={styles.defaultText(20, "center", "Nunito", "70%", 0, 0)}>
+        <Text
+          style={
+            (styles.defaultText,
+            styles.font20,
+            styles.fontDefault,
+            styles.width70)
+          }
+        >
           Seu cadastro está pronto! {"\n"}Inicie para sua vida ficar ainda mais
           saudável!
         </Text>

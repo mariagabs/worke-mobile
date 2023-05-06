@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import { COLORS } from "../../../assets/colors";
 import styles from "../../styles";
 import Home from "./Home";
 import Ranking from "./Ranking";
@@ -8,6 +7,7 @@ import NavigationBar from "../atoms/NavigationBar";
 import Profile from "./Profile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DefaultModal from "../molecules/DefaultModal";
+import Workouts from "./Workouts";
 
 interface Props {
   selectedTab: string;
@@ -44,6 +44,8 @@ const Menu: React.FC<Props> = ({ selectedTab, navigation }) => {
           navigation={navigation}
           showModal={(show) => getShowModal(show)}
         />
+      ) : activeTab === "workouts" ? (
+        <Workouts navigation={navigation} />
       ) : activeTab === "ranking" ? (
         <Ranking />
       ) : activeTab === "profile" ? (

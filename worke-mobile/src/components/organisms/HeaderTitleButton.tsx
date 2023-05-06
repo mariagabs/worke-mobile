@@ -8,21 +8,13 @@ import { COLORS } from "../../../assets/colors";
 interface Props {
   title: string;
   onPress: () => void;
-  search: boolean;
 }
 
-const HeaderTitleButton: React.FC<Props> = ({ title, onPress, search }) => {
+const HeaderTitleButton: React.FC<Props> = ({ title, onPress }) => {
   return (
     <View style={styles.headerTitle}>
-      <BackButton signUpPage={false} onPress={onPress}></BackButton>
+      <BackButton onPress={onPress}></BackButton>
       <Text style={styles.pageTitle}>{title}</Text>
-      {search ? (
-        <View style={styles.searchHeaderTitle}>
-          <FontAwesome5 name="search" size={24} color={COLORS.lighterGray} />
-        </View>
-      ) : (
-        ""
-      )}
     </View>
   );
 };

@@ -121,7 +121,6 @@ const CreateGroup: React.FC<Props> = ({ navigation }) => {
       <HeaderTitleButton
         onPress={group}
         title="criar grupo"
-        search={false}
       ></HeaderTitleButton>
       <View style={styles.viewList}>
         <ScrollView>

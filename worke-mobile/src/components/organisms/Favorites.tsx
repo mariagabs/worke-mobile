@@ -56,7 +56,6 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
         <ExerciseCard
           key={favorites[i].id}
           color={colors[i]}
-          description={favorites[i].categoria}
           exercise={favorites[i].nome}
           list={false}
           onPress={(id) => {

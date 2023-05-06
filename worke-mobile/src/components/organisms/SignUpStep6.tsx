@@ -68,7 +68,7 @@ const SignUpStep4: React.FC<Props> = ({
   return (
     <View>
       <View style={styles.centerView}>
-        <Text style={styles.title(200)}>
+        <Text style={(styles.title, styles.width200)}>
           Quando você <Text style={styles.titleBold}>nasceu?</Text>
         </Text>
         <BlankTextBox

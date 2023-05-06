@@ -12,14 +12,12 @@ const AchievementsTab: React.FC<Props> = ({ user }) => {
   return (
     <View style={styles.container}>
       <View style={styles.achievements}>
-        <View>
-          <RankingTopIcon
-            color={COLORS.green}
-            horizontal={true}
-            user={user}
-          ></RankingTopIcon>
-          <Divider></Divider>
-        </View>
+        <RankingTopIcon
+          color={COLORS.green}
+          horizontal={true}
+          user={user}
+        ></RankingTopIcon>
+        <Divider></Divider>
         <AchievementsList user={user} />
       </View>
     </View>

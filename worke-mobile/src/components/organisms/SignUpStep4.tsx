@@ -57,7 +57,7 @@ const SignUpStep4: React.FC<Props> = ({
   return (
     <View>
       <View style={styles.centerView}>
-        <Text style={styles.title(300)}>
+        <Text style={(styles.title, styles.width300)}>
           Crie sua <Text style={styles.titleBold}>nova senha</Text>
         </Text>
         <View style={styles.fullWidth}>

@@ -1,6 +1,6 @@
 import { Platform } from "react-native";
 import { COLORS } from "../assets/colors.js";
-import { Dimensions, StyleSheet, PixelRatio, Platforms } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
@@ -153,15 +153,22 @@ export default StyleSheet.create({
     marginRight: -60,
     marginTop: 30,
   },
-  title: (width, letterSpacing) => ({
+  title: {
     fontSize: 30,
     fontFamily: "Nunito-Medium",
-    letterSpacing: letterSpacing,
-    width: width,
     textAlign: "center",
     color: COLORS.black,
     marginBottom: 20,
-  }),
+  },
+  width300: {
+    width: 300,
+  },
+  width200: {
+    width: 200,
+  },
+  width250: {
+    width: 250,
+  },
   titleBold: {
     fontFamily: "Nunito-ExtraBold",
     color: COLORS.black,
@@ -175,12 +182,23 @@ export default StyleSheet.create({
     width: "80%",
     marginTop: 55,
   },
-  textLabelButton: (color) => ({
-    color: color,
+  textLabelButton: {
     fontSize: 22,
     letterSpacing: 2.5,
     fontFamily: "Nunito-Black",
-  }),
+  },
+  textPink: {
+    color: COLORS.pink,
+  },
+  textPurple: {
+    color: COLORS.purple,
+  },
+  textBlue: {
+    color: COLORS.blue,
+  },
+  textGreen: {
+    color: COLORS.green,
+  },
   iconButton: {
     color: COLORS.purple,
   },
@@ -199,6 +217,21 @@ export default StyleSheet.create({
     height: 5,
     borderRadius: 7,
   }),
+  backgroundPink: {
+    backgroundColor: COLORS.pink,
+  },
+  backgroundPurple: {
+    backgroundColor: COLORS.purple,
+  },
+  backgroundGreen: {
+    backgroundColor: COLORS.green,
+  },
+  backgroundBlue: {
+    backgroundColor: COLORS.blue,
+  },
+  backgroundLighterGray: {
+    backgroundColor: COLORS.lighterGray,
+  },
   stepsPosition: {
     position: "absolute",
     top: 70,
@@ -234,15 +267,21 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-around",
   },
-  gender: (gender) => ({
+  gender: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    marginRight: gender === "MASCULINO" ? 25 : 0,
-    marginLeft: gender === "FEMININO" ? 25 : 0,
     marginTop: 50,
-  }),
+  },
+  genderM: {
+    marginRight: 25,
+    marginLeft: 0,
+  },
+  genderF: {
+    marginRight: 0,
+    marginLeft: 25,
+  },
   genderText: {
     fontFamily: "Nunito-ExtraBold",
     fontSize: 14,
@@ -251,22 +290,49 @@ export default StyleSheet.create({
     textAlign: "center",
     color: COLORS.black,
   },
-  defaultText: (
-    fontSize,
-    align,
-    fontFamily,
-    width,
-    letterSpacing,
-    marginTop,
-  ) => ({
-    fontSize: fontSize,
-    textAlign: align,
-    fontFamily: fontFamily,
-    width: width,
-    letterSpacing: letterSpacing,
-    marginTop: marginTop,
+  defaultText: {
+    textAlign: "center",
     color: COLORS.black,
-  }),
+  },
+  fontBold: {
+    fontFamily: "Nunito-Bold",
+  },
+  fontBlack: {
+    fontFamily: "Nunito-Black",
+  },
+  fontExtraBold: {
+    fontFamily: "Nunito-ExtraBold",
+  },
+  font32: {
+    fontSize: 32,
+  },
+  font14: {
+    fontSize: 14,
+  },
+  widthAuto: {
+    width: "auto",
+  },
+  marginTop50: {
+    marginTop: 50,
+  },
+  marginTop20: {
+    marginTop: 20,
+  },
+  letterSpacing2: {
+    letterSpacing: 2,
+  },
+  letterSpacing25: {
+    letterSpacing: 2.5,
+  },
+  fontDefault: {
+    fontFamily: "nunito",
+  },
+  font20: {
+    fontSize: 20,
+  },
+  width70: {
+    width: "70%",
+  },
   genderTextSelected: {
     fontFamily: "Nunito-ExtraBold",
     fontSize: 14,
@@ -300,13 +366,12 @@ export default StyleSheet.create({
     paddingVertical: 8,
     overflow: "hidden",
   },
-  blankTextBox: (color) => ({
+  blankTextBox: {
     fontSize: 36,
-    color: color,
     fontFamily: "Nunito",
     textAlign: "center",
     marginTop: 40,
-  }),
+  },
   blankTextBoxComp: {
     display: "flex",
     width: "100%",
@@ -337,7 +402,7 @@ export default StyleSheet.create({
     letterSpacing: 2,
     color: COLORS.lighterGray,
   },
-  errorTextBlank: (bottom) => ({
+  errorTextBlank: {
     backgroundColor: COLORS.lightRed,
     color: COLORS.red,
     fontFamily: "Nunito-SemiBold",
@@ -348,25 +413,42 @@ export default StyleSheet.create({
     borderRadius: 7,
     overflow: "hidden",
     position: "absolute",
-    bottom: bottom,
-  }),
-  selectionLabel: (color, selected) => ({
-    borderColor: color,
+  },
+  bottom90: {
+    bottom: -90,
+  },
+  bottom150: {
+    bottom: -150,
+  },
+  selectionLabel: {
     borderWidth: 1,
     width: "100%",
     padding: 20,
     borderRadius: 7,
     marginTop: 20,
-    backgroundColor: selected ? color : COLORS.white,
-  }),
-  textSelectionLabel: (color, selected) => ({
-    color: selected ? COLORS.white : color,
+  },
+  backgroundWhite: {
+    backgroundColor: COLORS.white,
+  },
+  borderPink: {
+    borderColor: COLORS.pink,
+  },
+  borderBlue: {
+    borderColor: COLORS.blue,
+  },
+  borderGreen: {
+    borderColor: COLORS.green,
+  },
+  borderPurple: {
+    borderColor: COLORS.purple,
+  },
+  textSelectionLabel: {
     fontSize: 14,
     textTransform: "uppercase",
     fontFamily: "Nunito-ExtraBold",
     letterSpacing: 2,
     // whiteSpace: Platform.OS === "android" ? "nowrap" : "",
-  }),
+  },
   expectations: {
     display: "flex",
     width: "100%",
@@ -418,9 +500,6 @@ export default StyleSheet.create({
     color: COLORS.black,
     textTransform: "uppercase",
   },
-  nameColor: (textColor) => ({
-    color: textColor,
-  }),
   notificationIndicator: {
     backgroundColor: COLORS.pink,
     width: 10,
@@ -442,9 +521,8 @@ export default StyleSheet.create({
     height: 10,
     borderRadius: 7,
   },
-  barLevelProgress: (progress, color) => ({
+  barLevelProgress: (progress) => ({
     width: progress,
-    backgroundColor: color,
     position: "absolute",
     height: 10,
     borderRadius: 7,
@@ -457,11 +535,10 @@ export default StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  infoColor: (textColor) => ({
-    color: textColor,
+  infoColor: {
     fontSize: 16,
     fontFamily: "Nunito-ExtraBold",
-  }),
+  },
   level: {
     color: COLORS.lightGray,
     fontFamily: "Nunito-Bold",
@@ -488,14 +565,13 @@ export default StyleSheet.create({
     flexDirection: "row",
   },
   dividerThin: {
-    width: Dimensions.get("window").width,
+    width: "150%",
     height: 0.3,
     marginTop: 20,
     backgroundColor: COLORS.lighterGray,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    marginLeft: -30,
   },
   navigationArea: {
     position: "absolute",
@@ -530,17 +606,16 @@ export default StyleSheet.create({
     position: "absolute",
     elevation: 24,
   },
-  navigationSelected: (color) => ({
+  navigationSelected: {
     display: "flex",
     flexDirection: "row",
-    backgroundColor: color,
     width: 4,
     height: 4,
     borderRadius: 100,
     alignSelf: "center",
     position: "absolute",
     bottom: -10,
-  }),
+  },
   exercisesImage: {
     width: 240,
     resizeMode: "stretch",
@@ -589,13 +664,12 @@ export default StyleSheet.create({
     borderRadius: 7,
     padding: 15,
   },
-  descriptionExerciseTitle: (textColor) => ({
+  descriptionExerciseTitle: {
     fontFamily: "Nunito-ExtraBold",
     fontSize: 16,
-    color: textColor,
     letterSpacing: 1.5,
     textAlign: "left",
-  }),
+  },
   arrowSize: {
     width: 20,
     height: 20,
@@ -617,21 +691,24 @@ export default StyleSheet.create({
     padding: 30,
     marginTop: 40,
   },
-  exerciseCard: (cardColor, list) => ({
-    borderColor: cardColor,
+  exerciseCard: {
     borderWidth: 1,
     borderRadius: 7,
     width: (Dimensions.get("window").width - 80) / 2,
-    height: list ? 80 : 110,
     padding: 15,
     marginBottom: 20,
-  }),
-  exerciseCardTitle: (textColor) => ({
-    color: textColor,
-    fontSize: 14,
+  },
+  exerciseCardSmall: {
+    height: 80,
+  },
+  exerciseCardBig: {
+    height: 110,
+  },
+  exerciseCardTitle: {
+    fontSize: 12,
     fontFamily: "Nunito-ExtraBold",
     textTransform: "uppercase",
-  }),
+  },
   exerciseCardDesc: {
     fontSize: 12,
     fontFamily: "Nunito-Bold",
@@ -670,34 +747,55 @@ export default StyleSheet.create({
     bottom: -15,
     alignSelf: "center",
   },
-  rankTextBackground: (backColor) => ({
-    backgroundColor: backColor,
+  rankTextBackground: {
     width: 30,
     height: 30,
     borderRadius: 100,
     paddingTop: 4,
-  }),
-  rankText: (textColor) => ({
-    color: textColor,
+  },
+  backgroundLightPink: {
+    backgroundColor: COLORS.lightPink,
+  },
+  backgroundLightBlue: {
+    backgroundColor: COLORS.lightBlue,
+  },
+  backgroundLightPurple: {
+    backgroundColor: COLORS.lightPurple,
+  },
+  backgroundLightGreen: {
+    backgroundColor: COLORS.lightGreen,
+  },
+  rankText: {
     fontFamily: "Nunito-ExtraBold",
     fontSize: 16,
     textAlign: "center",
-  }),
-  rankTopInfo: (horizontal) => ({
-    marginTop: horizontal ? 0 : 20,
-    marginLeft: horizontal ? 15 : 0,
+  },
+  rankTopInfo: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-  }),
-  rankingPhotos: (horizontal) => ({
+    flexDirection: "column",
+  },
+
+  rankTopInfoHorizontal: {
+    marginTop: 0,
+    marginLeft: 15,
+  },
+  rankTopInfoVertical: {
+    marginTop: 20,
+    marginLeft: 0,
+  },
+  rankingPhotos: {
     display: "flex",
-    flexDirection: horizontal ? "row" : "column",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: horizontal ? 25 : 0,
-    paddingHorizontal: 30,
-  }),
+  },
+  rankingPhotosRow: {
+    flexDirection: "row",
+  },
+  rankingPhotosColumn: {
+    flexDirection: "column",
+  },
   nameRankTop: {
     fontFamily: "Nunito-ExtraBold",
     color: COLORS.black,
@@ -707,16 +805,15 @@ export default StyleSheet.create({
     maxWidth: "80%",
     marginBottom: 6,
   },
-  pointsRankTop: (textColor) => ({
+  pointsRankTop: {
     fontFamily: "Nunito-ExtraBold",
-    color: textColor,
     fontSize: 14,
     textTransform: "uppercase",
     textAlign: "center",
     letterSpacing: 1,
     display: "flex",
     flexWrap: "nowrap",
-  }),
+  },
   descRankTop: {
     fontFamily: "Nunito-ExtraBold",
     color: COLORS.lightGray,
@@ -744,8 +841,7 @@ export default StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  rankingCard: (color) => ({
-    borderColor: color,
+  rankingCard: {
     borderWidth: 1,
     borderRadius: 7,
     display: "flex",
@@ -753,7 +849,7 @@ export default StyleSheet.create({
     alignItems: "center",
     padding: 15,
     marginTop: 15,
-  }),
+  },
   imageRankList: {
     width: 50,
     height: 50,
@@ -783,15 +879,14 @@ export default StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 1,
   },
-  pointsRankList: (textColor) => ({
-    color: textColor,
+  pointsRankList: {
     fontFamily: "Nunito-ExtraBold",
     fontSize: 12,
     letterSpacing: 1,
     textTransform: "uppercase",
     position: "absolute",
     right: 15,
-  }),
+  },
   groupTitleGroup: {
     display: "flex",
     flexDirection: "row",
@@ -863,19 +958,17 @@ export default StyleSheet.create({
     paddingVertical: 25,
     marginBottom: 20,
   },
-  achievementNumber: (textColor) => ({
+  achievementNumber: {
     fontFamily: "Nunito-ExtraBold",
-    color: textColor,
     fontSize: 38,
     letterSpacing: 2,
-  }),
-  achievementDescription: (textColor) => ({
+  },
+  achievementDescription: {
     fontFamily: "Nunito-SemiBold",
-    color: textColor,
     fontSize: 14,
     letterSpacing: 1,
     textTransform: "uppercase",
-  }),
+  },
   subAchievementCard: {
     fontFamily: "Nunito-SemiBold",
     color: COLORS.lightGray,
@@ -969,21 +1062,19 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     paddingRight: 15,
   },
-  bodyCard: (colorBorder) => ({
-    borderColor: colorBorder,
+  bodyCard: {
     borderWidth: 1,
     padding: 15,
     width: (Dimensions.get("window").width - 80) / 2,
     borderRadius: 7,
-  }),
-  bodyCardTitle: (textColor) => ({
-    color: textColor,
+  },
+  bodyCardTitle: {
     fontFamily: "Nunito-ExtraBold",
     fontSize: 16,
     textTransform: "uppercase",
     letterSpacing: 1,
     marginBottom: 3,
-  }),
+  },
   bodyCardDescription: {
     fontFamily: "Nunito-ExtraBold",
     fontSize: 14,
@@ -1245,21 +1336,28 @@ export default StyleSheet.create({
     width: "100%",
     zIndex: 2,
   },
-  listButton: (editButton) => ({
+  listButton: {
     width: "100%",
-    backgroundColor: editButton ? COLORS.green : COLORS.darkWhite,
     paddingVertical: 20,
     borderRadius: 7,
     alignSelf: "center",
-  }),
-  listButtonText: (editButton) => ({
+  },
+  backgroundDarkWhite: {
+    backgroundColor: COLORS.darkWhite,
+  },
+  listButtonText: {
     fontFamily: "Nunito-Bold",
     fontSize: 14,
     letterSpacing: 1,
     textTransform: "uppercase",
-    color: editButton ? COLORS.white : COLORS.gray,
     textAlign: "center",
-  }),
+  },
+  textWhite: {
+    color: COLORS.white,
+  },
+  textGray: {
+    color: COLORS.gray,
+  },
   buttonEditList: {
     backgroundColor: COLORS.white,
     width: "100%",
@@ -1562,5 +1660,74 @@ export default StyleSheet.create({
     borderRadius: 10,
     margin: 15,
     marginRight: 10,
+  },
+  workoutBackgroundImage: {
+    width: 65,
+    height: 65,
+    borderRadius: 50,
+  },
+  infoWorkoutCard: {
+    marginLeft: 10,
+    display: "flex",
+    flexWrap: "wrap",
+    flexShrink: 1,
+  },
+  workoutNumber: {
+    fontFamily: "Nunito-ExtraBold",
+    fontSize: 10,
+    color: COLORS.white,
+    borderRadius: 3,
+    letterSpacing: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    overflow: "hidden",
+    alignSelf: "flex-start",
+  },
+  workoutTitle: {
+    fontFamily: "Nunito-ExtraBold",
+    fontSize: 13,
+    color: COLORS.black,
+    marginTop: 5,
+    flexWrap: "wrap",
+    flexShrink: 1,
+    alignSelf: "flex-start",
+  },
+  workoutObj: {
+    marginTop: 5,
+    fontSize: 11,
+    fontFamily: "Nunito",
+  },
+  workoutDesc: {
+    fontFamily: "Nunito-Bold",
+    fontSize: 11,
+  },
+  workoutCard: {
+    borderRadius: 7,
+    borderWidth: 1,
+    width: Dimensions.get("window").width - 60,
+    paddingHorizontal: 15,
+    paddingVertical: 17,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    marginTop: 10,
+  },
+  workouts: {
+    fontFamily: "Nunito-ExtraBold",
+    fontSize: 20,
+    marginTop: 80,
+    marginLeft: 30,
+    marginBottom: 10,
+    color: COLORS.black,
+  },
+  workoutsList: {
+    display: "flex",
+    paddingHorizontal: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  workoutListHeight: {
+    height: Dimensions.get("window").height - 175,
   },
 });

@@ -64,11 +64,7 @@ const MyExercises: React.FC<Props> = ({ navigation, route }) => {
       ) : (
         ""
       )}
-      <HeaderTitleButton
-        onPress={home}
-        title={title}
-        search={true}
-      ></HeaderTitleButton>
+      <HeaderTitleButton onPress={home} title={title}></HeaderTitleButton>
       <View style={styles.view}>
         <View style={styles.myExercisesList}>
           <ExercisesList

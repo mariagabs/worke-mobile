@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
 import styles from "../../styles";
 import { TextInputMask } from "react-native-masked-text";
+import { COLORS } from "../../../assets/colors";
 
 interface Props {
   color: string;
@@ -33,7 +34,16 @@ const BlankTextBox: React.FC<Props> = ({
           <TextInputMask
             type={"datetime"}
             options={{ format: "DD/MM/YYYY" }}
-            style={styles.blankTextBox(color)}
+            style={
+              (styles.blankTextBox,
+              color === COLORS.pink
+                ? styles.textPink
+                : color === COLORS.purple
+                ? styles.textPurple
+                : color === COLORS.blue
+                ? styles.textBlue
+                : styles.textGreen)
+            }
             onChangeText={(text) => {
               setDate(text);
               onChangeText(text);
@@ -48,7 +58,16 @@ const BlankTextBox: React.FC<Props> = ({
       ) : (
         <View style={styles.blankTextBoxComp}>
           <TextInput
-            style={styles.blankTextBox(color)}
+            style={
+              (styles.blankTextBox,
+              color === COLORS.pink
+                ? styles.textPink
+                : color === COLORS.purple
+                ? styles.textPurple
+                : color === COLORS.blue
+                ? styles.textBlue
+                : styles.textGreen)
+            }
             keyboardType="numeric"
             maxLength={3}
             onChangeText={(text) => {

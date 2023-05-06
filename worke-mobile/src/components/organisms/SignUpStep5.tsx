@@ -36,7 +36,7 @@ const SignUpStep3: React.FC<Props> = ({ invalidInput }) => {
 
   return (
     <View style={styles.centerView}>
-      <Text style={styles.title(250)}>
+      <Text style={(styles.title, styles.width250)}>
         Conte para nós mais sobre <Text style={styles.titleBold}>você!</Text>
       </Text>
       <View style={styles.displayRow}>
@@ -65,14 +65,11 @@ const SignUpStep3: React.FC<Props> = ({ invalidInput }) => {
           style={
             genderSelect.trim() === "O"
               ? styles.defaultAnswerGender
-              : styles.defaultText(
-                  14,
-                  "center",
-                  "Nunito-ExtraBold",
-                  "auto",
-                  2.5,
-                  50,
-                )
+              : (styles.defaultText,
+                styles.marginTop50,
+                styles.fontExtraBold,
+                styles.letterSpacing25,
+                styles.font14)
           }
         >
           PREFIRO NÃO RESPONDER

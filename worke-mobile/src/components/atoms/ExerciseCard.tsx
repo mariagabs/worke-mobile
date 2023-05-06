@@ -26,12 +26,35 @@ const ExerciseCard: React.FC<Props> = ({
   return (
     <TouchableOpacity
       activeOpacity={1}
-      style={styles.exerciseCard(color, list)}
+      style={[
+        styles.exerciseCard,
+        color === COLORS.pink
+          ? styles.borderPink
+          : color === COLORS.purple
+          ? styles.borderPurple
+          : color === COLORS.blue
+          ? styles.borderBlue
+          : styles.borderGreen,
+        list ? styles.exerciseCardSmall : styles.exerciseCardBig,
+      ]}
       onPress={(id) => {
         onPress(idExercise);
       }}
     >
-      <Text style={styles.exerciseCardTitle(color)}>{exercise}</Text>
+      <Text
+        style={[
+          styles.exerciseCardTitle,
+          color === COLORS.pink
+            ? styles.textPink
+            : color === COLORS.purple
+            ? styles.textPurple
+            : color === COLORS.blue
+            ? styles.textBlue
+            : styles.textGreen,
+        ]}
+      >
+        {exercise}
+      </Text>
       <Text style={styles.exerciseCardDesc}>{description}</Text>
       <Image source={image} style={styles.exerciseCardImage}></Image>
     </TouchableOpacity>

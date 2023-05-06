@@ -14,9 +14,18 @@ const ListButton: React.FC<Props> = ({ edit, text, onPress }) => {
       onPress={(type) => {
         onPress(!edit);
       }}
-      style={styles.listButton(edit)}
+      style={
+        (styles.listButton,
+        edit ? styles.backgroundGreen : styles.backgroundDarkWhite)
+      }
     >
-      <Text style={styles.listButtonText(edit)}>{text}</Text>
+      <Text
+        style={
+          (styles.listButtonText, edit ? styles.textWhite : styles.textGray)
+        }
+      >
+        {text}
+      </Text>
     </TouchableOpacity>
   );
 };

@@ -10,11 +10,17 @@ interface Props {
 
 const BodyCard: React.FC<Props> = ({ weight, height }) => {
   return (
-    <View style={styles.bodyCard(weight !== "" ? COLORS.blue : COLORS.purple)}>
+    <View
+      style={[
+        styles.bodyCard,
+        weight !== "" ? styles.borderBlue : styles.borderPurple,
+      ]}
+    >
       <Text
-        style={styles.bodyCardTitle(
-          weight !== "" ? COLORS.blue : COLORS.purple,
-        )}
+        style={[
+          styles.bodyCardTitle,
+          weight !== "" ? styles.textBlue : styles.textPurple,
+        ]}
       >
         {weight !== "" ? "peso atual" : "altura"}
       </Text>

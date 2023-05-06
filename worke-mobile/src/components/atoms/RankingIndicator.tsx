@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import styles from "../../styles";
+import { COLORS } from "../../../assets/colors";
 
 interface Props {
   color: string;
@@ -8,15 +9,33 @@ interface Props {
 }
 
 const RankingIndicator: React.FC<Props> = ({ color, rank }) => {
-  const lightColor = color
-    .replace("#3F2180", "#DAD0F0")
-    .replace("#EA3A86", "#FFDAEC")
-    .replace("#49B7D6", "#D6F0F8")
-    .replace("#A8CD5A", "#E2F3BF");
-
   return (
-    <View style={styles.rankTextBackground(lightColor)}>
-      <Text style={styles.rankText(color)}>{rank}</Text>
+    <View
+      style={[
+        styles.rankTextBackground,
+        color === COLORS.pink
+          ? styles.backgroundLightPink
+          : color === COLORS.purple
+          ? styles.backgroundLightPurple
+          : color === COLORS.blue
+          ? styles.backgroundLightBlue
+          : styles.backgroundLightGreen,
+      ]}
+    >
+      <Text
+        style={[
+          styles.rankText,
+          color === COLORS.pink
+            ? styles.textPink
+            : color === COLORS.purple
+            ? styles.textPurple
+            : color === COLORS.blue
+            ? styles.textBlue
+            : styles.textGreen,
+        ]}
+      >
+        {rank}
+      </Text>
     </View>
   );
 };

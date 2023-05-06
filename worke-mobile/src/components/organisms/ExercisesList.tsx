@@ -75,8 +75,8 @@ const ExercisesList: React.FC<Props> = ({
         nome = "";
 
       if (type === "categorias") {
-        id = categories[i].id;
-        nome = categories[i].nome;
+        id = categories[i].sigla;
+        nome = categories[i].descricao;
       }
 
       exercisesList.push(
@@ -96,8 +96,7 @@ const ExercisesList: React.FC<Props> = ({
             key={exercises[i].id}
             idExercise={exercises[i].id}
             color={chosenColor}
-            exercise={exercises[i].categoria}
-            description={exercises[i].nome}
+            exercise={exercises[i].nome}
             list={true}
             onPress={(id) => {
               setChosenExercise(id);

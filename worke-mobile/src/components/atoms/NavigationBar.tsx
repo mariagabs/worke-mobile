@@ -40,7 +40,34 @@ const NavigationBar: React.FC<Props> = ({ onPress }) => {
               }
             ></Foundation>
             {selected === "home" || selected === "" ? (
-              <View style={styles.navigationSelected(COLORS.blue)}></View>
+              <View
+                style={[styles.navigationSelected, styles.backgroundBlue]}
+              ></View>
+            ) : (
+              ""
+            )}
+          </TouchableOpacity>
+        </View>
+        <View>
+          <TouchableOpacity
+            onPress={(tab) => {
+              select("workouts");
+              onPress("workouts");
+            }}
+            activeOpacity={1}
+            style={styles.iconNavigationBar}
+          >
+            <FontAwesome5
+              name="dumbbell"
+              size={22}
+              color={
+                selected === "workouts" ? COLORS.purple : COLORS.lighterGray
+              }
+            ></FontAwesome5>
+            {selected === "workouts" ? (
+              <View
+                style={[styles.navigationSelected, styles.backgroundPurple]}
+              ></View>
             ) : (
               ""
             )}
@@ -58,12 +85,12 @@ const NavigationBar: React.FC<Props> = ({ onPress }) => {
             <FontAwesome5
               name="trophy"
               size={22}
-              color={
-                selected === "ranking" ? COLORS.purple : COLORS.lighterGray
-              }
+              color={selected === "ranking" ? COLORS.green : COLORS.lighterGray}
             ></FontAwesome5>
             {selected === "ranking" ? (
-              <View style={styles.navigationSelected(COLORS.purple)}></View>
+              <View
+                style={[styles.navigationSelected, styles.backgroundGreen]}
+              ></View>
             ) : (
               ""
             )}
@@ -81,16 +108,18 @@ const NavigationBar: React.FC<Props> = ({ onPress }) => {
             <FontAwesome5
               name="user-alt"
               size={22}
-              color={selected === "profile" ? COLORS.green : COLORS.lighterGray}
+              color={selected === "profile" ? COLORS.pink : COLORS.lighterGray}
             ></FontAwesome5>
             {selected === "profile" ? (
-              <View style={styles.navigationSelected(COLORS.green)}></View>
+              <View
+                style={[styles.navigationSelected, styles.backgroundPink]}
+              ></View>
             ) : (
               ""
             )}
           </TouchableOpacity>
         </View>
-        <View>
+        {/* <View>
           <TouchableOpacity
             onPress={(tab) => {
               select("settings");
@@ -110,7 +139,7 @@ const NavigationBar: React.FC<Props> = ({ onPress }) => {
               ""
             )}
           </TouchableOpacity>
-        </View>
+        </View> */}
       </View>
     </View>
   );

@@ -4,7 +4,7 @@ import styles from "../../styles";
 
 interface Props {
   onPress?: (step) => void;
-  currentStep: number;
+  currentStep?: number;
 }
 
 const BackButton: React.FC<Props> = ({ onPress, currentStep }) => {

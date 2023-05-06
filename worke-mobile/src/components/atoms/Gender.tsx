@@ -35,7 +35,10 @@ const Gender: React.FC<Props> = ({ gender, selected, onPress }) => {
     <View>
       <TouchableOpacity
         onPress={onPress}
-        style={styles.gender(gender, !selected.trim())}
+        style={
+          (styles.gender,
+          gender === "MASCULNO" ? styles.genderM : styles.genderF)
+        }
         activeOpacity={1}
       >
         <Image source={genderImage}></Image>

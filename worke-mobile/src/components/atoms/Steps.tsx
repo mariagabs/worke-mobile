@@ -30,7 +30,21 @@ const Steps: React.FC<Props> = ({ qtd, step }) => {
       chosenColor = COLORS.lighterGray;
     }
 
-    steps.push(<View style={styles.step(chosenColor, qtd)} key={i}></View>);
+    steps.push(
+      <View
+        style={
+          (styles.step(qtd),
+          chosenColor === COLORS.pink
+            ? styles.textPink
+            : chosenColor === COLORS.purple
+            ? styles.textPurple
+            : chosenColor === COLORS.blue
+            ? styles.textBlue
+            : styles.textGreen)
+        }
+        key={i}
+      ></View>,
+    );
   }
 
   return <View style={styles.steps}>{steps}</View>;
