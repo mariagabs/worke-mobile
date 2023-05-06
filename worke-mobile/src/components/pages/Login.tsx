@@ -11,6 +11,7 @@ import {
   Text,
   Keyboard,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -26,6 +27,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [invalidInput, setInvalidInput] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const signUp = () => navigation.navigate("SignUp");
   const home = () => navigation.navigate("Menu");
@@ -43,7 +45,8 @@ const Login: React.FC<Props> = ({ navigation }) => {
       await AsyncStorage.setItem("token", data.jwt);
       await AsyncStorage.setItem("user", JSON.stringify(data.usuario));
       setPassword("");
-      setEmail("");
+      setEmail("");      
+      setLoading(false);
       home();
     } catch (e) {}
   };
@@ -55,6 +58,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
     }
 
     setInvalidInput(false);
+    setLoading(true);
 
     const configurationObject = {
       url: "http://54.237.75.229:8000/login",
@@ -71,14 +75,23 @@ const Login: React.FC<Props> = ({ navigation }) => {
         ) {
           saveDataRedirect(response.data);
         } else {
+          setLoading(false);
           throw new Error("An error has occurred");
         }
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
       });
   };
 
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#666" />
+      </View>
+    );
+  }
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}

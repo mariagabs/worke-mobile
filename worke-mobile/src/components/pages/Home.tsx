@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, Dimensions } from "react-native";
+import { View, ScrollView, Dimensions, ActivityIndicator } from "react-native";
 import { COLORS } from "../../../assets/colors";
 import styles from "../../styles";
 import HomeHeader from "../organisms/HomeHeader";
@@ -19,6 +19,7 @@ interface Props {
 const Home: React.FC<Props> = ({ navigation, showModal }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [exercise, setExercise] = useState([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     navigation.addListener("beforeRemove", (e) => {
       // Prevent default behavior of leaving the screen
@@ -51,6 +52,8 @@ const Home: React.FC<Props> = ({ navigation, showModal }) => {
 
       let modelo = ModelSingleton.getInstance();
       modelo.setModelo(net);
+      
+	    setLoading(false);
     } catch (err) {
       console.log("erro no tensorflow");
       console.log(err);
@@ -63,6 +66,13 @@ const Home: React.FC<Props> = ({ navigation, showModal }) => {
     setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
   };
 
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#666" />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <View style={styles.home}>
