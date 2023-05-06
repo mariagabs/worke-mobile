@@ -45,7 +45,7 @@ const SignUpStep7: React.FC<Props> = ({ invalidInput }) => {
   return (
     <View>
       <View style={styles.centerView}>
-        <Text style={(styles.title, styles.width250)}>
+        <Text style={[styles.title, styles.width250]}>
           Quantas vezes na semana você faz
           <Text style={styles.titleBold}> exercícios físicos</Text>?
         </Text>

@@ -99,7 +99,6 @@ export default StyleSheet.create({
     paddingHorizontal: 12,
     textAlign: "center",
     fontSize: 32,
-    fontWeight: "bold",
     fontFamily: "Nunito-SemiBold",
     justifyContent: "center",
     textTransform: "uppercase",
@@ -108,7 +107,12 @@ export default StyleSheet.create({
     alignSelf: "flex-end",
     position: "absolute",
     paddingRight: 18,
+  },
+  paddingTop0: {
     paddingTop: 0,
+  },
+  paddingTop25: {
+    paddingTop: 25,
   },
   buttonText: {
     color: COLORS.white,
@@ -275,12 +279,10 @@ export default StyleSheet.create({
     marginTop: 50,
   },
   genderM: {
-    marginRight: 25,
     marginLeft: 0,
   },
   genderF: {
     marginRight: 0,
-    marginLeft: 25,
   },
   genderText: {
     fontFamily: "Nunito-ExtraBold",
@@ -325,7 +327,7 @@ export default StyleSheet.create({
     letterSpacing: 2.5,
   },
   fontDefault: {
-    fontFamily: "nunito",
+    fontFamily: "Nunito",
   },
   font20: {
     fontSize: 20,
@@ -1210,7 +1212,7 @@ export default StyleSheet.create({
     top: 75,
     textAlign: "center",
   },
-  groupPassword: {
+  hasPassword: {
     borderColor: COLORS.green,
     borderWidth: 1,
     borderRadius: 7,
@@ -1219,7 +1221,6 @@ export default StyleSheet.create({
     flexDirection: "column",
     paddingVertical: 20,
     paddingHorizontal: 20,
-    paddingTop: 25,
   },
   loginPassword: {
     width: "100%",
@@ -1228,15 +1229,12 @@ export default StyleSheet.create({
   passwordGroup: {
     marginTop: 30,
   },
-  hasPassword: {
+  groupPassword: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     // marginBottom: 35,
-  },
-  groupPassword: {
-    marginBottom: 25,
   },
   headerGroupPassword: {
     display: "flex",
@@ -1729,5 +1727,8 @@ export default StyleSheet.create({
   },
   workoutListHeight: {
     height: Dimensions.get("window").height - 175,
+  },
+  marginBottom25: {
+    marginBottom: 25,
   },
 });

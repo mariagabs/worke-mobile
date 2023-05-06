@@ -59,6 +59,8 @@ const InputCode: React.FC<Props> = ({ navigation }) => {
   };
 
   const checkPassword = () => {
+    console.log(password);
+    console.log(group.senha);
     if (password !== group.senha) {
       setInvalidInput(true);
     } else {
@@ -159,7 +161,7 @@ const InputCode: React.FC<Props> = ({ navigation }) => {
         )}
       />
       {hasPassword ? (
-        <View style={styles.groupPassword}>
+        <View style={styles.marginBottom25}>
           <PasswordTextBox
             placeholder="Senha"
             onChangeText={onChangePassword}

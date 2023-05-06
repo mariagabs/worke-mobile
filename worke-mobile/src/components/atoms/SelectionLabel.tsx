@@ -19,9 +19,9 @@ const SelectionLabel: React.FC<Props> = ({
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={
-        (styles.selectionLabel,
-        selected
+      style={[
+        styles.selectionLabel,
+        !selected
           ? color === COLORS.pink
             ? styles.textPink
             : color === COLORS.purple
@@ -29,21 +29,27 @@ const SelectionLabel: React.FC<Props> = ({
             : color === COLORS.blue
             ? styles.textBlue
             : styles.textGreen
-          : styles.backgroundWhite,
+          : color === COLORS.pink
+          ? styles.backgroundPink
+          : color === COLORS.purple
+          ? styles.backgroundPurple
+          : color === COLORS.blue
+          ? styles.backgroundBlue
+          : styles.backgroundGreen,
         color === COLORS.pink
           ? styles.borderPink
           : color === COLORS.purple
           ? styles.borderPurple
           : color === COLORS.blue
           ? styles.borderBlue
-          : styles.borderGreen)
-      }
+          : styles.borderGreen,
+      ]}
       activeOpacity={1}
     >
       <Text
-        style={
-          (styles.textSelectionLabel,
-          selected
+        style={[
+          styles.textSelectionLabel,
+          !selected
             ? color === COLORS.pink
               ? styles.textPink
               : color === COLORS.purple
@@ -51,8 +57,8 @@ const SelectionLabel: React.FC<Props> = ({
               : color === COLORS.blue
               ? styles.textBlue
               : styles.textGreen
-            : styles.backgroundWhite)
-        }
+            : styles.textWhite,
+        ]}
       >
         {text}
       </Text>

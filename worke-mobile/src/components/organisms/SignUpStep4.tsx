@@ -57,14 +57,14 @@ const SignUpStep4: React.FC<Props> = ({
   return (
     <View>
       <View style={styles.centerView}>
-        <Text style={(styles.title, styles.width300)}>
-          Crie sua <Text style={styles.titleBold}>nova senha</Text>
+        <Text style={[styles.title, styles.width300]}>
+          Crie sua<Text style={styles.titleBold}> senha</Text>
         </Text>
         <View style={styles.fullWidth}>
           <PasswordTextBox
             onChangeText={onChangePassword}
             top={25}
-            placeholder={"Nova senha"}
+            placeholder={"Senha"}
             onBlur={savePassword}
             text={password}
             onTouchStart={() => {

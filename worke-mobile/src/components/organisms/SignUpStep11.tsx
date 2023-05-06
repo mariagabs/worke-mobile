@@ -34,24 +34,24 @@ const SignUpStep9: React.FC<Props> = ({ navigation }) => {
       <View style={styles.centerView}>
         <Image source={require("../../../assets/happy-green.png")}></Image>
         <Text
-          style={
-            (styles.defaultText,
+          style={[
+            styles.defaultText,
             styles.fontBlack,
             styles.fullWidth,
             styles.font32,
             styles.marginTop20,
-            styles.letterSpacing2)
-          }
+            styles.letterSpacing2,
+          ]}
         >
           EBA!
         </Text>
         <Text
-          style={
-            (styles.defaultText,
+          style={[
+            styles.defaultText,
             styles.font20,
             styles.fontDefault,
-            styles.width70)
-          }
+            styles.width70,
+          ]}
         >
           Seu cadastro está pronto! {"\n"}Inicie para sua vida ficar ainda mais
           saudável!

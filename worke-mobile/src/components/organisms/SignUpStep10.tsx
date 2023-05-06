@@ -55,7 +55,7 @@ const SignUpStep8: React.FC<Props> = ({ invalidInput }) => {
   return (
     <View>
       <View style={styles.centerView}>
-        <Text style={(styles.title, styles.width250)}>
+        <Text style={[styles.title, styles.width250]}>
           Quais são suas
           <Text style={styles.titleBold}> expectativas</Text>?
         </Text>

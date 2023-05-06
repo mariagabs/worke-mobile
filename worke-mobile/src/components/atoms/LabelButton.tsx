@@ -27,16 +27,16 @@ const LabelButton: React.FC<Props> = ({
       activeOpacity={1}
     >
       <Text
-        style={
-          (styles.textLabelButton,
+        style={[
+          styles.textLabelButton,
           color === COLORS.pink
             ? styles.textPink
             : color === COLORS.purple
             ? styles.textPurple
             : color === COLORS.blue
             ? styles.textBlue
-            : styles.textGreen)
-        }
+            : styles.textGreen,
+        ]}
       >
         {text}
       </Text>

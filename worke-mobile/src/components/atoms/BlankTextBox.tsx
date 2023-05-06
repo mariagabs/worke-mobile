@@ -34,16 +34,16 @@ const BlankTextBox: React.FC<Props> = ({
           <TextInputMask
             type={"datetime"}
             options={{ format: "DD/MM/YYYY" }}
-            style={
-              (styles.blankTextBox,
+            style={[
+              styles.blankTextBox,
               color === COLORS.pink
                 ? styles.textPink
                 : color === COLORS.purple
                 ? styles.textPurple
                 : color === COLORS.blue
                 ? styles.textBlue
-                : styles.textGreen)
-            }
+                : styles.textGreen,
+            ]}
             onChangeText={(text) => {
               setDate(text);
               onChangeText(text);
@@ -58,16 +58,16 @@ const BlankTextBox: React.FC<Props> = ({
       ) : (
         <View style={styles.blankTextBoxComp}>
           <TextInput
-            style={
-              (styles.blankTextBox,
+            style={[
+              styles.blankTextBox,
               color === COLORS.pink
                 ? styles.textPink
                 : color === COLORS.purple
                 ? styles.textPurple
                 : color === COLORS.blue
                 ? styles.textBlue
-                : styles.textGreen)
-            }
+                : styles.textGreen,
+            ]}
             keyboardType="numeric"
             maxLength={3}
             onChangeText={(text) => {

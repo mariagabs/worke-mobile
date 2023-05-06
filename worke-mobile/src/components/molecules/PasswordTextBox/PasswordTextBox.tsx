@@ -51,7 +51,13 @@ const PasswordTextBox: React.FC<Props> = ({
         onBlur={onBlur}
         text={text}
       />
-      <Pressable onPress={handlePasswordVisibility} style={styles.eyeIcon}>
+      <Pressable
+        onPress={handlePasswordVisibility}
+        style={[
+          styles.eyeIcon,
+          errorInput ? styles.paddingTop25 : styles.paddingTop0,
+        ]}
+      >
         <Ionicons name={rightIcon} size={22} color={COLORS.lightGray} />
       </Pressable>
     </View>
