@@ -45,7 +45,7 @@ const SignUpStep3: React.FC<Props> = ({
   return (
     <View>
       <View style={styles.centerView}>
-        <Text style={(styles.title, styles.width300)}>
+        <Text style={[styles.title, styles.width300]}>
           Qual o seu <Text style={styles.titleBold}>e-mail?</Text>
         </Text>
         <View style={styles.fullWidth}>

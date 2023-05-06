@@ -47,7 +47,7 @@ const SignUpStep6: React.FC<Props> = ({
   return (
     <View>
       <View style={styles.centerView}>
-        <Text style={(styles.title, styles.width250)}>
+        <Text style={[styles.title, styles.width250]}>
           Qual o seu <Text style={styles.titleBold}>peso?</Text>
         </Text>
         <BlankTextBox

@@ -47,7 +47,7 @@ const SignUpStep5: React.FC<Props> = ({
   return (
     <View>
       <View style={styles.centerView}>
-        <Text style={(styles.title, styles.width250)}>
+        <Text style={[styles.title, styles.width250]}>
           Qual a sua <Text style={styles.titleBold}>altura?</Text>
         </Text>
         <BlankTextBox

@@ -293,7 +293,7 @@ const SignUp: React.FC<Props> = ({ navigation }) => {
         break;
       case "frequency":
         let frequency = userCreate.frequency;
-        if (frequency === "0") {
+        if (frequency.toString() === "0") {
           setInvalid(true);
         } else {
           setInvalid(false);
