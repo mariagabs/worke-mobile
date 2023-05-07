@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import styles from "../../styles";
 import ExerciseCard from "../atoms/ExerciseCard";
 import { COLORS } from "../../../assets/colors";
@@ -17,6 +17,7 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
   var favoritesList = [];
   const [favorites, setFavorites] = useState([]);
   const isFocused = useIsFocused();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getFavorites = async () => {
@@ -31,10 +32,12 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
         .then((response) => {
           if (response.status === 200) {
             setFavorites(response.data);
+            setLoading(false);
           }
         })
         .catch((error) => {
           console.log(error);
+          setLoading(false);
         });
     };
     if (isFocused) {
@@ -70,6 +73,16 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
     return favoritesList;
   };
 
+  if (loading) {
+    return (
+      <View>
+        <Text style={styles.subtitleHome}>FAVORITOS</Text>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", marginTop: 80 }}>
+          <ActivityIndicator size="large" color={COLORS.blue}/>
+        </View>
+      </View>
+    );
+  }
   return (
     <View>
       <Text style={styles.subtitleHome}>FAVORITOS</Text>

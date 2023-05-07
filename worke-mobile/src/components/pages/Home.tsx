@@ -19,7 +19,7 @@ interface Props {
 const Home: React.FC<Props> = ({ navigation, showModal }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [exercise, setExercise] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   useEffect(() => {
     navigation.addListener("beforeRemove", (e) => {
       // Prevent default behavior of leaving the screen
@@ -53,7 +53,7 @@ const Home: React.FC<Props> = ({ navigation, showModal }) => {
       let modelo = ModelSingleton.getInstance();
       modelo.setModelo(net);
       
-	    setLoading(false);
+	    // setLoading(false);
     } catch (err) {
       console.log("erro no tensorflow");
       console.log(err);
@@ -66,13 +66,13 @@ const Home: React.FC<Props> = ({ navigation, showModal }) => {
     setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
   };
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#666" />
-      </View>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+  //       <ActivityIndicator size="large" color="#666" />
+  //     </View>
+  //   );
+  // }
   return (
     <View style={styles.container}>
       <View style={styles.home}>
