@@ -34,9 +34,10 @@ const ExercisesList: React.FC<Props> = ({
   var aux = 0;
 
   useEffect(() => {    
+    setLoading(true);
     if (getCategoryExercise && exercises.length === 0) getExerciseCategory();
     else getExercises();
-  }, []);
+  }, [getCategoryExercise]);
 
   const api = type === "exercícios" ? "exercicio" : "categorias";
 
