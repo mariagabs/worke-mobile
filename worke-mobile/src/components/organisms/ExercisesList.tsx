@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, Dimensions } from "react-native";
+import { View, ScrollView, Dimensions, ActivityIndicator } from "react-native";
 import ExerciseCard from "../atoms/ExerciseCard";
 import { COLORS } from "../../../assets/colors";
 import styles from "../../styles";
@@ -27,10 +27,16 @@ const ExercisesList: React.FC<Props> = ({
   let colors = [COLORS.purple, COLORS.green, COLORS.pink, COLORS.blue];
   const [exercises, setExercises] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
   const { title } = route.params;
   if (title !== "") type = title;
   var exercisesList = [];
   var aux = 0;
+
+  useEffect(() => {    
+    if (getCategoryExercise && exercises.length === 0) getExerciseCategory();
+    else getExercises();
+  }, []);
 
   const api = type === "exercícios" ? "exercicio" : "categorias";
 
@@ -116,6 +122,7 @@ const ExercisesList: React.FC<Props> = ({
       ((type === "exercícios" && exercises.length === 0) ||
         (type === "categorias" && categories.length === 0))
     ) {
+      console.log("getExercises");
       const configurationObject = {
         url: "http://54.237.75.229:8000/" + api,
         method: "GET",
@@ -130,11 +137,14 @@ const ExercisesList: React.FC<Props> = ({
               setCategories([]);
               setExercises(response.data);
             }
+            setLoading(false);
           } else {
+            setLoading(false);
             throw new Error("An error has occurred");
           }
         })
         .catch((error) => {
+          setLoading(false);
           console.log(error);
         });
 
@@ -144,6 +154,7 @@ const ExercisesList: React.FC<Props> = ({
 
   const getExerciseCategory = async () => {
     type = "exercícios";
+    console.log("getExerciseCategory");
     const category = await AsyncStorage.getItem("chosenCategory");
     const configurationObject = {
       url: "http://54.237.75.229:8000/exercicioCategoria/" + category,
@@ -154,20 +165,29 @@ const ExercisesList: React.FC<Props> = ({
         if (response.status === 200) {
           setCategories([]);
           setExercises(response.data);
+          setLoading(false);
         } else {
+          setLoading(false);
           throw new Error("An error has occurred");
         }
       })
       .catch((error) => {
+        setLoading(false);
         console.log(error);
       });
 
     setList();
   };
 
-  if (getCategoryExercise && exercises.length === 0) getExerciseCategory();
-  else getExercises();
-
+  if (loading) {
+    return (
+      <View>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size="large" color={COLORS.blue}/>
+        </View>
+      </View>
+    );
+  }
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.exercisesList}>{setList()}</View>

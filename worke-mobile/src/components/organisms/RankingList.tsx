@@ -71,7 +71,7 @@ const RankingList: React.FC<Props> = ({ user }) => {
   if (loading) {
     return (
       <View>
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", marginTop: 10 }}>
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center"}}>
           <ActivityIndicator size="large" color={COLORS.green}/>
         </View>
       </View>
