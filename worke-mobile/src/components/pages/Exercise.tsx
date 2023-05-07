@@ -18,15 +18,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 const RESULT_MAPPING = [
-  "Cima",
-  "Pulso",
-  "Diagonal",
-  "Joelho",
-  "Lateral",
+  "Dorsais e flexores dos dedos",
+  "Flexores dos dedos",
+  "Dorsais e abdômen oblíquo",
+  "Extensores do quadril",
+  "Ombros e trapézio",
   "Parado",
-  "Pescoço",
+  "Lateral de pescoço",
   "Vazio",
-  "Pra baixo",
+  "Cadeia posterior (posterior de coxa e costas)",
 ];
 
 const TensorCamera = cameraWithTensors(Camera);
