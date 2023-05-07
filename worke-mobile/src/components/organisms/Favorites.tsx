@@ -44,6 +44,7 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
 
   const setChosenExercise = async (id) => {
     await AsyncStorage.setItem("fromFavorites", "1");
+    await AsyncStorage.setItem("chosenWorkout", null);
     await AsyncStorage.setItem(
       "chosenExercise",
       JSON.stringify(favorites.find((x) => x.id === id)),

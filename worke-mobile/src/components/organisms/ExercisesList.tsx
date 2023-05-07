@@ -48,7 +48,8 @@ const ExercisesList: React.FC<Props> = ({
       "chosenExercise",
       JSON.stringify(exercises.find((x) => x.id === id)),
     );
-    await AsyncStorage.setItem("choseCategory", "0");
+    // await AsyncStorage.setItem("chosenCategory", "0");
+    await AsyncStorage.setItem("chosenWorkout", "");
   };
 
   const setChosenCategory = async (id, nome) => {

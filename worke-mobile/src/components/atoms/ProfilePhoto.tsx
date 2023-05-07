@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, Alert, TouchableOpacity } from "react-native";
-import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5, FontAwesome, Ionicons } from "@expo/vector-icons";
 import styles from "../../styles";
 import * as ImagePicker from "expo-image-picker";
 import { COLORS } from "../../../assets/colors";

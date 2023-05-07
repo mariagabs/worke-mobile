@@ -49,7 +49,7 @@ const Menu: React.FC<Props> = ({ selectedTab, navigation }) => {
       ) : activeTab === "ranking" ? (
         <Ranking />
       ) : activeTab === "profile" ? (
-        <Profile user={user} />
+        <Profile user={user} navigation={navigation} />
       ) : (
         ""
       )}
@@ -59,9 +59,7 @@ const Menu: React.FC<Props> = ({ selectedTab, navigation }) => {
           text={
             "VOCÊ SELECIONOU O EXERCÍCIO " +
             exercise.nome +
-            " DA CATEGORIA " +
-            exercise.categoria +
-            "!"
+            " DE SEUS FAVORITOS!"
           }
           title="VAMOS?"
           type="exercise"

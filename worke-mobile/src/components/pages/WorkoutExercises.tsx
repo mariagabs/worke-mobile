@@ -4,7 +4,6 @@ import DefaultModal from "../molecules/DefaultModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HeaderTitleButton from "../organisms/HeaderTitleButton";
 import styles from "../../styles";
-import ExercisesList from "../organisms/ExercisesList";
 import axios from "axios";
 import { COLORS } from "../../../assets/colors";
 import ExerciseCard from "../atoms/ExerciseCard";
@@ -19,7 +18,7 @@ const WorkoutExercises: React.FC<Props> = ({ navigation }) => {
   const [exercises, setExercises] = useState([]);
   const [exercise, setExercise] = useState({});
   let colors = [COLORS.blue, COLORS.green, COLORS.purple, COLORS.pink];
-  const backWorkouts = () => navigation.navigate("Workouts");
+  const backWorkouts = () => navigation.navigate("Menu");
   let list = [];
   useEffect(() => {
     const getChosenWorkout = async () => {
@@ -48,11 +47,8 @@ const WorkoutExercises: React.FC<Props> = ({ navigation }) => {
   }, []);
 
   const setChosenExercise = async (id) => {
-    await AsyncStorage.setItem(
-      "chosenExercise",
-      JSON.stringify(exercises.find((x) => x.id === id)),
-    );
-    await AsyncStorage.setItem("choseCategory", "0");
+    await AsyncStorage.setItem("chosenWorkout", chosenWorkout.toString());
+    await AsyncStorage.setItem("fromFavorites", "0");
   };
 
   const closeModal = (visible) => {

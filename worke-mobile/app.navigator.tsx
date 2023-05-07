@@ -22,6 +22,7 @@ import MyExercises from "./src/components/pages/MyExercises";
 import Exercise from "./src/components/pages/Exercise";
 import Workouts from "./src/components/pages/Workouts";
 import WorkoutExercises from "./src/components/pages/WorkoutExercises";
+import Settings from "./src/components/pages/Settings";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -33,9 +34,9 @@ const AppNavigator = () => (
         cardStyle: { backgroundColor: "white" },
         gestureEnabled: false,
       }}
-      initialRouteName="Login"
-      detachInactiveScreens={true}
+      initialRouteName="Initial"
     >
+      <Screen name="Initial" component={Login}></Screen>
       <Screen name="Login" component={Login}></Screen>
       <Screen name="Group" component={Group}></Screen>
       <Screen name="SignUp" component={SignUp}></Screen>
@@ -55,6 +56,7 @@ const AppNavigator = () => (
       <Screen name="Exercise" component={Exercise}></Screen>
       <Screen name="Workouts" component={Workouts}></Screen>
       <Screen name="WorkoutExercises" component={WorkoutExercises}></Screen>
+      <Screen name="Settings" component={Settings}></Screen>
     </Navigator>
   </NavigationContainer>
 );

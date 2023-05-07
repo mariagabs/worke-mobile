@@ -63,6 +63,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   const [completed, setCompleted] = useState(false);
   const [user, setUser] = useState(null);
   const [fromFavorites, setFromFavorites] = useState(false);
+  const [fromWorkout, setFromWorkout] = useState(false);
   const [saved, setSaved] = useState(false);
   const startExercise = () => {
     setShowTimerStart(true);
@@ -177,6 +178,8 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
 
     if (fromFavorites) {
       navigation.navigate("Menu");
+    } else if (fromWorkout) {
+      navigation.navigate("WorkoutExercises");
     } else {
       navigation.navigate("MyExercises", {
         title: page,
@@ -195,6 +198,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
     (async () => {
       setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
       setFromFavorites((await AsyncStorage.getItem("fromFavorites")) === "1");
+      setFromWorkout((await AsyncStorage.getItem("chosenWorkout")) !== null);
       setUser(JSON.parse(await AsyncStorage.getItem("user")));
       let modelo = ModelSingleton.getInstance();
       modeloTensorFlow = modelo.getModelo();

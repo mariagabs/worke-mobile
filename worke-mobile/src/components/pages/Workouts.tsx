@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import WorkoutImage from "../atoms/WorkoutImage";
 import WorkoutCard from "../molecules/WorkoutCard";
@@ -19,6 +19,13 @@ const Workouts: React.FC<Props> = ({ navigation }) => {
   const setChosenWorkout = async (id) => {
     await AsyncStorage.setItem("chosenWorkout", id.toString());
   };
+
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (e) => {
+      // Prevent default behavior of leaving the screen
+      e.preventDefault();
+    });
+  }, [navigation]);
 
   const setList = () => {
     let aux = 0;

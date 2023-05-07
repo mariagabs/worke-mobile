@@ -49,13 +49,7 @@ const MyExercises: React.FC<Props> = ({ navigation, route }) => {
       {modalVisible ? (
         <DefaultModal
           buttonText="INICIAR"
-          text={
-            "VOCÊ SELECIONOU O EXERCÍCIO " +
-            exercise.nome +
-            " DA CATEGORIA " +
-            exercise.categoria +
-            "!"
-          }
+          text={"VOCÊ SELECIONOU O EXERCÍCIO " + exercise.nome + "!"}
           title="VAMOS?"
           type="exercise"
           onPressClose={(visible) => closeModal(visible)}

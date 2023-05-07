@@ -19,7 +19,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface Props {
-  navigation: any;
+  navigation?: any;
 }
 
 const Login: React.FC<Props> = ({ navigation }) => {
@@ -45,7 +45,7 @@ const Login: React.FC<Props> = ({ navigation }) => {
       await AsyncStorage.setItem("token", data.jwt);
       await AsyncStorage.setItem("user", JSON.stringify(data.usuario));
       setPassword("");
-      setEmail("");      
+      setEmail("");
       setLoading(false);
       home();
     } catch (e) {}
