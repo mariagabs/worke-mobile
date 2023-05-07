@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, ScrollView, ActivityIndicator } from "react-native";
 import WorkoutImage from "../atoms/WorkoutImage";
 import WorkoutCard from "../molecules/WorkoutCard";
 import styles from "../../styles";
@@ -12,6 +12,7 @@ interface Props {
 }
 const Workouts: React.FC<Props> = ({ navigation }) => {
   const [workouts, setWorkouts] = useState([]);
+  const [loading, setLoading] = useState(true);
   let colors = [COLORS.blue, COLORS.green, COLORS.purple, COLORS.pink];
   let workoutsList = [];
   // const list = navigation.navigate("WorkoutExercises");
@@ -65,16 +66,37 @@ const Workouts: React.FC<Props> = ({ navigation }) => {
       .then((response) => {
         if (response.status === 200) {
           setWorkouts(response.data);
+          setLoading(false);
         } else {
+          setLoading(false);
           throw new Error("An error has occurred");
         }
       })
       .catch((error) => {
+        setLoading(false);
         console.log(error);
       });
     setList();
   };
   if (workouts.length === 0) loadWorkouts();
+
+  if (loading) {
+    return (
+      <View>
+        <Text style={styles.workouts}>TREINOS</Text>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 280,
+          }}
+        >
+          <ActivityIndicator size="large" color={COLORS.purple} />
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View>
