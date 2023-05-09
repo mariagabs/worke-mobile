@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
 import styles from "../../styles";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface Props {
   description: string;
@@ -14,7 +15,11 @@ const NotificationOption: React.FC<Props> = ({
   navigation,
 }) => {
   return (
-    <View style={styles.notification}>
+    <TouchableOpacity
+      style={styles.notification}
+      activeOpacity={1}
+      onPress={onPress}
+    >
       <View style={styles.notificationOption}>
         <Text style={styles.notificationDesc}>{description}</Text>
         <Image
@@ -22,7 +27,7 @@ const NotificationOption: React.FC<Props> = ({
         ></Image>
       </View>
       <View style={styles.dividerNotification}></View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

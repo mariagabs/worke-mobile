@@ -14,7 +14,6 @@ const AchievementsList: React.FC<Props> = ({ user }) => {
     { number: "", description: "minutos", sub: "" },
     { number: "", description: "exercícios", sub: "" },
     { number: "", description: "dias", sub: "consecutivos" },
-    { number: "", description: "semanas", sub: "na mesma posição" },
   ];
   const cardsList = [];
 
@@ -23,10 +22,6 @@ const AchievementsList: React.FC<Props> = ({ user }) => {
     list[1].number = user.qty_exercises === null ? "0" : user.qty_exercises;
     list[2].number =
       user.consecutive_days === null ? "0" : user.consecutive_days;
-
-    const weeks =
-      user.consecutive_days > 7 ? (user.consecutive_days / 7).toFixed(2) : "0";
-    list[3].number = weeks;
 
     for (var i = 0; i < list.length; i++) {
       cardsList.push(

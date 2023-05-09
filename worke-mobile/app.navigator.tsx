@@ -23,6 +23,7 @@ import Exercise from "./src/components/pages/Exercise";
 import Workouts from "./src/components/pages/Workouts";
 import WorkoutExercises from "./src/components/pages/WorkoutExercises";
 import Settings from "./src/components/pages/Settings";
+import Terms from "./src/components/pages/Terms";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -57,6 +58,7 @@ const AppNavigator = () => (
       <Screen name="Workouts" component={Workouts}></Screen>
       <Screen name="WorkoutExercises" component={WorkoutExercises}></Screen>
       <Screen name="Settings" component={Settings}></Screen>
+      <Screen name="Terms" component={Terms}></Screen>
     </Navigator>
   </NavigationContainer>
 );

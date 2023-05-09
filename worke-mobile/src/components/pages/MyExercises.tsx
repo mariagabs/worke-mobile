@@ -34,6 +34,7 @@ const MyExercises: React.FC<Props> = ({ navigation, route }) => {
     setModalVisible(visible);
     await AsyncStorage.setItem("fromFavorites", "0");
     setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
+    console.log(exercise);
   };
   const closeModal = (visible) => {
     setModalVisible(visible);
@@ -48,12 +49,17 @@ const MyExercises: React.FC<Props> = ({ navigation, route }) => {
     <View>
       {modalVisible ? (
         <DefaultModal
-          buttonText="INICIAR"
-          text={"VOCÊ SELECIONOU O EXERCÍCIO " + exercise.nome + "!"}
+          buttonText="CONTINUAR"
+          text={
+            "VOCÊ SELECIONOU O EXERCÍCIO " +
+            exercise.nome +
+            "! CONTINUE PARA VISUALIZÁ-LO."
+          }
           title="VAMOS?"
           type="exercise"
           onPressClose={(visible) => closeModal(visible)}
           navigation={navigation}
+          exerciseId={exercise.id}
         ></DefaultModal>
       ) : (
         ""

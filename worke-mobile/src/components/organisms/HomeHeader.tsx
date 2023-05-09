@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import UserPhotoIcon from "../atoms/UserPhotoIcon";
-import NotificationIcon from "../atoms/NotificationIcon";
 import HelloUser from "../atoms/HelloUser";
 import LevelProgress from "../atoms/LevelProgress";
 import styles from "../../styles";
@@ -50,7 +49,6 @@ const HomeHeader: React.FC<Props> = ({ color }) => {
             <HelloUser color={color} name={name}></HelloUser>
           </View>
         </View>
-        <NotificationIcon></NotificationIcon>
       </View>
       <LevelProgress
         color={color}

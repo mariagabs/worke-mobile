@@ -90,18 +90,17 @@ const WorkoutExercises: React.FC<Props> = ({ navigation }) => {
     <View>
       {showModal ? (
         <DefaultModal
-          buttonText="INICIAR"
+          buttonText="CONTINUAR"
           text={
             "VOCÊ SELECIONOU O EXERCÍCIO " +
             exercise.nome +
-            " DO TREINO " +
-            chosenWorkout +
-            "!"
+            "! CONTINUE PARA VISUALIZÁ-LO."
           }
           title="VAMOS?"
           type="exercise"
           onPressClose={(visible) => closeModal(visible)}
           navigation={navigation}
+          exerciseId={exercise.id}
         ></DefaultModal>
       ) : (
         ""

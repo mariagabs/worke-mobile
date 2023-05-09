@@ -5,13 +5,6 @@ import styles from "../../styles";
 import NotificationOption from "../atoms/NotificationOption";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  CommonActions,
-  StackActions,
-  NavigationAction,
-  useNavigation,
-} from "@react-navigation/native";
-import CodePush from "react-native-code-push";
 
 interface Props {
   navigation: any;
@@ -25,6 +18,11 @@ const Settings: React.FC<Props> = ({ navigation }) => {
     AsyncStorage.removeItem("user");
     login();
   };
+
+  const terms = (type) =>
+    navigation.navigate("Terms", {
+      type: type,
+    });
   return (
     <View style={styles.container}>
       <HeaderTitleButton
@@ -33,25 +31,20 @@ const Settings: React.FC<Props> = ({ navigation }) => {
       ></HeaderTitleButton>
       <View style={[styles.viewList, styles.marginTop100]}>
         <NotificationOption
-          description="Notificações"
-          navigation={navigation}
-        ></NotificationOption>
-        <NotificationOption
-          description="Ajuda"
-          navigation={navigation}
-        ></NotificationOption>
-        <NotificationOption
           description="Termos de uso"
           navigation={navigation}
+          onPress={() => {
+            terms("use");
+          }}
         ></NotificationOption>
         <NotificationOption
           description="Política de privacidade"
           navigation={navigation}
+          onPress={() => {
+            terms("privacy");
+          }}
         ></NotificationOption>
-        <NotificationOption
-          description="Sobre o aplicativo"
-          navigation={navigation}
-        ></NotificationOption>
+
         <TouchableOpacity onPress={logout} style={styles.logout}>
           <Text style={styles.logoutText}>Sair</Text>
         </TouchableOpacity>

@@ -47,7 +47,7 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
 
   const setChosenExercise = async (id) => {
     await AsyncStorage.setItem("fromFavorites", "1");
-    await AsyncStorage.setItem("chosenWorkout", null);
+    await AsyncStorage.removeItem("chosenWorkout");
     await AsyncStorage.setItem(
       "chosenExercise",
       JSON.stringify(favorites.find((x) => x.id === id)),
@@ -78,8 +78,15 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
     return (
       <View>
         <Text style={styles.subtitleHome}>FAVORITOS</Text>
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", marginTop: 80 }}>
-          <ActivityIndicator size="large" color={COLORS.blue}/>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 80,
+          }}
+        >
+          <ActivityIndicator size="large" color={COLORS.blue} />
         </View>
       </View>
     );

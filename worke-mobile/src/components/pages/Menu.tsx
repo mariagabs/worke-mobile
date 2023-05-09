@@ -24,9 +24,12 @@ const Menu: React.FC<Props> = ({ selectedTab, navigation }) => {
     setActiveTab(tab);
   };
 
-  const getShowModal = async (visible) => {
+  const getShowModal = (visible) => {
+    AsyncStorage.getItem("chosenExercise").then((chosenExercise) => {
+      setExercise(JSON.parse(chosenExercise));
+    });
+
     setShowModal(visible);
-    setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
   };
   const closeModal = (visible) => {
     setShowModal(visible);
@@ -55,16 +58,17 @@ const Menu: React.FC<Props> = ({ selectedTab, navigation }) => {
       )}
       {showModal ? (
         <DefaultModal
-          buttonText="INICIAR"
+          buttonText="CONTINUAR"
           text={
             "VOCÊ SELECIONOU O EXERCÍCIO " +
             exercise.nome +
-            " DE SEUS FAVORITOS!"
+            "! CONTINUE PARA VISUALIZÁ-LO."
           }
           title="VAMOS?"
           type="exercise"
           onPressClose={(visible) => closeModal(visible)}
           navigation={navigation}
+          exerciseId={exercise.id}
         ></DefaultModal>
       ) : (
         ""

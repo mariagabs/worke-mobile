@@ -54,8 +54,7 @@ const Body: React.FC = () => {
   };
   return (
     <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.bodyChart}>
+      {/* <View style={styles.bodyChart}>
           <View style={styles.chartHeader}>
             <Text style={styles.chartTitle}>peso</Text>
             <FontAwesome5 name="plus" size={22} color={COLORS.green} />
@@ -74,12 +73,11 @@ const Body: React.FC = () => {
               borderRadius: 7,
             }}
           />
-        </View>
-        <View style={styles.bodyCards}>
-          <BodyCard weight={weight} height=""></BodyCard>
-          <BodyCard height={height} weight=""></BodyCard>
-        </View>
-      </ScrollView>
+        </View> */}
+      <View style={styles.bodyCards}>
+        <BodyCard weight={weight} height=""></BodyCard>
+        <BodyCard height={height} weight=""></BodyCard>
+      </View>
     </View>
   );
 };

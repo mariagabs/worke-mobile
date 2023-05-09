@@ -15,39 +15,44 @@ const Steps: React.FC<Props> = ({ qtd, step }) => {
   let aux = 0;
   step--;
 
-  for (let i = 0; i < qtd; i++) {
-    if (step >= 0 && i <= step) {
-      if (i >= colors.length) {
-        chosenColor = colors[aux];
-        aux++;
-        if (aux >= colors.length) {
-          aux = 0;
+  const list = () => {
+    for (let i = 0; i < qtd; i++) {
+      if (step >= 0 && i <= step) {
+        if (i >= colors.length) {
+          chosenColor = colors[aux];
+          aux++;
+          if (aux >= colors.length) {
+            aux = 0;
+          }
+        } else {
+          chosenColor = colors[i];
         }
       } else {
-        chosenColor = colors[i];
+        chosenColor = COLORS.lighterGray;
       }
-    } else {
-      chosenColor = COLORS.lighterGray;
+      steps.push(
+        <View
+          style={[
+            styles.step(qtd),
+            chosenColor === COLORS.pink
+              ? styles.backgroundPink
+              : chosenColor === COLORS.purple
+              ? styles.backgroundPurple
+              : chosenColor === COLORS.blue
+              ? styles.backgroundBlue
+              : chosenColor === COLORS.green
+              ? styles.backgroundGreen
+              : styles.backgroundLighterGray,
+          ]}
+          key={i}
+        ></View>,
+      );
     }
 
-    steps.push(
-      <View
-        style={
-          (styles.step(qtd),
-          chosenColor === COLORS.pink
-            ? styles.textPink
-            : chosenColor === COLORS.purple
-            ? styles.textPurple
-            : chosenColor === COLORS.blue
-            ? styles.textBlue
-            : styles.textGreen)
-        }
-        key={i}
-      ></View>,
-    );
-  }
+    return steps;
+  };
 
-  return <View style={styles.steps}>{steps}</View>;
+  return <View style={styles.steps}>{list()}</View>;
 };
 
 export default Steps;

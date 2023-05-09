@@ -136,10 +136,8 @@ const Login: React.FC<Props> = ({ navigation }) => {
               submitEdit={() => setKeyboardVisible(false)}
             ></PasswordTextBox>
           </View>
-          <View style={styles.fullWidth}>
-            <Text style={styles.span}>Esqueceu a senha?</Text>
-          </View>
-          <View style={styles.fullWidth}>
+
+          <View style={[styles.fullWidth, styles.marginTop50]}>
             <Button
               buttonText={"ENTRAR"}
               onClick={onSubmitFormHandler}

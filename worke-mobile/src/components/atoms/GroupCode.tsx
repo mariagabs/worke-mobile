@@ -14,7 +14,7 @@ const GroupCode: React.FC<Props> = ({ code }) => {
       <Text style={styles.cardGroupCodeTitle}>grupo</Text>
       <View style={styles.infoCardGroupCode}>
         <Text style={styles.codeGroupCard}>{code}</Text>
-        <FontAwesome5 name="share-alt" size={20} color={COLORS.black} />
+        {/* <FontAwesome5 name="share-alt" size={20} color={COLORS.black} /> */}
       </View>
     </View>
   );
