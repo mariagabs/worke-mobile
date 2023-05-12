@@ -199,7 +199,10 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
       setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
       setFromFavorites((await AsyncStorage.getItem("fromFavorites")) === "1");
       setFromWorkout((await AsyncStorage.getItem("chosenWorkout")) !== null);
+      let exercicio = JSON.parse(await AsyncStorage.getItem("chosenExercise"));
+      console.log(exercicio);
       setUser(JSON.parse(await AsyncStorage.getItem("user")));
+      setTimer(exercicio.duracao);
       let modelo = ModelSingleton.getInstance();
       modeloTensorFlow = modelo.getModelo();
     })();
