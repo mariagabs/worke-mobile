@@ -46,12 +46,12 @@ const Favorites: React.FC<Props> = ({ onPress }) => {
   }, [isFocused]);
 
   const setChosenExercise = async (id) => {
-    await AsyncStorage.setItem("fromFavorites", "1");
-    await AsyncStorage.removeItem("chosenWorkout");
     await AsyncStorage.setItem(
       "chosenExercise",
       JSON.stringify(favorites.find((x) => x.id === id)),
     );
+    await AsyncStorage.setItem("fromFavorites", "1");
+    await AsyncStorage.removeItem("chosenWorkout");    
   };
 
   const listFavorites = () => {
