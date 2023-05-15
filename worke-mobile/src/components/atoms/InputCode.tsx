@@ -47,7 +47,7 @@ const InputCode: React.FC<Props> = ({ navigation }) => {
         .then((response) => {
           if (response.status === 200) {
             setGroup(response.data);
-            setHasPassword(group.senha !== "");
+            setHasPassword(group.senha !== "" && group.senha !== null);
           } else {
             throw new Error("An error has occurred");
           }
@@ -61,7 +61,7 @@ const InputCode: React.FC<Props> = ({ navigation }) => {
   const checkPassword = () => {
     console.log(password);
     console.log(group.senha);
-    if (password !== group.senha) {
+    if (group.senha !== null && group.senha !== "" && password !== group.senha) {
       setInvalidInput(true);
     } else {
       setInvalidInput(false);
