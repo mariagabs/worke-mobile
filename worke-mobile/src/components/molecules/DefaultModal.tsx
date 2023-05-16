@@ -7,7 +7,6 @@ import styles from "../../styles";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Camera } from "expo-camera";
 import { WorkoutExerciseImages } from "../../WorkoutExerciseImages";
-import { any } from "@tensorflow/tfjs";
 
 interface Props {
   title: string;
@@ -17,6 +16,7 @@ interface Props {
   onPressClose: (visible: boolean) => void;
   navigation?: any;
   exerciseId?: string;
+  onPressContinue?: () => void;
 }
 
 const DefaultModal: React.FC<Props> = ({
@@ -27,12 +27,14 @@ const DefaultModal: React.FC<Props> = ({
   onPressClose,
   navigation,
   exerciseId,
+  onPressContinue,
 }) => {
   const images = [
     { type: "yoga", image: require("../../../assets/letsyoga.png") },
     { type: "exercise", image: require("../../../assets/letsexercise.png") },
     { type: "success", image: require("../../../assets/signUpSuccess.png") },
     { type: "shareGroup", image: require("../../../assets/shareGroup.png") },
+    { type: "empty", image: "" },
   ];
   const image = images.find((x) => x.type === type).image;
   const [startExercise, setStartExercise] = useState(false);
@@ -56,7 +58,11 @@ const DefaultModal: React.FC<Props> = ({
   };
 
   return (
-    <View style={styles.modalBackground}>
+    <View
+      style={
+        type !== "empty" ? styles.modalBackground : styles.modalNoBackground
+      }
+    >
       <View
         style={[
           styles.modal,
@@ -79,7 +85,13 @@ const DefaultModal: React.FC<Props> = ({
           <View style={styles.centerView}>
             <View style={styles.modalTitle}>
               <Text style={styles.modalTitleText}>{title}</Text>
-              <Text style={styles.modalText}>{text}</Text>
+              <Text
+                style={
+                  type === "empty" ? styles.modalTextSmall : styles.modalText
+                }
+              >
+                {text}
+              </Text>
             </View>
             <Image style={styles.imageModal} source={image}></Image>
           </View>
@@ -91,19 +103,23 @@ const DefaultModal: React.FC<Props> = ({
             ></Image>
           </View>
         )}
-        <View style={styles.buttonModal}>
-          {!startExercise ? (
+        <View
+          style={[
+            styles.buttonModal,
+            type !== "empty" ? styles.positionAbsolute : "",
+          ]}
+        >
+          {type === "empty" ? (
+            <Button buttonText={buttonText} onPress={onPressContinue}></Button>
+          ) : startExercise ? (
+            <Button buttonText="INICIAR" onPress={onPress}></Button>
+          ) : !startExercise ? (
             <Button
               buttonText={buttonText}
               onPress={() => {
                 setStartExercise(true);
               }}
             ></Button>
-          ) : (
-            ""
-          )}
-          {startExercise ? (
-            <Button buttonText="INICIAR" onPress={onPress}></Button>
           ) : (
             ""
           )}

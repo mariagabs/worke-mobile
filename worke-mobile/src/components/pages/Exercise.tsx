@@ -16,6 +16,7 @@ import styles from "../../styles";
 import ButtonExercise from "../atoms/ButtonExercise";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import DefaultModal from "../molecules/DefaultModal";
 
 const RESULT_MAPPING = [
   "Dorsais e flexores dos dedos",
@@ -65,6 +66,7 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   const [fromFavorites, setFromFavorites] = useState(false);
   const [fromWorkout, setFromWorkout] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const startExercise = () => {
     setShowTimerStart(true);
     setShowButton(false);
@@ -194,13 +196,13 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
     setShowFixExercise(false);
     setCompleted(false);
     started = showContinue = showAlmostDone = leavePage = false;
+    setShowModal(true);
 
     (async () => {
       setExercise(JSON.parse(await AsyncStorage.getItem("chosenExercise")));
       setFromFavorites((await AsyncStorage.getItem("fromFavorites")) === "1");
       setFromWorkout((await AsyncStorage.getItem("chosenWorkout")) !== null);
       let exercicio = JSON.parse(await AsyncStorage.getItem("chosenExercise"));
-      console.log(exercicio);
       setUser(JSON.parse(await AsyncStorage.getItem("user")));
       setTimer(exercicio.duracao);
       let modelo = ModelSingleton.getInstance();
@@ -259,12 +261,12 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
 
         if (
           executedExercise.name === exercise.nome &&
-          executedExercise.accuracy > 0.85
+          executedExercise.accuracy > 0.7
         ) {
           badAccuracyCount = 0;
           let count = goodAccuracyCount + 1;
           goodAccuracyCount = count;
-        } else if (executedExercise.accuracy < 0.85) {
+        } else if (executedExercise.accuracy < 0.7) {
           goodAccuracyCount = 0;
           badAccuracyCount++;
         }
@@ -309,6 +311,9 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
       tf.dispose(casted);
     }
   };
+  const closeModal = (visible) => {
+    setShowModal(visible);
+  };
 
   const textureDims =
     Platform.OS === "ios"
@@ -318,6 +323,19 @@ const Exercise: React.FC<Props> = ({ navigation }) => {
   const camRef = useRef(null);
   return (
     <View style={styles.container}>
+      {showModal ? (
+        <DefaultModal
+          buttonText="CONTINUAR"
+          text="Para realizar o seu exercício, certifique-se de estar em um ambiente bem iluminado e procure ficar centralizado na câmera. Isso nos ajuda a validar melhor os seus movimentos!"
+          title="ATENÇÃO!"
+          type="empty"
+          onPressClose={(visible) => closeModal(visible)}
+          navigation={navigation}
+          onPressContinue={() => closeModal(false)}
+        ></DefaultModal>
+      ) : (
+        ""
+      )}
       {!started ? (
         <Image
           source={require("../../../assets/background-exercise-waiting.png")}

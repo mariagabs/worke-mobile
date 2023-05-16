@@ -1421,6 +1421,22 @@ export default StyleSheet.create({
     borderRadius: 30,
     paddingVertical: 0,
     paddingTop: 25,
+    zIndex: 100,
+  },
+  modalNoBackground: {
+    width: "100%",
+    height: "100%",
+    alignSelf: "center",
+    justifyContent: "center",
+    zIndex: 99,
+  },
+  modalTextSmall: {
+    fontFamily: "Nunito-Medium",
+    fontSize: 14,
+    letterSpacing: 1,
+    textAlign: "center",
+    marginTop: 40,
+    marginBottom: 40,
   },
   modalBackground: {
     position: "absolute",
@@ -1430,6 +1446,15 @@ export default StyleSheet.create({
     zIndex: 10,
     alignSelf: "center",
     justifyContent: "center",
+  },
+  exerciseBackgroundWaiting: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    flex: 0,
+    flexDirection: "row",
+    justifyContent: "center",
+    zIndex: 0,
   },
   headerModal: {
     display: "flex",
@@ -1473,12 +1498,14 @@ export default StyleSheet.create({
     width: "100%",
   },
   buttonModal: {
-    position: "absolute",
     width: "100%",
     bottom: 0,
     paddingVertical: 25,
     paddingTop: 0,
     paddingHorizontal: 25,
+  },
+  positionAbsolute: {
+    position: "absolute",
   },
   secondTextBox: {
     marginTop: 20,
@@ -1549,15 +1576,7 @@ export default StyleSheet.create({
     color: COLORS.pink,
     fontFamily: "Nunito-Black",
   },
-  exerciseBackgroundWaiting: {
-    position: "absolute",
-    width: "100%",
-    height: "100%",
-    flex: 0,
-    flexDirection: "row",
-    justifyContent: "center",
-    zIndex: 0,
-  },
+
   textExerciseStart: {
     position: "absolute",
     width: "100%",
@@ -1688,7 +1707,7 @@ export default StyleSheet.create({
   infoWorkoutCard: {
     marginLeft: 10,
     display: "flex",
-    flexWrap: "wrap",
+    // flexWrap: "wrap",
     flexShrink: 1,
   },
   workoutNumber: {
