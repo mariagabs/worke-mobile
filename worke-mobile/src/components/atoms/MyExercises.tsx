@@ -26,7 +26,7 @@ const MyExercises: React.FC<Props> = ({ navigation }) => {
         activeOpacity={1}
         style={styles.headerMyExercises}
       >
-        <Text style={styles.subtitleHome}>EXERCÍCIOS</Text>
+        <Text style={styles.subtitleHome}>EXERCÍCIOS DE ALONGAMENTOS</Text>
         <Image
           source={require("../../../assets/angle-right-black.png")}
         ></Image>
